@@ -66,6 +66,8 @@ public:
 
     // Call from Master to do message loop work
     void DoMessageLoopWork();
+	// Key emulation
+	void EmulateKey(TabCEFInterface* pTab, int key);
 
     // Emulation of left mouse button press and release in specific Tab
     void EmulateMouseCursor(TabCEFInterface* pTab, double x, double y, bool leftButtonPressed); // leftButtonPressed seems necessary

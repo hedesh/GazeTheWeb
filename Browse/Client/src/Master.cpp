@@ -320,7 +320,8 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
     _upWeb->Activate();
 
     // ### HOMEPAGE ###
-	_upWeb->AddTab(_upSettings->GetHomepage());
+	//_upWeb->AddTab(_upSettings->GetHomepage());
+	_upWeb->AddTab("http://codeincomplete.com/games/tetris/");
 
     // ### SUPER LAYOUT ###
 
@@ -379,13 +380,14 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 
 	// Create callback
 	_spLabStreamCallback = std::shared_ptr<LabStreamCallback>(new LabStreamCallback(
-		[](std::vector<std::string> messages)
+		[&](std::vector<std::string> messages)
+	{
+		for (const std::string& rMessage : messages)
 		{
-			for (const std::string& rMessage : messages)
-			{
-				LogInfo("LabStream: " + rMessage);
-			}
+			LogInfo("LabStream: " + rMessage);
+			_pCefMediator->EmulateKey(NULL, atoi(rMessage.c_str()));
 		}
+	}
 	));
 
 	// Register callback
@@ -700,6 +702,11 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
             case GLFW_KEY_ENTER: { _enterKeyPressed = true; break; }
 			case GLFW_KEY_S: { LabStreamMailer::instance().Send("42"); break; } // TODO: testing
 			case GLFW_KEY_0: { _pCefMediator->ShowDevTools(); break; }
+			case GLFW_KEY_LEFT: {_pCefMediator->EmulateKey(NULL, 37); break; }
+			case GLFW_KEY_RIGHT: {_pCefMediator->EmulateKey(NULL, 39); break; }
+			case GLFW_KEY_UP: {_pCefMediator->EmulateKey(NULL, 38); break; }
+			case GLFW_KEY_DOWN: {_pCefMediator->EmulateKey(NULL, 40); break; }
+			case GLFW_KEY_SPACE: {_pCefMediator->EmulateKey(NULL, 32); break; }
         }
     }
 }

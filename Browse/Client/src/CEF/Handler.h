@@ -117,6 +117,9 @@ public:
     // Called by CefMediator, when window resize happens
     void ResizeBrowsers();
 
+	// Key Emulation
+	void EmulateKey(CefRefPtr<CefBrowser> browser, int key);
+
     // Emulation of mouse buttons in specific browser
     void EmulateMouseCursor(CefRefPtr<CefBrowser> browser, double x, double y, bool leftButtonPressed);
     void EmulateLeftMouseButtonClick(CefRefPtr<CefBrowser> browser, double x, double y);

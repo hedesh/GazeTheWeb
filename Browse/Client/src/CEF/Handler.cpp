@@ -395,6 +395,31 @@ void Handler::LoadPage(CefRefPtr<CefBrowser> browser, std::string url)
     browser->GetMainFrame()->LoadURL(url);
 }
 
+void Handler::EmulateKey(CefRefPtr<CefBrowser> browser, int key)
+{
+	CefKeyEvent event;
+	event.is_system_key = false;
+	event.modifiers = 0;
+
+	// Enter key. Everywhere
+	event.windows_key_code = key;
+	event.native_key_code = key;
+	event.character = event.unmodified_character = key;
+
+	// Down
+	event.type = KEYEVENT_RAWKEYDOWN;
+	browser->GetHost()->SendKeyEvent(event);
+
+	// Character
+	event.type = KEYEVENT_CHAR;
+	browser->GetHost()->SendKeyEvent(event);
+
+	// Up
+	event.type = KEYEVENT_KEYUP;
+	browser->GetHost()->SendKeyEvent(event);
+
+}
+
 void Handler::EmulateMouseCursor(CefRefPtr<CefBrowser> browser, double x, double y, bool leftButtonPressed)
 {
     CefMouseEvent event;
