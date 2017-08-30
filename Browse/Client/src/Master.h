@@ -11,6 +11,7 @@
 
 #include "src/MasterNotificationInterface.h"
 #include "src/Singletons/LabStreamMailer.h"
+#include "src/Singletons/LabStreamMailer2.h"
 #include "src/CEF/Mediator.h"
 #include "src/State/Web/Web.h"
 #include "src/State/Settings/Settings.h"
@@ -203,6 +204,7 @@ private:
 
 	// LabStreamMailer callback to print incoming messages to log
 	std::shared_ptr<LabStreamCallback> _spLabStreamCallback;
+	std::shared_ptr<LabStreamCallback2> _spLabStreamCallback2;
 
 	// Time of notification displaying
 	float _notificationTime;

@@ -321,7 +321,7 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 
     // ### HOMEPAGE ###
 	//_upWeb->AddTab(_upSettings->GetHomepage());
-	_upWeb->AddTab("http://codeincomplete.com/games/tetris/");
+	_upWeb->AddTab("http://augreal.mklab.iti.gr/tetris");
 
     // ### SUPER LAYOUT ###
 
@@ -389,9 +389,30 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 		}
 	}
 	));
+	LogInfo("Registering callback");
+	_spLabStreamCallback2 = std::shared_ptr<LabStreamCallback2>(new LabStreamCallback2(
+		[&](std::vector<std::string> messages)
+	{
+		LogInfo("In callback");
+		for (const std::string& rMessage : messages)
+		{
+			LogInfo("LabStream: " + rMessage);
+			int label = atoi(rMessage.c_str());
+			if (label == 2)
+			{
+				_pCefMediator->EmulateKey(NULL, 38); 
+			}
+			else if (label >= 65 && label <= 90) {
+				_pCefMediator->EmulateKey(NULL, label);
+			}
+		}
+	}
+	));
+
 
 	// Register callback
 	LabStreamMailer::instance().RegisterCallback(_spLabStreamCallback);
+	LabStreamMailer2::instance().RegisterCallback(_spLabStreamCallback2);
 
     // ### OTHER ###
 
@@ -486,6 +507,7 @@ void Master::Loop()
 
 		// Update lab streaming layer mailer to get incoming messages
 		LabStreamMailer::instance().Update();
+		LabStreamMailer2::instance().Update();
 
 		// Poll CefMediator
 		_pCefMediator->Poll(tpf);
