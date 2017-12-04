@@ -100,6 +100,12 @@ int CommonMain(const CefMainArgs& args, CefSettings settings, CefRefPtr<MainCefA
 
 #ifdef CLIENT_SENSOR_LIB_INTEGRATION
 	std::unique_ptr<SensorLib::SensorLibrary> upLib = std::unique_ptr<SensorLib::SensorLibrary>(new SensorLib::SensorLibrary());
+	system("pause");
+	upLib->printStatus();
+	system("pause");
+	upLib->startRecording("C:\\Users\\Raphael\\tmp\\hello.xdf");
+	system("pause");
+	upLib->stopRecording();
 #endif
 
 	// Exit
