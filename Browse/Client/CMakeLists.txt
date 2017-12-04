@@ -29,6 +29,10 @@ if(OS_WINDOWS) # Windows
 	set(CLIENT_BUILD_TOBII_EYEX_PLUGIN ON CACHE BOOL "Build plugin for Tobii EyeX.")
 	set(CLIENT_TOBII_EYEX_SDK_PATH "C:/TobiiEyeXSDK-CPP/TobiiEyeXSDK" CACHE PATH "Path to Tobii EyeX SDK.")
 	
+	# Sensor Lib integration
+	set(CLIENT_SENSOR_LIB_INTEGRATION OFF CACHE BOOL "Integrate Sensor Lib.")
+	set(CLIENT_SENSOR_LIB_PATH "C:/SensorLib" CACHE PATH "Path to Sensor Lib.")
+	
 endif()
 
 # Deployment prepares ready to share binary version (TODO: installer creation)
@@ -47,6 +51,11 @@ endif()
 set(CLIENT_DEMO OFF CACHE BOOL "Setup for Demonstration.")
 if(${CLIENT_DEMO})
 	add_definitions(-DCLIENT_DEMO)
+endif()
+
+# Sensor Lib integration
+if(${CLIENT_SENSOR_LIB_INTEGRATION})
+	add_definitions(-DCLIENT_SENSOR_LIB_INTEGRATION)
 endif()
 
 if(OS_LINUX) # Linux
@@ -194,6 +203,17 @@ SET_CEF_TARGET_OUT_DIR()
 
 if(OS_WINDOWS) # Windows
 
+	# Sensor Lib integration
+	if(${CLIENT_SENSOR_LIB_INTEGRATION})
+	
+		# Include path
+		include_directories("${CLIENT_SENSOR_LIB_PATH}/include")
+		
+		# Library to link
+		set(SENSOR_LIB_LIBRARIES "${CLIENT_SENSOR_LIB_PATH}/lib/SensorLibrary.lib")
+		
+	endif()
+
 	# TODO: find reason for that console output instead of just not displaying it
 	set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "/NODEFAULTLIB:LIBCMT" )
 
@@ -216,6 +236,7 @@ if(OS_WINDOWS) # Windows
 		glfw
 		eyeGUI
 		${LIBLSL_LIBRARIES}
+		${SENSOR_LIB_LIBRARIES}
 		curl_lib
 		libcef_lib
 		libcef_dll_wrapper
@@ -240,6 +261,17 @@ if(OS_WINDOWS) # Windows
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different
 		"${LIBLSL_DIRECTORY}/lib-vs2015_x86_release/liblsl32.dll"
 		$<TARGET_FILE_DIR:${CEF_TARGET}>)
+		
+	# Sensor Lib integration (relies on liblsl.dll provided by GTW)
+	if(${CLIENT_SENSOR_LIB_INTEGRATION})
+	
+		# Copy all the DLLs
+		add_custom_command(TARGET ${CEF_TARGET} PRE_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_directory
+			"${CLIENT_SENSOR_LIB_PATH}/bin"
+			$<TARGET_FILE_DIR:${CEF_TARGET}>)
+			
+	endif()
 
 elseif(OS_LINUX) # Linux
 

@@ -14,6 +14,11 @@
 #include "src/Master/Master.h"
 #include "src/Utils/Logger.h"
 
+// TODO: Testing
+#ifdef CLIENT_SENSOR_LIB_INTEGRATION
+	#include "SensorLibrary.h"
+#endif
+
 // Execute function to have Master object on stack which might be faster than on heap
 bool Execute(CefRefPtr<MainCefApp> app, std::string userDirectory) // returns whether system should shut down
 {
@@ -47,6 +52,8 @@ int CommonMain(const CefMainArgs& args, CefSettings settings, CefRefPtr<MainCefA
 	freopen("conout$", "w", stdout);
 	freopen("conout$", "w", stderr);
 #endif
+
+	/*
 
 	// Set path for CEF data: cache, user data and debug.log
 	CefString(&settings.cache_path).FromASCII(std::string(userDirectory + "cache").c_str());
@@ -88,6 +95,12 @@ int CommonMain(const CefMainArgs& args, CefSettings settings, CefRefPtr<MainCefA
 	{
 		shutdown();
 	}
+
+	*/
+
+#ifdef CLIENT_SENSOR_LIB_INTEGRATION
+	std::unique_ptr<SensorLib::SensorLibrary> upLib = std::unique_ptr<SensorLib::SensorLibrary>(new SensorLib::SensorLibrary());
+#endif
 
 	// Exit
     return 0;
