@@ -42,7 +42,10 @@ function CefPoll(num_partitions, update_partition)
         console.log("CefPoll: Analyzed missing node", node);
     }
 
-    // Partitions shouldn't matter for expected small amounts of video nodes
+    // TODO: Hard to partion, when walking down DOM tree from beginning
+    ForEveryChild(document.documentElement, AnalyzeNode);
+    
+    // Partitions shouldn't matter for an expected small amount of video nodes
     domVideos.forEach((n) => { SendAttributeChangesToCEF("Rects", n); });
 
     window.domNodes.forEach((list) => {
