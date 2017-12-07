@@ -103,7 +103,7 @@ int CommonMain(const CefMainArgs& args, CefSettings settings, CefRefPtr<MainCefA
 	system("pause");
 	upLib->printStatus();
 	system("pause");
-	upLib->startRecording("C:\\Users\\Raphael\\tmp\\hello.xdf");
+	upLib->startRecording("hello.xdf");
 	system("pause");
 	upLib->stopRecording();
 #endif
