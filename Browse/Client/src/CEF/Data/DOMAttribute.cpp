@@ -22,7 +22,7 @@ std::string DOMAttrToString(DOMAttribute attr)
 	case OccBitmask:		return "OccBitmask"; 
 	case HTMLId:			return "HTMLId"; 
 	case HTMLClass:			return "HTMLClass";
-	case CheckedState:			return "CheckedState";
+	case CheckedState:		return "CheckedState";
 	default:				return std::to_string(attr);
 	}
 }

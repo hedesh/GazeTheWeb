@@ -42,8 +42,10 @@ function CefPoll(num_partitions, update_partition)
         console.log("CefPoll: Analyzed missing node", node);
     }
 
+    // NOTE: This was for the GMail Login. Works now more efficiently by analyzing not already
+    // analyzed child nodes, when webkit transition ends :)
     // TODO: Hard to partion, when walking down DOM tree from beginning
-    ForEveryChild(document.documentElement, AnalyzeNode);
+    // ForEveryChild(document.documentElement, AnalyzeNode);
     
     // Partitions shouldn't matter for an expected small amount of video nodes
     domVideos.forEach((n) => { SendAttributeChangesToCEF("Rects", n); });
