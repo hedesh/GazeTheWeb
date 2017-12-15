@@ -181,8 +181,7 @@ DOMNode.prototype.updateOccBitmask = function(altNode, debug){
                 var topNode = document.elementFromPoint(pt[0], pt[1]);
                 if(debug)
                 {
-                    console.log(this.getType(), this.getId(), ": (", pt[0], ",", pt[1],
-                        ") => ", topNode);
+                    console.log(this.getType(), this.getId(), ": (", pt[0], ",", pt[1], ") => ", topNode);
                     console.log(document.elementsFromPoint(pt[0], pt[1]));//.slice(0,3));
                 }
                 // TODO: Quick fix

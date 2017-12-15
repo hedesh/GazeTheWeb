@@ -27,10 +27,20 @@ DOMTextInput.prototype.inputText = function(text, submit){
 		}
 		this.node.value = text;
 	}
-	else
+	// else /* For what kind of inputs? */
+	else if (this.node.tagName !== "DIV")
 	{
 		this.node.textContent = text;
 		ConsolePrint("Set input's value to given text");
+	}
+
+	// Facebook chat
+	if(this.node.tagName == "DIV" && this.node.hasAttribute("data-offset-key"))
+	{
+		var txtNode = this.node.querySelector("[data-text='true']");
+		console.log("Setting text in text container node: ",  txtNode);
+		if(txtNode)
+			txtNode.textContent = text;
 	}
 	
 	this.setText(text);

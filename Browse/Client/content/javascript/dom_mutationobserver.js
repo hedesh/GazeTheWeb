@@ -305,6 +305,13 @@ function AnalyzeNode(node)
 			CreateDOMSelectField(node);
 		}
 
+		// Fix for Facebook's in-site messenger
+		if(node.tagName == "DIV" && node.hasAttribute("data-offset-key"))
+		{
+			CreateDOMTextInput(node);
+			console.log("Found possible text area on Facebook? ", node);
+		}
+
 		// Find high res favicons
 		// TODO: Loading of smaller resolutions could be prevented
 		if(node.tagName == "LINK")
