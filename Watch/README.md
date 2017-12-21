@@ -2,7 +2,7 @@
 
 ![Logo](media/Logo.png)
 
-YouTube application controlled with gaze and processing of gaze and EEG sensor data, part of the EU-funded research project MAMEM. Developed as part of a research lab supervised by Dr. Chandan Kumar and Raphael Menges.
+YouTube application controlled with gaze and processing of gaze and EEG sensor data, part of the EU-funded research project MAMEM. Developed as part of a research lab supervised by Dr. Chandan Kumar, Korok Sengupta and Raphael Menges.
 
 ## Developers
 The application was designed and developed by the students who participated in the research lab:
