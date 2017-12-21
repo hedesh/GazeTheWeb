@@ -8,4 +8,4 @@ YouTube application controlled with gaze and processing of gaze and EEG sensor d
 
 ## Developers
 The application was designed and developed by the students who participated in the research lab:
-Denise Dünnebier, Mariya Chkalova, Min Ke, Yessika Legat, Arsenii Smyrnov, Benjamin Becker, Daniyal Akbari, Matthias Greber, Ramin Hedeshy, Steven Timothy Schürstedt, Jannis Eisenmenger
+Denise Dünnebier, Mariya Chkalova, Min Ke, Yessika Legat, Arsenii Smyrnov, Benjamin Becker, Daniyal Akbari, Matthias Greber, Ramin Hedeshy, Steven Timothy Schürstedt and Jannis Eisenmenger
