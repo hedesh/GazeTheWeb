@@ -13,9 +13,9 @@ When submodules on remote are updated, one has to execute ```git submodule updat
 
 ## Projects
 There are multiple subprojects in this repository:
-* [**Browse**](Browse) Web browser controlled by your gaze
-* [**BrowseUpdater**](BrowseUpdater) Update tool for the browser
-* [**Tweet**](Tweet) Gaze-controlled Twitter application
+* [**Browse**](Browse) Web browser controlled by your gaze.
+* [**BrowseUpdater**](BrowseUpdater) Update tool for the browser.
+* [**Tweet**](Tweet) Gaze-controlled Twitter application.
 * [**Watch**](Watch) YouTube application with gaze and EEG signal processing.
 
 Visit the [**wiki**](https://github.com/MAMEM/GazeTheWeb/wiki) for troubleshooting.
