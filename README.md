@@ -21,8 +21,9 @@ There are multiple subprojects in this repository:
 Visit the [**wiki**](https://github.com/MAMEM/GazeTheWeb/wiki) for troubleshooting.
 
 ## Public
-* Winner of the TPG Accessibility Challenge Judges' Award at [Web For All 2017](http://www.w4a.info/2016/2017) in Perth, Australia. Read the corresponding paper [here](Browse/media/W4A17-p19-WeST.pdf).
-* Honourable mention for the technical approach in [WWW 2017](http://www2017.com.au) conference in Perth, Australia.
+* Winner of the TPG Accessibility Challenge Judges' Award at the [Web For All 2017](http://www.w4a.info/2016/2017) in Perth, Australia. Read the corresponding paper [here](Browse/media/W4A17-p19-WeST.pdf).
+* Honourable mention for the technical approach at the [WWW 2017](http://www2017.com.au) conference in Perth, Australia. Read the corresponding paper [here](Browse/media/WWW17-p219-WeST).
+* Finalist in the Digital Imagination Challenge by Unitymedia. See [here](https://unitymedia-digitalimagination.de/de/die-finalisten).
 
 ## Research
 If you use our software as part for your own research, please be kind and cite our publication:
@@ -40,9 +41,9 @@ If you use our software as part for your own research, please be kind and cite o
 ```
 
 ## Links
-* [**Project page**](http://west.uni-koblenz.de/en/research/gazetheweb) Official project page
-* [**Institute for Web Science and Technologies**](http://west.uni-koblenz.de) Website of our institute
-* [**YouTube Channel**](https://www.youtube.com/channel/UCiM5FSmeFyeU1s4tj_e794Q) Latest videos of the project
-* [**Twitter**](https://twitter.com/GazeTheWeb) Follow us on Twitter
-* [**MAMEM**](http://www.mamem.eu) GazeTheWeb is part of the EU-funded project MAMEM, which is funded by Horizon 2020
-* [**eyeGUI**](https://github.com/raphaelmenges/eyegui) User interface library for eye-controlled applications
+* [**Project page**](http://west.uni-koblenz.de/en/research/gazetheweb) Official project page.
+* [**Institute for Web Science and Technologies**](http://west.uni-koblenz.de) Website of our institute.
+* [**YouTube Channel**](https://www.youtube.com/channel/UCiM5FSmeFyeU1s4tj_e794Q) Latest videos of the project.
+* [**Twitter**](https://twitter.com/GazeTheWeb) Follow us on Twitter.
+* [**MAMEM**](http://www.mamem.eu) GazeTheWeb is part of the EU-funded project MAMEM, which is funded by Horizon 2020.
+* [**eyeGUI**](https://github.com/raphaelmenges/eyegui) User interface library for eye-controlled applications.
