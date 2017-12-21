@@ -21,7 +21,8 @@ There are multiple subprojects in this repository:
 Visit the [**wiki**](https://github.com/MAMEM/GazeTheWeb/wiki) for troubleshooting.
 
 ## Public
-Winner of the TPG Accessibility Challenge Judges' Award at [Web For All 2017](http://www.w4a.info/2016/2017) in Perth, Australia. Read the corresponding paper [here](Browse/media/W4A17-p19-WeST.pdf).
+* Winner of the TPG Accessibility Challenge Judges' Award at [Web For All 2017](http://www.w4a.info/2016/2017) in Perth, Australia. Read the corresponding paper [here](Browse/media/W4A17-p19-WeST.pdf).
+* Honourable mention for the technical approach in [WWW 2017](http://www2017.com.au) conference in Perth, Australia.
 
 ## Research
 If you use our software as part for your own research, please be kind and cite our publication:
