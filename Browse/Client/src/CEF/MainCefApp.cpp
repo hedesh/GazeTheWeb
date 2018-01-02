@@ -46,6 +46,10 @@ void MainCefApp::OnBeforeCommandLineProcessing(const CefString& process_type, Ce
 		command_line->AppendSwitch("enable-begin-frame-scheduling"); // breaks WebGL, but better for performance
 	}
 
+	// Enable media input
+	command_line->AppendSwitch("enable-media-stream");
+	command_line->AppendSwitch("enable-speech-input");
+
 #ifndef CLIENT_DEPLOYMENT
 	command_line->AppendSwitch("enable-logging"); // get LOG(..) writes in console
 #endif
