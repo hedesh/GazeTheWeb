@@ -20,7 +20,7 @@ Filter::~Filter()
 	// For the sake of the C++ standard
 }
 
-void Filter::Update(const SampleQueue spSamples)
+void Filter::Update(const SampleQueue spSamples, float samplerate)
 {
 	// Only work with non-empty sample queue
 	if (!spSamples->empty())
@@ -44,7 +44,7 @@ void Filter::Update(const SampleQueue spSamples)
 	}
 
 	// Apply filtering to retrieve current filtered gaze coordinate and other information
-	ApplyFilter(_spSamples, _gazeX, _gazeY, _fixationDuration);
+	ApplyFilter(_spSamples, _gazeX, _gazeY, _fixationDuration, samplerate);
 
 	// Work on custom transformations
 	for (auto& rCustomTransformation : _customTransformations)
@@ -81,7 +81,8 @@ void Filter::Update(const SampleQueue spSamples)
 			rTrans.queue,
 			rTrans.gazeX,
 			rTrans.gazeY,
-			fixationDuration);
+			fixationDuration,
+			samplerate);
 	}
 }
 

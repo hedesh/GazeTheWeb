@@ -14,7 +14,7 @@ EyeInput::EyeInput(MasterThreadsafeInterface* _pMasterThreadsafeInterface, Eyetr
 	_spFilter(std::shared_ptr<Filter>(
 		new WeightedAverageFilter(
 			setup::FILTER_KERNEL,
-			setup::FILTER_WINDOW_SIZE,
+			setup::FILTER_WINDOW_TIME,
 			setup::FILTER_USE_OUTLIER_REMOVAL)))
 {
 	// Create thread for connection to eye tracker
@@ -258,7 +258,7 @@ std::shared_ptr<Input> EyeInput::Update(
 		}
 
 		// Update filter algorithm and provide local variables as reference
-		_spFilter->Update(spSamples);
+		_spFilter->Update(spSamples, _info.samplerate);
 
 		// Check, whether eye tracker is tracking
 		isTracking = _procIsTracking();

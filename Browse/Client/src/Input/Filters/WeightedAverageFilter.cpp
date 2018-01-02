@@ -9,26 +9,20 @@
 
 #include <iostream>
 
-WeightedAverageFilter::WeightedAverageFilter(FilterKernel kernel, unsigned int windowSize, bool outlierRemoval) :
-	_kernel(kernel), _windowSize(windowSize), _outlierRemoval(outlierRemoval)
-{
-	// Calculate sigma for gaussian filter
-	float sigma = glm::sqrt(-glm::pow(_windowSize - 1.f, 2.f) / (2.f * glm::log(0.05f))); // determine sigma, so that no weight is below 0.05
+WeightedAverageFilter::WeightedAverageFilter(FilterKernel kernel, float windowTime, bool outlierRemoval) :
+	_kernel(kernel), _windowTime(windowTime), _outlierRemoval(outlierRemoval) {}
 
-	// Store denominator of exponential function
-	_gaussianDenominator = (2.f * glm::pow(sigma, 2.f));
-}
-
-void WeightedAverageFilter::ApplyFilter(const SampleQueue& rSamples, double& rGazeX, double& rGazeY, float& rFixationDuration) const
+void WeightedAverageFilter::ApplyFilter(const SampleQueue& rSamples, double& rGazeX, double& rGazeY, float& rFixationDuration, float samplerate) const
 {
 	// Prepare variables
 	double sumX = 0;
 	double sumY = 0;
 	double weightSum = 0;
+	int windowSize = glm::ceil(_windowTime * samplerate);
 	
 	// Indexing
 	const int size = (int)rSamples->size();
-	int endIndex = glm::max(0, size - (int)_windowSize);
+	int endIndex = glm::max(0, size - windowSize);
 	int startIndex = size - 1;
 
 	// Indices updated by loop
@@ -91,7 +85,7 @@ void WeightedAverageFilter::ApplyFilter(const SampleQueue& rSamples, double& rGa
 		}
 
 		// Calculate weight
-		double weight = CalculateWeight(weightIndex);
+		double weight = CalculateWeight(weightIndex, windowSize);
 
 		// Sum values
 		sumX += rGaze.x * weight;
@@ -121,7 +115,7 @@ void WeightedAverageFilter::ApplyFilter(const SampleQueue& rSamples, double& rGa
 	rFixationDuration = fixationDuration; // update fixation duration
 }
 
-double WeightedAverageFilter::CalculateWeight(unsigned int i) const
+double WeightedAverageFilter::CalculateWeight(unsigned int i, int windowSize) const
 {
 	switch (_kernel)
 	{
@@ -129,10 +123,13 @@ double WeightedAverageFilter::CalculateWeight(unsigned int i) const
 		return 1.0;
 		break;
 	case FilterKernel::TRIANGULAR:
-		return (int)_windowSize - (int)i;
+		return windowSize - (int)i;
 		break;
 	case FilterKernel::GAUSSIAN:
-		return glm::exp(-glm::pow(i, 2.f) / _gaussianDenominator);
+		// Calculate sigma for gaussian filter
+		float sigma = glm::sqrt(-glm::pow(windowSize - 1.f, 2.f) / (2.f * glm::log(0.05f))); // determine sigma, so that no weight is below 0.05
+		float gaussianDenominator = (2.f * glm::pow(sigma, 2.f));
+		return glm::exp(-glm::pow(i, 2.f) / gaussianDenominator);
 		break;
 	}
 	return 1.0;

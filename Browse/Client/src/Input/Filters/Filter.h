@@ -23,8 +23,8 @@ public:
 	// Destructor
 	virtual ~Filter() = 0;
 
-	// Update. Takes samples in window pixel coordinates
-	void Update(const SampleQueue spSamples);
+	// Update. Takes samples in window pixel coordinates and samplerate of eye tracking device
+	void Update(const SampleQueue spSamples, float samplerate);
 
 	// Various getters
 	double GetRawGazeX() const;
@@ -63,7 +63,7 @@ public:
 private:
 
 	// Actual implementation of filtering
-	virtual void ApplyFilter(const SampleQueue& rSamples, double& rGazeX, double& rGazeY, float& rFixationDuration) const = 0;
+	virtual void ApplyFilter(const SampleQueue& rSamples, double& rGazeX, double& rGazeY, float& rFixationDuration, float samplerate) const = 0;
 
 	// Timestamp of last sample
 	std::chrono::milliseconds _timestamp;
