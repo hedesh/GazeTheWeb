@@ -9,7 +9,7 @@
 
 ZoomClickPipeline::ZoomClickPipeline(TabInteractionInterface* pTab) : Pipeline(pTab)
 {
-    // Push back zoom coordinate with drift correction action
+    // Push back magnification coordinate action
 	std::shared_ptr<MagnificationCoordinateAction> spMagnificationCoordinateAction = std::make_shared<MagnificationCoordinateAction>(_pTab);
 	_actions.push_back(spMagnificationCoordinateAction);
 
