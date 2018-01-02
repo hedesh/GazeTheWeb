@@ -32,12 +32,20 @@ bool MagnificationCoordinateAction::Update(float tpf, const std::shared_ptr<cons
 		rCoordinate *= glm::vec2(_pTab->GetWebViewResolutionX(), _pTab->GetWebViewResolutionY()); // bring into pixel space of CEF
 	};
 
+	// Update magnification
+	if (_magnify && _magnification < 1.f)
+	{
+		_magnification += tpf / MAGNIFICATION_ANIMATION_DURATION;
+		_magnification = glm::min(_magnification, 1.f);
+	}
+	float magnificationAnimation = 1.f - (glm::cos(glm::pi<float>()*_magnification) + 1.f) / 2.f;
+
 	// Current gaze
 	glm::vec2 relativeGazeCoordinate = glm::vec2(spInput->webViewRelativeGazeX, spInput->webViewRelativeGazeY); // relative WebView space
 
 	// Values of interest
-	glm::vec2 relativeCenterOffset = _magnified ? _relativeMagnificationCenter - glm::vec2(0.5f, 0.5f) : glm::vec2(0);
-	float zoom = _magnified ? MAGNIFICATION : 1.f;
+	glm::vec2 relativeCenterOffset = magnificationAnimation * (_relativeMagnificationCenter - glm::vec2(0.5f, 0.5f));
+	float zoom = (magnificationAnimation * MAGNIFICATION) + (1.f - magnificationAnimation);
 	glm::vec2 relativeMagnificationCenter = _relativeMagnificationCenter;
 
 	// Decrease fixationWaitTime
@@ -52,7 +60,7 @@ bool MagnificationCoordinateAction::Update(float tpf, const std::shared_ptr<cons
 	if (!spInput->gazeUponGUI && (spInput->instantInteraction || (fixationWaitTime <= 0 && spInput->fixationDuration >= FIXATION_DURATION))) // user demands on instant interaction or fixates on the screen
 	{
 		// Check for magnification
-		if (_magnified) // already magnified, so finish this action
+		if (_magnification >= 1.f) // already magnified, so finish this action
 		{
 			// Set output
 			glm::vec2 coordinate = relativeGazeCoordinate;
@@ -62,17 +70,18 @@ bool MagnificationCoordinateAction::Update(float tpf, const std::shared_ptr<cons
 			// Finish this action
 			finished = true;
 		}
-		else // not yet magnified, do it now
+		else if(_magnification <= 0.f) // not yet magnified, do it now
 		{
 			// Set magnification center
 			_relativeMagnificationCenter = relativeGazeCoordinate;
 
 			// Remember magnification
-			_magnified = true;
+			_magnify = true;
 
 			// Reset fixation wait time so no accidential instant interaction after magnification can happen
 			fixationWaitTime = FIXATION_DURATION;
 		}
+		// else: in the middle of magnification animation
 	}
 
 	// Decrement dimming

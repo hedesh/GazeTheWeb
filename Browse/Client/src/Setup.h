@@ -50,10 +50,10 @@ namespace setup
 	static const int	TEXT_SELECTION_MARGIN = 4; // area which is selected before / after zoom coordinate in CEFPixels
 
 	// Gaze filtering
-	static const int	FILTER_GAZE_FIXATION_PIXEL_RADIUS = 20;
+	static const int	FILTER_GAZE_FIXATION_PIXEL_RADIUS = 30;
 	static const int	FILTER_MEMORY_SIZE = 1000; // how many samples are kept in memory of the filters
 	static const FilterKernel FILTER_KERNEL = FilterKernel::GAUSSIAN;
-	static const int	FILTER_WINDOW_SIZE = 30;
+	static const float	FILTER_WINDOW_TIME = 1.f; // in seconds, limits the fixation duration in the input structure !!!
 	static const bool	FILTER_USE_OUTLIER_REMOVAL = true;
 	static const bool	USE_EYEGUI_DRIFT_MAP = !DEMO_MODE;
 

@@ -24,6 +24,11 @@ enum class FirebaseIntegerKey	{
 	PAGE_ACTIVITY_NEWS_COUNT,
 	PAGE_ACTIVITY_SHOPPING_COUNT,
 	PAGE_ACTIVITY_EMAIL_COUNT,
+	PAGE_ACTIVITY_JOB_COUNT,
+	PAGE_ACTIVITY_ENTERTAINMENT_COUNT,
+	PAGE_ACTIVITY_FORUM_COUNT,
+	PAGE_ACTIVITY_HEALTH_COUNT,
+	PAGE_ACTIVITY_ELEARNING_COUNT,
 	PAGE_ACTIVITY_WIKIPEDIA_COUNT,
 	PAGE_ACTIVITY_FACEBOOK_COUNT,
 	PAGE_ACTIVITY_LINKEDIN_COUNT,
@@ -62,6 +67,11 @@ enum class FirebaseJSONKey		{
 	PAGE_ACTIVITY_NEWS,
 	PAGE_ACTIVITY_SHOPPING,
 	PAGE_ACTIVITY_EMAIL,
+	PAGE_ACTIVITY_JOB,
+	PAGE_ACTIVITY_ENTERTAINMENT,
+	PAGE_ACTIVITY_FORUM,
+	PAGE_ACTIVITY_HEALTH,
+	PAGE_ACTIVITY_ELEARNING,
 	PAGE_ACTIVITY_WIKIPEDIA,
 	PAGE_ACTIVITY_FACEBOOK,
 	PAGE_ACTIVITY_LINKEDIN,
@@ -127,6 +137,16 @@ private:
 			return "pageActivity/shopping/sessionCount";
 		case FirebaseIntegerKey::PAGE_ACTIVITY_EMAIL_COUNT:
 			return "pageActivity/email/sessionCount";
+		case FirebaseIntegerKey::PAGE_ACTIVITY_JOB_COUNT:
+			return "pageActivity/job/sessionCount";
+		case FirebaseIntegerKey::PAGE_ACTIVITY_ENTERTAINMENT_COUNT:
+			return "pageActivity/entertainment/sessionCount";
+		case FirebaseIntegerKey::PAGE_ACTIVITY_FORUM_COUNT:
+			return "pageActivity/forum/sessionCount";
+		case FirebaseIntegerKey::PAGE_ACTIVITY_HEALTH_COUNT:
+			return "pageActivity/health/sessionCount";
+		case FirebaseIntegerKey::PAGE_ACTIVITY_ELEARNING_COUNT:
+			return "pageActivity/elearning/sessionCount";
 		case FirebaseIntegerKey::PAGE_ACTIVITY_WIKIPEDIA_COUNT:
 			return "pageActivity/wikipedia/sessionCount";
 		case FirebaseIntegerKey::PAGE_ACTIVITY_FACEBOOK_COUNT:
@@ -213,6 +233,16 @@ private:
 			return "pageActivity/shopping";
 		case FirebaseJSONKey::PAGE_ACTIVITY_EMAIL:
 			return "pageActivity/email";
+		case FirebaseJSONKey::PAGE_ACTIVITY_JOB:
+			return "pageActivity/job";
+		case FirebaseJSONKey::PAGE_ACTIVITY_ENTERTAINMENT:
+			return "pageActivity/entertainment";
+		case FirebaseJSONKey::PAGE_ACTIVITY_FORUM:
+			return "pageActivity/forum";
+		case FirebaseJSONKey::PAGE_ACTIVITY_HEALTH:
+			return "pageActivity/health";
+		case FirebaseJSONKey::PAGE_ACTIVITY_ELEARNING:
+			return "pageActivity/elearning";
 		case FirebaseJSONKey::PAGE_ACTIVITY_WIKIPEDIA:
 			return "pageActivity/wikipedia";
 		case FirebaseJSONKey::PAGE_ACTIVITY_FACEBOOK:
