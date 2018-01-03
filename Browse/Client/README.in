@@ -25,7 +25,7 @@ ESC: Exit application
 Tab: Toggle pause
 
 ## License
-Copyright 2017 Raphael Menges and Daniel Müller
+Copyright 2018 Raphael Menges and Daniel Müller
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ limitations under the License.
 
 ## Software used in this project
 CEF3: https://bitbucket.org/chromiumembedded/cef
-	Binary release of branch 2454 Windows 32bit included from here: https://cefbuilds.com/#branch_2454
+	Binary release of CEF 3.3071.1634.g9cc59c8 / Chromium 59.0.3071.82 Windows 32bit included from here: http://opensource.spotify.com/cefbuilds/index.html
 GLM: http://glm.g-truc.net/0.9.7/index.html (MIT license chosen)
 GLFW3: http://www.glfw.org
 iViewX: Connection to the iViewX SDK, copyright SMI GmbH (http://www.smivision.com)
