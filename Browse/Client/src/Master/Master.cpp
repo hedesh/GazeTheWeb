@@ -373,6 +373,9 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 	eyegui::registerButtonListener(_pSuperCalibrationLayout, "continue", _spMasterButtonListener);
 	eyegui::registerButtonListener(_pSuperCalibrationLayout, "recalibration", _spMasterButtonListener);
 
+	// Disable continuing from super calibration screen (until calibration is done)
+	eyegui::setElementActivity(_pSuperCalibrationLayout, "continue", false, false);
+
 	// Add floating frame for notification
 	_notificationFrameIndex = eyegui::addFloatingFrameWithBrick(
 		_pSuperLayout,
@@ -1241,6 +1244,9 @@ void Master::MasterButtonListener::down(eyegui::Layout* pLayout, std::string id)
 			{
 				// Show message
 				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_display_message", eyegui::fetchLocalization(_pMaster->_pSuperGUI, "calibration_display_message"));
+
+				// Force user to do calibration
+				eyegui::setElementActivity(_pMaster->_pSuperCalibrationLayout, "continue", false, true);
 			}
 			else
 			{
@@ -1281,6 +1287,9 @@ void Master::MasterButtonListener::down(eyegui::Layout* pLayout, std::string id)
 					// Add point visualization
 					_pMaster->_lastCalibrationPointsFrameIndices.push_back(eyegui::addFloatingFrameWithBrick(_pMaster->_pSuperCalibrationLayout, brickFilepath, x, y, calibrationPointSize, calibrationPointSize, true, false));
 				}
+
+				// Allow user to continue browsing
+				eyegui::setElementActivity(_pMaster->_pSuperCalibrationLayout, "continue", true, true);
 			}
 		}
 	}
