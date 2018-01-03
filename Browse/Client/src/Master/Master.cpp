@@ -1247,7 +1247,7 @@ void Master::MasterButtonListener::down(eyegui::Layout* pLayout, std::string id)
 			if (spCalibrationInfo->empty())
 			{
 				// Show message
-				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_display_message", eyegui::fetchLocalization(_pMaster->_pSuperGUI, "calibration_display_message"));
+				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_display_message", eyegui::fetchLocalization(_pMaster->_pSuperGUI, "super_calibration:calibration_display_message"));
 			}
 			else
 			{
