@@ -359,11 +359,14 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 
     // ### SUPER LAYOUT ###
 
-    // Load layouts (deleted at eyeGUI termination)
-    _pSuperLayout = eyegui::addLayout(_pSuperGUI, "layouts/Super.xeyegui", EYEGUI_SUPER_LAYER, true);
+	// Load layouts
+	_pSuperLayout = eyegui::addLayout(_pSuperGUI, "layouts/Super.xeyegui", EYEGUI_SUPER_LAYER, true);
 
 	// Load super calibration layout
 	_pSuperCalibrationLayout = eyegui::addLayout(_pSuperGUI, "layouts/SuperCalibration.xeyegui", EYEGUI_SUPER_LAYER, false); // adding on top of super layout but still beneath cursor
+
+    // Load notification layout
+	_pSuperNotificationLayout = eyegui::addLayout(_pSuperGUI, "layouts/Empty.xeyegui", EYEGUI_SUPER_LAYER, true);
 
     // Button listener for pause
     _spMasterButtonListener = std::shared_ptr<MasterButtonListener>(new MasterButtonListener(this));
@@ -378,7 +381,7 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 
 	// Add floating frame for notification
 	_notificationFrameIndex = eyegui::addFloatingFrameWithBrick(
-		_pSuperLayout,
+		_pSuperNotificationLayout,
 		"bricks/Notification.beyegui",
 		(1.f - NOTIFICATION_WIDTH) / 2.f,
 		NOTIFICATION_Y,
@@ -756,7 +759,7 @@ void Master::Loop()
 
 				// Set content
 				eyegui::setContentOfTextBlock(
-					_pSuperLayout,
+					_pSuperNotificationLayout,
 					"notification",
 					notification.message);
 
@@ -782,7 +785,7 @@ void Master::Loop()
 				_notificationOverridable = notification.overridable;
 
 				// Make floating frame visible
-				eyegui::setVisibilityOFloatingFrame(_pSuperLayout, _notificationFrameIndex, true, false, true);
+				eyegui::setVisibilityOFloatingFrame(_pSuperNotificationLayout, _notificationFrameIndex, true, false, true);
 
 				// Reset time
 				_notificationTime = NOTIFICATION_DISPLAY_DURATION;
@@ -796,7 +799,7 @@ void Master::Loop()
 			else if(_notificationTime <= 0) // hide notification, if empty and time is over
 			{
 				// Hide notification display
-				eyegui::setVisibilityOFloatingFrame(_pSuperLayout, _notificationFrameIndex, false, false, true);
+				eyegui::setVisibilityOFloatingFrame(_pSuperNotificationLayout, _notificationFrameIndex, false, false, true);
 			}
 		}
 		else

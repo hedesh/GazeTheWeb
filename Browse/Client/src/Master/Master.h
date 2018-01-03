@@ -327,6 +327,9 @@ private:
 	// Layout to trigger calibration etc.
 	eyegui::Layout* _pSuperCalibrationLayout;
 
+	// Layout to display notifications
+	eyegui::Layout* _pSuperNotificationLayout;
+
     // Emtpy layout to handle cursor floating frame that may not take input
     eyegui::Layout* _pCursorLayout;
 
