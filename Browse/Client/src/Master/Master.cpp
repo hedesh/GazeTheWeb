@@ -383,6 +383,10 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 		NOTIFICATION_HEIGHT,
 		false,
 		false);
+
+	// Add floating frames for eyes in trackbox display of super calibration layout
+	_trackboxLeftFrameIndex = eyegui::addFloatingFrameWithBrick(_pSuperCalibrationLayout, "bricks/TrackboxEyeLeft.beyegui", 0, 0, 0, 0, true, false);
+	_trackboxRightFrameIndex = eyegui::addFloatingFrameWithBrick(_pSuperCalibrationLayout, "bricks/TrackboxEyeRight.beyegui", 0, 0, 0, 0, true, false);
 	
 	// ### CURSOR LAYOUT ###
 
@@ -830,6 +834,62 @@ void Master::Loop()
 			ShowSuperCalibrationLayout();
 		}
 
+		// Update super calibration layout with trackbox information
+		if (eyegui::isLayoutVisible(_pSuperCalibrationLayout))
+		{
+			// Coordinate of display in layout
+			const float trackboxDisplayX = 0.05f;
+			const float trackboxDisplayY = 0.60f;
+			const float trackboxDisplayWidth = 0.35f;
+			const float trackboxDisplayHeight = 0.25f;
+			const float trackboxPointSize = 0.1f;
+
+			// Get trackbox info
+			auto trackboxInfo = _upEyeInput->GetTrackboxInfo();
+
+			// Function to transform eye
+			auto transformTrackboxEye = [&](
+				const float x, const float y, const float z, // input
+				float& rX, float& rY, float& rSize)
+			{
+				// Size
+				rSize = 1.f - glm::abs(z);
+				rSize = rSize * trackboxPointSize;
+
+				// Position
+				rX = ((x + 1.f) * 0.5f) - (rSize * 0.5f);
+				rY = (1.f - ((y + 1.f) * 0.5f)) - (rSize * 0.5f);
+				rX = (rX * trackboxDisplayWidth) + trackboxDisplayX;
+				rY = (rY * trackboxDisplayHeight) + trackboxDisplayY;
+			};
+
+			// Visualization of the left eye
+			float leftSize = 0;
+			float leftX = 0;
+			float leftY = 0;
+			if (trackboxInfo.leftTracked)
+			{
+				transformTrackboxEye(
+					trackboxInfo.leftX, trackboxInfo.leftY, trackboxInfo.leftZ, // input
+					leftX, leftY, leftSize); // output
+			}
+			eyegui::setPositionOfFloatingFrame(_pSuperCalibrationLayout, _trackboxLeftFrameIndex, leftX, leftY);
+			eyegui::setSizeOfFloatingFrame(_pSuperCalibrationLayout, _trackboxLeftFrameIndex, leftSize, leftSize);
+
+			// Visualization of the right eye
+			float rightSize = 0;
+			float rightX = 0;
+			float rightY = 0;
+			if (trackboxInfo.rightTracked)
+			{
+				transformTrackboxEye(
+					trackboxInfo.rightX, trackboxInfo.rightY, trackboxInfo.rightZ, // input
+					rightX, rightY, rightSize); // output
+			}
+			eyegui::setPositionOfFloatingFrame(_pSuperCalibrationLayout, _trackboxRightFrameIndex, rightX, rightY);
+			eyegui::setSizeOfFloatingFrame(_pSuperCalibrationLayout, _trackboxRightFrameIndex, rightSize, rightSize);
+		}
+
         // Update cursor with original mouse input
         eyegui::setVisibilityOfLayout(_pCursorLayout, spInput->gazeEmulated, false, true);
         float halfRelativeMouseCursorSize = MOUSE_CURSOR_RELATIVE_SIZE / 2.f;
@@ -1180,18 +1240,18 @@ void Master::MasterButtonListener::down(eyegui::Layout* pLayout, std::string id)
 			if (spCalibrationInfo->empty())
 			{
 				// Show message
-				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_message", eyegui::fetchLocalization(_pMaster->_pSuperGUI, "calibration_message"));
+				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_display_message", eyegui::fetchLocalization(_pMaster->_pSuperGUI, "calibration_display_message"));
 			}
 			else
 			{
 				// Hide message
-				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_message", "");
+				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_display_message", "");
 
 				// Show points of this calibration
-				const float calibrationDisplayX = 0.075f;
-				const float calibrationDisplayY = 0.175f;
+				const float calibrationDisplayX = 0.05f;
+				const float calibrationDisplayY = 0.16f;
 				const float calibrationDisplayWidth = 0.35f;
-				const float calibrationDisplayHeight = 0.35f;
+				const float calibrationDisplayHeight = 0.25f;
 				const float calibrationPointSize = 0.1f;
 				for (const auto& rPoint : *spCalibrationInfo.get())
 				{

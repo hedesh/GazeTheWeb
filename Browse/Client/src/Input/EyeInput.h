@@ -27,6 +27,7 @@
 typedef void(__cdecl *FETCH_SAMPLES)(SampleQueue&);
 typedef bool(__cdecl *IS_TRACKING)();
 typedef CalibrationResult(__cdecl *CALIBRATE)(std::shared_ptr<CalibrationInfo>&);
+typedef TrackboxInfo(__cdecl *GET_TRACKBOX_INFO)();
 typedef void(__cdecl *CONTINUE_LAB_STREAM)();
 typedef void(__cdecl *PAUSE_LAB_STREAM)();
 #endif
@@ -54,6 +55,9 @@ public:
 
 	// Calibrate the eye tracking device, returns result
 	CalibrationResult Calibrate(std::shared_ptr<CalibrationInfo>& rspCalibrationInfo);
+
+	// Get trackbox info
+	TrackboxInfo GetTrackboxInfo();
 
 	// Delegation of filter. Indicated whether age of input does say something...
 	bool SamplesReceived() const;
@@ -87,6 +91,9 @@ private:
 
 	// Handle to calibration
 	CALIBRATE _procCalibrate = NULL;
+
+	// Handle to get trackbox info
+	GET_TRACKBOX_INFO _procGetTrackboxInfo = NULL;
 
 	// Handle to continue lab stream
 	CONTINUE_LAB_STREAM _procContinueLabStream = NULL;

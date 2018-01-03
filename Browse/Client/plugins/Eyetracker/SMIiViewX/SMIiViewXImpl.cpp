@@ -122,6 +122,11 @@ CalibrationResult Calibrate(std::shared_ptr<CalibrationInfo>& rspInfo)
 	return iV_Calibrate() == RET_SUCCESS ? CALIBRATION_OK : CALIBRATION_FAILED;
 }
 
+TrackboxInfo GetTrackboxInfo()
+{
+	return TrackboxInfo();
+}
+
 void ContinueLabStream()
 {
 	eyetracker_global::ContinueLabStream();

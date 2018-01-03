@@ -54,6 +54,9 @@ EyeInput::EyeInput(MasterThreadsafeInterface* _pMasterThreadsafeInterface, Eyetr
 				// Fetch procedure to calibrate
 				_procCalibrate = (CALIBRATE)GetProcAddress(_pluginHandle, "Calibrate");
 
+				// Fetch procedure to get trackbox info
+				_procGetTrackboxInfo = (GET_TRACKBOX_INFO)GetProcAddress(_pluginHandle, "GetTrackboxInfo");
+
 				// Fetch procedure to continue lab stream
 				_procContinueLabStream = (CONTINUE_LAB_STREAM)GetProcAddress(_pluginHandle, "ContinueLabStream");
 
@@ -61,7 +64,13 @@ EyeInput::EyeInput(MasterThreadsafeInterface* _pMasterThreadsafeInterface, Eyetr
 				_procPauseLabStream = (PAUSE_LAB_STREAM)GetProcAddress(_pluginHandle, "PauseLabStream");
 
 				// Check whether procedures could be loaded
-				if (procConnect != NULL && _procFetchGazeSamples != NULL && _procIsTracking != NULL && _procCalibrate != NULL)
+				if (procConnect != NULL
+					&& _procFetchGazeSamples != NULL
+					&& _procIsTracking != NULL
+					&& _procCalibrate != NULL
+					&& _procGetTrackboxInfo != NULL
+					&& _procContinueLabStream != NULL
+					&& _procPauseLabStream != NULL)
 				{
 					/*
 					EyetrackerGeometry geometry;
@@ -88,6 +97,7 @@ EyeInput::EyeInput(MasterThreadsafeInterface* _pMasterThreadsafeInterface, Eyetr
 						_procFetchGazeSamples = NULL;
 						_procIsTracking = NULL;
 						_procCalibrate = NULL;
+						_procGetTrackboxInfo = NULL;
 						_procContinueLabStream = NULL;
 						_procPauseLabStream = NULL;
 					}
@@ -398,6 +408,19 @@ CalibrationResult EyeInput::Calibrate(std::shared_ptr<CalibrationInfo>& rspCalib
 #endif // _WIN32
 	return result;
 }
+
+TrackboxInfo EyeInput::GetTrackboxInfo()
+{
+	TrackboxInfo info;
+#ifdef _WIN32
+	if (_info.connected && _procGetTrackboxInfo != NULL)
+	{
+		info = _procGetTrackboxInfo();
+	}
+#endif // _WIN32
+	return info;
+}
+
 
 bool EyeInput::SamplesReceived() const
 {
