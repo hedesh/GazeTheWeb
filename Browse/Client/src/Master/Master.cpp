@@ -355,7 +355,7 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 	// _upWeb->AddTab("http://html5-demos.appspot.com/static/fullscreen.html");
 	// _upWeb->AddTab(std::string(CONTENT_PATH) + "/websites/index.html");
 	_upWeb->AddTab(_upSettings->GetHomepage());
-	_upWeb->AddTab("http://augreal.mklab.iti.gr/mamem/testing/", false);
+	// _upWeb->AddTab("http://augreal.mklab.iti.gr/mamem/testing/", false);
 
     // ### SUPER LAYOUT ###
 
@@ -838,7 +838,7 @@ void Master::Loop()
 		if (eyegui::isLayoutVisible(_pSuperCalibrationLayout))
 		{
 			// Coordinate of display in layout
-			const float trackboxDisplayX = 0.05f;
+			const float trackboxDisplayX = 0.04f;
 			const float trackboxDisplayY = 0.60f;
 			const float trackboxDisplayWidth = 0.35f;
 			const float trackboxDisplayHeight = 0.25f;
@@ -1248,7 +1248,7 @@ void Master::MasterButtonListener::down(eyegui::Layout* pLayout, std::string id)
 				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_display_message", "");
 
 				// Show points of this calibration
-				const float calibrationDisplayX = 0.05f;
+				const float calibrationDisplayX = 0.04f;
 				const float calibrationDisplayY = 0.16f;
 				const float calibrationDisplayWidth = 0.35f;
 				const float calibrationDisplayHeight = 0.25f;

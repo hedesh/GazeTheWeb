@@ -55,7 +55,7 @@ namespace setup
 	static const FilterKernel FILTER_KERNEL = FilterKernel::GAUSSIAN;
 	static const float	FILTER_WINDOW_TIME = 1.f; // in seconds, limits the fixation duration in the input structure !!!
 	static const bool	FILTER_USE_OUTLIER_REMOVAL = true;
-	static const bool	USE_EYEGUI_DRIFT_MAP = !DEMO_MODE;
+	static const bool	USE_EYEGUI_DRIFT_MAP = false; // !DEMO_MODE;
 
 	// Distortion
 	static const bool	EYEINPUT_DISTORT_GAZE = false && !DEPLOYMENT;
