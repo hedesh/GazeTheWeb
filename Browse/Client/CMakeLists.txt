@@ -4,7 +4,7 @@ set(CEF_TARGET Client)
 
 message(STATUS "*** CLIENT ***")
 
-set(VERSION "0.7")
+set(VERSION "0.8")
 add_definitions(-DCLIENT_VERSION=${VERSION})
 
 string(TIMESTAMP DATE %d/%m/%Y)
