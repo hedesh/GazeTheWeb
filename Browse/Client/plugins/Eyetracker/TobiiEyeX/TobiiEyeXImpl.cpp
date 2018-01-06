@@ -212,6 +212,11 @@ CalibrationResult Calibrate(std::shared_ptr<CalibrationInfo>& rspInfo)
 	return CALIBRATION_NOT_SUPPORTED;
 }
 
+TrackboxInfo GetTrackboxInfo()
+{
+	return TrackboxInfo();
+}
+
 void ContinueLabStream()
 {
 	eyetracker_global::ContinueLabStream();

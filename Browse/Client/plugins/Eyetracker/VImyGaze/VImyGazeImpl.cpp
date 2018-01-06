@@ -248,6 +248,22 @@ CalibrationResult Calibrate(std::shared_ptr<CalibrationInfo>& rspInfo)
 	return result;
 }
 
+TrackboxInfo GetTrackboxInfo()
+{
+	TrackingStatusStruct status;
+	iV_GetTrackingStatus(&status);
+	TrackboxInfo info;
+	info.leftTracked = status.leftEye.validity == 1;
+	info.leftX = (float)status.leftEye.relativePositionX;
+	info.leftY = (float)status.leftEye.relativePositionY;
+	info.leftZ = (float)status.leftEye.relativePositionZ;
+	info.rightTracked = status.rightEye.validity == 1;
+	info.rightX = (float)status.rightEye.relativePositionX;
+	info.rightY = (float)status.rightEye.relativePositionY;
+	info.rightZ = (float)status.rightEye.relativePositionZ;
+	return info;
+}
+
 void ContinueLabStream()
 {
 	eyetracker_global::ContinueLabStream();

@@ -355,15 +355,18 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 	// _upWeb->AddTab("http://html5-demos.appspot.com/static/fullscreen.html");
 	// _upWeb->AddTab(std::string(CONTENT_PATH) + "/websites/index.html");
 	_upWeb->AddTab(_upSettings->GetHomepage());
-	_upWeb->AddTab("http://augreal.mklab.iti.gr/mamem/testing/", false);
+	// _upWeb->AddTab("http://augreal.mklab.iti.gr/mamem/testing/", false);
 
     // ### SUPER LAYOUT ###
 
-    // Load layouts (deleted at eyeGUI termination)
-    _pSuperLayout = eyegui::addLayout(_pSuperGUI, "layouts/Super.xeyegui", EYEGUI_SUPER_LAYER, true);
+	// Load layouts
+	_pSuperLayout = eyegui::addLayout(_pSuperGUI, "layouts/Super.xeyegui", EYEGUI_SUPER_LAYER, true);
 
 	// Load super calibration layout
 	_pSuperCalibrationLayout = eyegui::addLayout(_pSuperGUI, "layouts/SuperCalibration.xeyegui", EYEGUI_SUPER_LAYER, false); // adding on top of super layout but still beneath cursor
+
+    // Load notification layout
+	_pSuperNotificationLayout = eyegui::addLayout(_pSuperGUI, "layouts/Empty.xeyegui", EYEGUI_SUPER_LAYER, true);
 
     // Button listener for pause
     _spMasterButtonListener = std::shared_ptr<MasterButtonListener>(new MasterButtonListener(this));
@@ -373,9 +376,12 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 	eyegui::registerButtonListener(_pSuperCalibrationLayout, "continue", _spMasterButtonListener);
 	eyegui::registerButtonListener(_pSuperCalibrationLayout, "recalibration", _spMasterButtonListener);
 
+	// Disable continuing from super calibration screen (until calibration is done)
+	eyegui::setElementActivity(_pSuperCalibrationLayout, "continue", false, false);
+
 	// Add floating frame for notification
 	_notificationFrameIndex = eyegui::addFloatingFrameWithBrick(
-		_pSuperLayout,
+		_pSuperNotificationLayout,
 		"bricks/Notification.beyegui",
 		(1.f - NOTIFICATION_WIDTH) / 2.f,
 		NOTIFICATION_Y,
@@ -383,6 +389,10 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 		NOTIFICATION_HEIGHT,
 		false,
 		false);
+
+	// Add floating frames for eyes in trackbox display of super calibration layout
+	_trackboxLeftFrameIndex = eyegui::addFloatingFrameWithBrick(_pSuperCalibrationLayout, "bricks/TrackboxEyeLeft.beyegui", 0, 0, 0, 0, true, false);
+	_trackboxRightFrameIndex = eyegui::addFloatingFrameWithBrick(_pSuperCalibrationLayout, "bricks/TrackboxEyeRight.beyegui", 0, 0, 0, 0, true, false);
 	
 	// ### CURSOR LAYOUT ###
 
@@ -749,7 +759,7 @@ void Master::Loop()
 
 				// Set content
 				eyegui::setContentOfTextBlock(
-					_pSuperLayout,
+					_pSuperNotificationLayout,
 					"notification",
 					notification.message);
 
@@ -775,7 +785,7 @@ void Master::Loop()
 				_notificationOverridable = notification.overridable;
 
 				// Make floating frame visible
-				eyegui::setVisibilityOFloatingFrame(_pSuperLayout, _notificationFrameIndex, true, false, true);
+				eyegui::setVisibilityOFloatingFrame(_pSuperNotificationLayout, _notificationFrameIndex, true, false, true);
 
 				// Reset time
 				_notificationTime = NOTIFICATION_DISPLAY_DURATION;
@@ -789,7 +799,7 @@ void Master::Loop()
 			else if(_notificationTime <= 0) // hide notification, if empty and time is over
 			{
 				// Hide notification display
-				eyegui::setVisibilityOFloatingFrame(_pSuperLayout, _notificationFrameIndex, false, false, true);
+				eyegui::setVisibilityOFloatingFrame(_pSuperNotificationLayout, _notificationFrameIndex, false, false, true);
 			}
 		}
 		else
@@ -828,6 +838,62 @@ void Master::Loop()
 		{
 			// Show super calibration layout
 			ShowSuperCalibrationLayout();
+		}
+
+		// Update super calibration layout with trackbox information
+		if (eyegui::isLayoutVisible(_pSuperCalibrationLayout))
+		{
+			// Coordinate of display in layout TODO: ask eyeGUI for the dimensions
+			const float trackboxDisplayX = 0.04f;
+			const float trackboxDisplayY = 0.60f;
+			const float trackboxDisplayWidth = 0.35f;
+			const float trackboxDisplayHeight = 0.25f;
+			const float trackboxPointSize = 0.1f;
+
+			// Get trackbox info
+			auto trackboxInfo = _upEyeInput->GetTrackboxInfo();
+
+			// Function to transform eye
+			auto transformTrackboxEye = [&](
+				const float x, const float y, const float z, // input
+				float& rX, float& rY, float& rSize) // output
+			{
+				// Size
+				rSize = 1.f - glm::abs(z);
+				rSize = rSize * trackboxPointSize;
+
+				// Position
+				rX = ((x + 1.f) * 0.5f) - (rSize * 0.5f);
+				rY = (1.f - ((y + 1.f) * 0.5f)) - (rSize * 0.5f);
+				rX = (rX * trackboxDisplayWidth) + trackboxDisplayX;
+				rY = (rY * trackboxDisplayHeight) + trackboxDisplayY;
+			};
+
+			// Visualization of the left eye
+			float leftSize = 0;
+			float leftX = 0;
+			float leftY = 0;
+			if (trackboxInfo.leftTracked)
+			{
+				transformTrackboxEye(
+					trackboxInfo.leftX, trackboxInfo.leftY, trackboxInfo.leftZ, // input
+					leftX, leftY, leftSize); // output
+			}
+			eyegui::setPositionOfFloatingFrame(_pSuperCalibrationLayout, _trackboxLeftFrameIndex, leftX, leftY);
+			eyegui::setSizeOfFloatingFrame(_pSuperCalibrationLayout, _trackboxLeftFrameIndex, leftSize, leftSize);
+
+			// Visualization of the right eye
+			float rightSize = 0;
+			float rightX = 0;
+			float rightY = 0;
+			if (trackboxInfo.rightTracked)
+			{
+				transformTrackboxEye(
+					trackboxInfo.rightX, trackboxInfo.rightY, trackboxInfo.rightZ, // input
+					rightX, rightY, rightSize); // output
+			}
+			eyegui::setPositionOfFloatingFrame(_pSuperCalibrationLayout, _trackboxRightFrameIndex, rightX, rightY);
+			eyegui::setSizeOfFloatingFrame(_pSuperCalibrationLayout, _trackboxRightFrameIndex, rightSize, rightSize);
 		}
 
         // Update cursor with original mouse input
@@ -1150,18 +1216,22 @@ void Master::MasterButtonListener::down(eyegui::Layout* pLayout, std::string id)
 				_pMaster->PushNotificationByKey("notification:calibration_success", MasterNotificationInterface::Type::SUCCESS, false);
 				eyegui::resetDriftMap(_pMaster->_pGUI); // reset drift map of GUI
 				success = true;
+				eyegui::setElementActivity(_pMaster->_pSuperCalibrationLayout, "continue", true, true); // allow user to continue
 				break;
 			case CALIBRATION_BAD:
 				// TODO: provide hints how to improve calibration
 				_pMaster->PushNotificationByKey("notification:calibration_bad", MasterNotificationInterface::Type::WARNING, false);
 				eyegui::resetDriftMap(_pMaster->_pGUI); // reset drift map of GUI
 				success = true;
+				eyegui::setElementActivity(_pMaster->_pSuperCalibrationLayout, "continue", true, true); // allow user to continue
 				break;
 			case CALIBRATION_FAILED:
 				_pMaster->PushNotificationByKey("notification:calibration_failure", MasterNotificationInterface::Type::WARNING, false);
+				eyegui::setElementActivity(_pMaster->_pSuperCalibrationLayout, "continue", false, true); // force user to do calibration
 				break;
 			case CALIBRATION_NOT_SUPPORTED:
 				_pMaster->PushNotificationByKey("notification:calibration_failure", MasterNotificationInterface::Type::WARNING, false);
+				eyegui::setElementActivity(_pMaster->_pSuperCalibrationLayout, "continue", true, true); // allow user to continue
 				break;
 			}
 
@@ -1180,18 +1250,18 @@ void Master::MasterButtonListener::down(eyegui::Layout* pLayout, std::string id)
 			if (spCalibrationInfo->empty())
 			{
 				// Show message
-				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_message", eyegui::fetchLocalization(_pMaster->_pSuperGUI, "calibration_message"));
+				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_display_message", eyegui::fetchLocalization(_pMaster->_pSuperGUI, "super_calibration:calibration_display_message"));
 			}
 			else
 			{
 				// Hide message
-				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_message", "");
+				eyegui::setContentOfTextBlock(_pMaster->_pSuperCalibrationLayout, "calibration_display_message", "");
 
-				// Show points of this calibration
-				const float calibrationDisplayX = 0.075f;
-				const float calibrationDisplayY = 0.175f;
+				// Show points of this calibration TODO: ask eyeGUI for the dimensions
+				const float calibrationDisplayX = 0.04f;
+				const float calibrationDisplayY = 0.16f;
 				const float calibrationDisplayWidth = 0.35f;
-				const float calibrationDisplayHeight = 0.35f;
+				const float calibrationDisplayHeight = 0.25f;
 				const float calibrationPointSize = 0.1f;
 				for (const auto& rPoint : *spCalibrationInfo.get())
 				{
