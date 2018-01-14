@@ -431,8 +431,14 @@ function AnalyzeNode(node)
 		{
 
 			node.addEventListener('webkitTransitionEnd', function(event){
-				// ConsolePrint("FORM transition event detected"); //DEBUG
+
+				// DEBUG
+				console.log("Recognized webkitTransitionEnd for node: ", node);
 				ForEveryChild(node, function(child){
+
+					if(!child.analyzed)
+						AnalyzeNode(child);
+
 					if(child.nodeType == 1)
 					{
 						var nodeType = child.getAttribute('nodeType');

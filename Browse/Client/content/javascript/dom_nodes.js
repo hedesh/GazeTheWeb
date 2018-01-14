@@ -136,19 +136,18 @@ DOMNode.prototype.updateRects = function(altNode){
     var adjustedRects = this.getAdjustedClientRects(altNode);
 
 
-    if(!EqualClientRectsData(this.rects, adjustedRects))
+    var rects_changed = !EqualClientRectsData(this.rects, adjustedRects);
+    if(rects_changed)
     {
         this.rects = adjustedRects;
 
         SendAttributeChangesToCEF("Rects", this);
-        UpdateRectUpdateTimer(t0);
-        
-        this.updateOccBitmask(altNode);
-        
-        return true; // Rects changed and were updated
     }
     UpdateRectUpdateTimer(t0);
-    return false; // No update needed, no changes
+    
+    this.updateOccBitmask(altNode);
+    
+    return rects_changed; // No update needed, no changes
 }
 
 DOMNode.prototype.updateOccBitmask = function(altNode, debug){
@@ -157,7 +156,7 @@ DOMNode.prototype.updateOccBitmask = function(altNode, debug){
     if(this.rects.length > 0)
     {
         // Cut with possible overflows hidding node partially
-        var r = Object.assign({}, this.getRects()[0]); // deepcopy array, otherwise, coordinates will be changed by the following
+        var r = Object.assign({}, this.getRects(false)[0]); // deepcopy array, otherwise, coordinates will be changed by the following
 
         if(debug)
             console.log("scroll X: ", window.scrollX, ", Y: ", window.scrollY, "\nrects before: ", r);
