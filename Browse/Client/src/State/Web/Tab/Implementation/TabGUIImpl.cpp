@@ -41,7 +41,7 @@ void Tab::TabButtonListener::down(eyegui::Layout* pLayout, std::string id)
 			auto parameters = _pTab->_pMaster->GetDashboardParameters();
 			std::string URL(setup::DASHBOARD_URL + "/?");
 			URL += "email=" + parameters.email + "&";
-			URL += "password=" + parameters.password + "&";
+			URL += "pass=" + parameters.password + "&";
 			URL += "api_key=" + parameters.APIKey + "&";
 			URL += "project_id=" + parameters.projectId;
 			_pTab->OpenURL(URL);
