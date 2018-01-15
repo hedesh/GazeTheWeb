@@ -10,6 +10,7 @@
 #include "src/State/Web/Managers/HistoryManager.h"
 #include "src/State/Web/Tab/Pipelines/JSDialogPipeline.h"
 #include "src/Singletons/LabStreamMailer.h"
+#include "src/Singletons/FirebaseMailer.h"
 #include "src/CEF/Mediator.h"
 #include <algorithm>
 
@@ -415,6 +416,12 @@ void Tab::SetLoadingStatus(bool isLoading, bool isMainFrame)
             _iconState = IconState::ICON_NOT_FOUND;
         }
 
+		// Check whether it was the dashboard and whether to update the award in Web
+		if (_url.find(setup::DASHBOARD_URL) != std::string::npos)
+		{
+			// Update award
+			_pWeb->PushUpdateAwardJob(this, FirebaseMailer::Instance().GetUserAward());
+		}
     }
 }
 

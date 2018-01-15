@@ -425,6 +425,12 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 	bool pushedBack = FirebaseMailer::Instance().PushBack_Login(_upSettings->GetFirebaseEmail(), _upSettings->GetFirebasePassword(), &idTokenPromise);
 	if (pushedBack) { LogInfo(idTokenFuture.get()); };
 
+	// Retrieve user award
+	Award award = FirebaseMailer::Instance().GetUserAward();
+
+	// Set award in Web
+	_upWeb->SetAward(award);
+
 	// ### JAVASCRIPT TO LAB STREAMING LAYER ###
 
 	// Registers a JavaScript callback function that pipes JS callbacks starting with "lsl:" to LabStreamingLayer
