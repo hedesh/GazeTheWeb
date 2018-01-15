@@ -419,7 +419,7 @@ void Tab::SetLoadingStatus(bool isLoading, bool isMainFrame)
 		// Check whether it was the dashboard and whether to update the award in Web
 		if (_url.find(setup::DASHBOARD_URL) != std::string::npos)
 		{
-			// Update award
+			// Update award TODO: will update on every subpage of the dashboard. maybe improve on that
 			_pWeb->PushUpdateAwardJob(this, FirebaseMailer::Instance().GetUserAward());
 		}
     }
