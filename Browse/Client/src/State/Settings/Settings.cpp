@@ -35,7 +35,7 @@ Settings::Settings(Master* pMaster) : State(pMaster)
     // Set state of switches before registering listerners to avoid unnecessary saving
     if(_globalSetup.showDescriptions) { eyegui::buttonDown(_pGeneralLayout, "toggle_descriptions", true); }
     if(_globalSetup.showGazeVisualization) { eyegui::buttonDown(_pGeneralLayout, "toggle_gaze_visualization", true); }
-	if(_globalSetup.adBlocking) { eyegui::buttonDown(_pGeneralLayout, "toggle_ad_blocking", true); };
+	if(_globalSetup.adBlocking) { eyegui::buttonDown(_pAdBlockingLayout, "toggle_ad_blocking", true); };
 
 	// Button listener
 	_spSettingsButtonListener = std::shared_ptr<SettingsButtonListener>(new SettingsButtonListener(this));
@@ -230,7 +230,7 @@ bool Settings::LoadSettings()
 	tinyxml2::XMLElement* pAdBlocking = pGlobal->FirstChildElement("adblocking");
 	if (pAdBlocking != NULL)
 	{
-		_globalSetup.adBlocking = pGazeVisualization->BoolAttribute("block");
+		_globalSetup.adBlocking = pAdBlocking->BoolAttribute("block");
 	}
 
 	// Keyboard layout
