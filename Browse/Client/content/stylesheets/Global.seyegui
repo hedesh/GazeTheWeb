@@ -16,6 +16,7 @@ default
 	ButtonPressingDuration = 0.3
 	ButtonHitSound=sounds/GameAudio/ClickWooden-1.ogg
 	KeyPressSound=sounds/GameAudio/ClickWooden-2.ogg
+	FlowSpeedMultiplier = 0.5
 }
 
 default_noback : default
