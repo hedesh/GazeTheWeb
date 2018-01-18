@@ -31,7 +31,7 @@ document.onreadystatechange = function()
 
 	if(document.readyState === "complete")
 	{
-		ForEveryChild(document.documentElement, AnalyseNode);
+		ForEveryChild(document.documentElement, AnalyzeNode);
 
 		var keywords = document.querySelector("meta[name='keywords']");
 		if(keywords && keywords.content)
