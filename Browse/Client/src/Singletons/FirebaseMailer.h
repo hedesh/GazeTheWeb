@@ -363,7 +363,7 @@ public:
 	// Retrieve info about user award and wait for it
 	Award GetUserAward()
 	{
-		// Retrive score
+		// Retrieve score
 		float score = 0.f;
 		std::promise<nlohmann::json> scorePromise; auto scoreFuture = scorePromise.get_future(); // future provides score
 		bool pushedBack = FirebaseMailer::Instance().PushBack_Get(FirebaseJSONKey::SCORES_TOTAL, &scorePromise);
