@@ -340,8 +340,12 @@ void RenderProcessHandler::OnContextCreated(
 {
 	_msgRouter->OnContextCreated(browser, frame, context);
 
+
     if (frame->IsMain())
     {
+	/*	frame->ExecuteJavaScript("window.addEventListener('message', (event) => {"
+			"if(window.debug) console.log('Window object',window,'received message ', event);}, false);", "", 0);*/
+
 		frame->ExecuteJavaScript("window.starting_time_ = window.performance.now();", "", 0);
 
 		// Clear previous DOM nodes in current Tab
@@ -406,12 +410,18 @@ void RenderProcessHandler::OnContextCreated(
 
             context->Exit();
         }
-        /*
-        *	GetFavIconBytes
-        * END *******************************************************************************/
+		else
+		{
+			// EXPERIMENTAL: Moved to Handler::OnLoadStart for sub-frames
+			//frame->ExecuteJavaScript(
+			//	"window.addEventListener('message', (event) => {"
+			//	"console.log('Window object',window,'received message from',event.source);"
+			//	"event.source.postMessage('Answering event source...', event.origin);"
+			//	"}, false);", "", 0);
+		}
 
     }
-    //else IPCLogDebug(browser, "Not able to enter context! (main frame?="+std::to_string(frame->IsMain())+")");
+
 }
 
 void RenderProcessHandler::OnContextReleased(CefRefPtr<CefBrowser> browser,

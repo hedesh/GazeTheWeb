@@ -308,7 +308,7 @@ DOMTextInput.prototype.getText = function(){
     return this.text;
 }
 DOMTextInput.prototype.setText = function(text){
-    var informCEF = (this.text !== text);
+   var informCEF = (this.text !== text);
     this.text = text;
     if(informCEF)
         SendAttributeChangesToCEF("Text", this);

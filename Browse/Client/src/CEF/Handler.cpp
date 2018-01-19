@@ -129,6 +129,15 @@ void Handler::OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> fra
         frame->ExecuteJavaScript(_js_remove_css_scrollbar, frame->GetURL(), 0);
 
     }
+	else
+	{
+		// EXPERIMENTAL
+		//frame->ExecuteJavaScript(
+		//	"window.addEventListener('message', (event) => {"
+		//	"console.log('Window object',window,'received message from',event.source);"
+		//	"event.source.postMessage('Answering event source...', event);"
+		//	"});", "", 0);
+	}
 
 }
 

@@ -298,6 +298,15 @@ function AnalyzeNode(node)
 				// UpdateDOMRects("AnalyzeNode -- AddFixedElement "+node.className);
 		}
 
+		if(node.tagName === "IFRAME")
+		{
+			if(node.contentDocument.children.length > 0)
+			{
+				console.log("iframe added, now also observing:", node.contentDocument.children[0]);
+				window.observer.observe(node.contentDocument.children[0], window.observer_config);
+			}
+		}
+
 		if(node.tagName === "VIDEO")
 		{
 			CreateDOMVideo(node);
