@@ -16,6 +16,7 @@
 #include <iomanip>
 #include <string>
 #include <fstream>
+#include <experimental/filesystem>
 
 #ifdef _WIN32 // Windows
 // Native access to Windows functions is necessary to maximize window
@@ -180,7 +181,11 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 	// ### WINDOW ICON ###
 
 	// Set content path (before using it in the helper)
-	eyegui::setRootFilepath(CONTENT_PATH);
+	std::string contentPath = CONTENT_PATH;
+#ifdef CLIENT_DEPLOYMENT
+	contentPath = std::experimental::filesystem::current_path().generic_string() + "/content";
+#endif // CLIENT_DEPLOYMENT
+	eyegui::setRootFilepath(contentPath);
 
 	// Load window icons for GLFW
 	std::vector<unsigned char> icon16Data;
