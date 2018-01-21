@@ -11,8 +11,10 @@
 #define WEBTABINTERFACE_H_
 
 #include "src/State/Web/Managers/HistoryManager.h"
+#include "src/Award.h"
 #include <string>
 
+// Forward declarations
 class Tab;
 
 class WebTabInterface
@@ -21,6 +23,9 @@ public:
 
 	// Add tab after that tab
     virtual void PushAddTabAfterJob(Tab* pCaller, std::string URL) = 0;
+
+	// Update award
+	virtual void PushUpdateAwardJob(Tab* pCaller, Award award) = 0;
 
     // Get own id in web. Returns -1 if not found
     virtual int GetIdOfTab(Tab const * pCaller) const = 0;

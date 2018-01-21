@@ -101,6 +101,9 @@ int Web::AddTab(std::string URL, bool show)
     std::unique_ptr<Tab> upTab =
         std::unique_ptr<Tab>(new Tab(_pMaster, _pCefMediator, this, URL, _dataTransfer));
 
+	// Set award icon
+	upTab->SetAwardIcon(_award);
+
     // Put tab in map
     _tabs.emplace(id, std::move(upTab));
 
@@ -387,6 +390,15 @@ void Web::NotifyClick(std::string tag, std::string id, float x, float y)
 	}
 }
 
+void Web::SetAward(Award award)
+{
+	_award = award;
+	for (auto& rTab : _tabs)
+	{
+		rTab.second->SetAwardIcon(_award);
+	}
+}
+
 StateType Web::Update(float tpf, const std::shared_ptr<const Input> spInput)
 {
     // Process jobs first
@@ -546,6 +558,11 @@ void Web::Deactivate()
 void Web::PushAddTabAfterJob(Tab* pCaller, std::string URL)
 {
     _jobs.push_front(std::unique_ptr<TabJob>(new AddTabAfterJob(pCaller, URL, true)));
+}
+
+void Web::PushUpdateAwardJob(Tab* pCaller, Award award)
+{
+	_jobs.push_front(std::unique_ptr<TabJob>(new UpdateAwardJob(pCaller, award)));
 }
 
 int Web::GetIdOfTab(Tab const * pCaller) const
@@ -895,6 +912,12 @@ void Web::AddTabAfterJob::Execute(Web* pCallee)
 
 	// Flash tab overview button to indicate, that new tab was created by application
 	eyegui::flash(pCallee->_pWebLayout, "tab_overview");
+}
+
+void Web::UpdateAwardJob::Execute(Web* pCallee)
+{
+	// Set award
+	pCallee->SetAward(this->_award);
 }
 
 void Web::WebButtonListener::down(eyegui::Layout* pLayout, std::string id)

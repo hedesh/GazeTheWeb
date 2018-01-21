@@ -133,6 +133,9 @@ public:
 	// Get color accent
 	glm::vec4 GetColorAccent() const { return _targetColorAccent; }
 
+	// Update award icon
+	void SetAwardIcon(Award award); 
+
     // #################################
     // ### TAB INTERACTIVE INTERFACE ###
     // #################################

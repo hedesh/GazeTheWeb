@@ -37,6 +37,9 @@ extern "C" {
 	// Perform calibration, returns whether succesfull
 	DLL_API CalibrationResult Calibrate(std::shared_ptr<CalibrationInfo>& rspInfo);
 
+	// Retrieve trackbox informatoin
+	DLL_API TrackboxInfo GetTrackboxInfo();
+
 	// Continue lab streaming layer streaming
 	DLL_API void ContinueLabStream();
 

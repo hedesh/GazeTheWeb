@@ -327,11 +327,18 @@ private:
 	// Layout to trigger calibration etc.
 	eyegui::Layout* _pSuperCalibrationLayout;
 
+	// Layout to display notifications
+	eyegui::Layout* _pSuperNotificationLayout;
+
     // Emtpy layout to handle cursor floating frame that may not take input
     eyegui::Layout* _pCursorLayout;
 
-    // Floating frame index of cusor
+    // Floating frame index of cursor
     unsigned int _cursorFrameIndex = 0;
+
+	// Floating frame indices for eyes in trackbox display of super calibration layout
+	unsigned int _trackboxLeftFrameIndex = 0;
+	unsigned int _trackboxRightFrameIndex = 0;
 
     // Bool to indicate pause (PAUSED_AT_STARTUP used in constructor). Pauses input, not application!
     bool _paused = false;

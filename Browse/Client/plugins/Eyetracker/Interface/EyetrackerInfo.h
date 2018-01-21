@@ -17,6 +17,22 @@ struct EyetrackerInfo
 	bool geometrySetupSuccessful = false;
 };
 
+// Struct about position of eyes in track box
+struct TrackboxInfo
+{
+	// Whether tracked or not
+	bool leftTracked = false;
+	bool rightTracked = false;
+
+	// Relative eye position in trackbox -1 to 1
+	float leftX = 0; // left to right
+	float leftY = 0; // lower to upper
+	float leftZ = 0; // near to far
+	float rightX = 0; // left to right
+	float rightY = 0; // lower to upper
+	float rightZ = 0; // near to far
+};
+
 // Enumeration about calibration
 enum CalibrationResult { CALIBRATION_NOT_SUPPORTED, CALIBRATION_OK, CALIBRATION_BAD, CALIBRATION_FAILED };
 

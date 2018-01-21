@@ -78,6 +78,9 @@ public:
 	// Notify about click
 	void NotifyClick(std::string tag, std::string id, float x, float y);
 
+	// Set award
+	void SetAward(Award award);
+
     // #############
     // ### STATE ###
     // #############
@@ -100,6 +103,9 @@ public:
 
 	// Add tab after that tab
     virtual void PushAddTabAfterJob(Tab* pCaller, std::string URL);
+
+	// Update award
+	virtual void PushUpdateAwardJob(Tab* pCaller, Award award);
 
     // Get own id in web. Returns -1 if not found
     virtual int GetIdOfTab(Tab const * pCaller) const;
@@ -146,6 +152,25 @@ private:
         std::string _URL;
         bool _show;
     };
+
+	class UpdateAwardJob : public TabJob
+	{
+	public:
+
+		// Constructor
+		UpdateAwardJob(Tab* pCaller, Award award) : TabJob(pCaller)
+		{
+			_award = award;
+		}
+
+		// Execute
+		virtual void Execute(Web* pCallee);
+
+	protected:
+
+		// Members
+		Award _award;
+	};
 
     // Give listener full access
     friend class WebButtonListener;
@@ -226,6 +251,9 @@ private:
 
 	// Data transfer
 	bool _dataTransfer = false;
+
+	// Store which award the user currently has (in terms of persuasive design)
+	Award _award = Award::BRONZE;
 
 	// Regex for URL validation
 	std::unique_ptr<std::regex> _upURLregex;

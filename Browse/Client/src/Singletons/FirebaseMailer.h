@@ -10,6 +10,7 @@
 #define FIREBASEMAILER_H_
 
 #include "src/Setup.h"
+#include "src/Award.h"
 #include "submodules/json/src/json.hpp"
 #include <string>
 #include <deque>
@@ -99,6 +100,9 @@ enum class FirebaseJSONKey		{
 	GENERAL_GO_FORWARD_USAGE,
 	GENERAL_PAUSE,
 	GENERAL_UNPAUSE,
+
+	// Other
+	SCORES_TOTAL,
 
 	// TODO
 	GENERAL_DASHBOARD_USAGE,
@@ -301,6 +305,11 @@ private:
 			return "general/unpause";
 		case FirebaseJSONKey::GENERAL_DASHBOARD_USAGE:
 			return "general/dashboardUsage";
+
+		// Other
+		case FirebaseJSONKey::SCORES_TOTAL:
+			return "scores/total";
+
 		default: return "";
 		}
 	};
@@ -350,6 +359,30 @@ public:
 
 	// Get start index (is -1 one at failure)
 	int GetStartIndex() const;
+
+	// Retrieve info about user award and wait for it
+	Award GetUserAward()
+	{
+		// Retrieve score
+		float score = 0.f;
+		std::promise<nlohmann::json> scorePromise; auto scoreFuture = scorePromise.get_future(); // future provides score
+		bool pushedBack = FirebaseMailer::Instance().PushBack_Get(FirebaseJSONKey::SCORES_TOTAL, &scorePromise);
+		if (pushedBack) { score = scoreFuture.get().get<float>(); };
+
+		// Decide on award
+		if (score <= 3.3f)
+		{
+			return Award::BRONZE;
+		}
+		else if (score <= 6.6f)
+		{
+			return Award::SILVER;
+		}
+		else
+		{
+			return Award::GOLD;
+		}
+	}
 
 private:
 

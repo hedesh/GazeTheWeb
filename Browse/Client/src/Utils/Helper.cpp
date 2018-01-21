@@ -10,6 +10,7 @@
 #include <cmath>
 #include <vector>
 #include <ctime>
+#include <chrono>
 
 std::string RGBAToHexString(glm::vec4 color)
 {
@@ -218,5 +219,6 @@ std::string GetDate()
 
 std::string GetTimestamp()
 {
-	return std::to_string(std::time(nullptr));
+	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+	return std::to_string(ms.count());
 }

@@ -43,7 +43,7 @@ namespace setup
 	static const bool	CONNECT_TOBII_EYEX = true;
 	static const float	DURATION_BEFORE_INPUT = 1.f; // wait one second before accepting input
 	static const float	MAX_AGE_OF_USED_GAZE = 0.25f; // only accept gaze as input that is not older than one second (TODO: this is not used by filter but by master to determine when to stop taking gaze input as serious)
-	static const float	DURATION_BEFORE_SUPER_CALIBRATION = 3.f; // duration until recalibration is offered after receiving no gaze samples
+	static const float	DURATION_BEFORE_SUPER_CALIBRATION = 5.f; // duration until recalibration is offered after receiving no gaze samples
 	static const bool	PAUSED_AT_STARTUP = false | DEMO_MODE;
 	static const bool	SUPER_CALIBRATION_AT_STARTUP = false | DEPLOYMENT;
 	static const float	LINK_CORRECTION_MAX_PIXEL_DISTANCE = 5.f;
@@ -55,7 +55,7 @@ namespace setup
 	static const FilterKernel FILTER_KERNEL = FilterKernel::GAUSSIAN;
 	static const float	FILTER_WINDOW_TIME = 1.f; // in seconds, limits the fixation duration in the input structure !!!
 	static const bool	FILTER_USE_OUTLIER_REMOVAL = true;
-	static const bool	USE_EYEGUI_DRIFT_MAP = !DEMO_MODE;
+	static const bool	USE_EYEGUI_DRIFT_MAP = false; // !DEMO_MODE;
 
 	// Distortion
 	static const bool	EYEINPUT_DISTORT_GAZE = false && !DEPLOYMENT;
@@ -68,7 +68,8 @@ namespace setup
 	static const std::string	LAB_STREAM_INPUT_NAME = LAB_STREAM_OUTPUT_NAME; //  "GazeTheWebInput"; // may be set to same value as LAB_STREAM_OUTPUT_NAME to receive own events for debugging purposes
 	static const bool			LOG_INTERACTIONS = false; // on eyeGUI level, deprecated
 	static const bool			TAB_TRIGGER_SHOW_BADGE = false;
-	static const std::string	DASHBOARD_URL = "https://augreal.mklab.iti.gr/mamem/gtw-home"; // without slash at the end
+	static const std::string	DASHBOARD_URL = "http://augreal.mklab.iti.gr/mamem/gtw-home"; // without slash at the end
+	// TODO: CERTH HAS TO CHANGE URL TO HTTPS!!!
 
 	// Firebase
 	static const bool			FIREBASE_MAILING = !DEMO_MODE; // on/off switch for sending data to Firebase
