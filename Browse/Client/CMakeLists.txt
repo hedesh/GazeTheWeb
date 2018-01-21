@@ -31,7 +31,6 @@ if(OS_WINDOWS) # Windows
 	
 	# Sensor Lib integration
 	set(CLIENT_SENSOR_LIB_INTEGRATION OFF CACHE BOOL "Integrate Sensor Lib.")
-	set(CLIENT_SENSOR_LIB_PATH "C:/SensorLib" CACHE PATH "Path to Sensor Lib.")
 	
 endif()
 
@@ -202,11 +201,13 @@ if(OS_WINDOWS) # Windows
 	# Sensor Lib integration
 	if(${CLIENT_SENSOR_LIB_INTEGRATION})
 	
+		set(SENSOR_LIB_DIRECTORY "${EXTERNALS_DIR}/sensorLib")
+	
 		# Include path
-		include_directories("${CLIENT_SENSOR_LIB_PATH}/include")
+		include_directories("${SENSOR_LIB_DIRECTORY}/include")
 		
 		# Library to link
-		set(SENSOR_LIB_LIBRARIES "${CLIENT_SENSOR_LIB_PATH}/lib/SensorLibrary.lib")
+		set(SENSOR_LIB_LIBRARIES "${SENSOR_LIB_DIRECTORY}/lib/SensorLibrary.lib")
 		
 	endif()
 
@@ -216,7 +217,7 @@ if(OS_WINDOWS) # Windows
 	# Resource file
 	set(RESOURCE_FILE "${CMAKE_CURRENT_LIST_DIR}/Resources.rc")
 
-	# Creation of executeable
+	# Creation of executable
 	add_executable(${CEF_TARGET} WIN32 ${ALL_CODE} ${RESOURCE_FILE})
 	SET_EXECUTABLE_TARGET_PROPERTIES(${CEF_TARGET})
 
@@ -258,17 +259,35 @@ if(OS_WINDOWS) # Windows
 		"${LIBLSL_DIRECTORY}/lib-vs2015_x86_release/liblsl32.dll"
 		$<TARGET_FILE_DIR:${CEF_TARGET}>)
 		
-	# Sensor Lib integration (relies on liblsl.dll provided by GTW)
+	# Copy Sensor Lib library and dependencies to output folder (relies on liblsl.dll provided by GTW)
 	if(${CLIENT_SENSOR_LIB_INTEGRATION})
 	
-		# Copy all the DLLs
-		add_custom_command(TARGET ${CEF_TARGET} PRE_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_directory
-			"${CLIENT_SENSOR_LIB_PATH}/bin"
-			$<TARGET_FILE_DIR:${CEF_TARGET}>)
-			
+	  # Copy all dependencies....
+		macro(SimpleCopy arg)
+			add_custom_command(TARGET ${CEF_TARGET} PRE_BUILD
+				COMMAND ${CMAKE_COMMAND} -E copy_if_different
+				"${SENSOR_LIB_DIRECTORY}/bin/${arg}"
+				$<TARGET_FILE_DIR:${CEF_TARGET}>)
+		endmacro()
+		
+		# Libraries
+		SimpleCopy("SensorLibrary.dll")
+		SimpleCopy("EBNeuro.Galileo.Hardware.Communication.Device.GSR.dll")
+		SimpleCopy("EBNeuro.Galileo.Hardware.IO.dll")
+		SimpleCopy("EBNeuro.Galileo.Hardware.Ut.dll")
+		SimpleCopy("MathNet.Numerics.dll")
+		SimpleCopy("SDK_Shimmer.dll")
+		SimpleCopy("ShimmerClosedLibraryRev0_4.dll")
+		
+		# Licenses
+		SimpleCopy("LICENSE-EBNeuro.x.txt")
+		SimpleCopy("LICENSE-MathNet.Numerics.txt")
+		SimpleCopy("LICENSE-SDK_Shimmer.txt")
+		SimpleCopy("LICENSE-SensorLibrary.txt")
+		SimpleCopy("LICENSE-ShimmerClosedLibraryRev0_4.txt")
+	
 	endif()
-
+	
 elseif(OS_LINUX) # Linux
 
 	# Add custom compiler flags (necessary for spdlog)

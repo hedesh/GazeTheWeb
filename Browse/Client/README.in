@@ -45,12 +45,14 @@ CEF3: https://bitbucket.org/chromiumembedded/cef
 GLM: http://glm.g-truc.net/0.9.7/index.html (MIT license chosen)
 GLFW3: http://www.glfw.org
 iViewX: Connection to the iViewX SDK, copyright SMI GmbH (http://www.smivision.com)
+myGaze: Connection to myGaze SDK, copyright Visual Interaction GmbH (http://www.mygaze.com)
 TobiiEyeX: Connection to Tobii EyeX SDK, copyright Tobii Technology AB (http://developer.tobii.com/eyex-sdk)
 eyeGUI: https://github.com/raphaelmenges/eyeGUI
 	FreeType 2.6.1: http://www.freetype.org (FreeType license chosen)
 spdlog: https://github.com/gabime/spdlog
 liblsl: https://github.com/sccn/labstreaminglayer
 	Boost: https://github.com/boostorg/boost
+SensorLib: https://github.com/MAMEM/SensorLib
 text-csv: https://github.com/roman-kashitsyn/text-csv
 TinyXML2 (used one from eyeGUI library): https://github.com/leethomason/tinyxml2
 curl: https://github.com/curl/curl

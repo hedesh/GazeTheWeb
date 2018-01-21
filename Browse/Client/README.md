@@ -62,6 +62,7 @@ Dependencies are provided in the __externals__ and __submodules__ folder.
 __externals__:
 * liblsl: https://github.com/sccn/labstreaminglayer
   * Boost: https://github.com/boostorg/boost
+* SensorLib: https://github.com/MAMEM/SensorLib
 	
 __submodules__:
 * eyeGUI: https://github.com/raphaelmenges/eyeGUI
