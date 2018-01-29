@@ -161,8 +161,8 @@ DOMNode.prototype.updateOccBitmask = function(altNode, debug){
         if(debug)
             console.log("scroll X: ", window.scrollX, ", Y: ", window.scrollY, "\nrects before: ", r);
         var not_fixed = Number(!Boolean(this.fixObj));
-        r[0] = Math.ceil(r[0])+1 - window.scrollY * not_fixed;
-        r[1] = Math.ceil(r[1])+1 - window.scrollX * not_fixed;
+        r[0] = Math.floor(r[0])+1 - window.scrollY * not_fixed;
+        r[1] = Math.floor(r[1])+1 - window.scrollX * not_fixed;
         r[2] = Math.floor(r[2])-1 - window.scrollY * not_fixed;
         r[3] = Math.floor(r[3])-1 - window.scrollX * not_fixed;
         if(debug)

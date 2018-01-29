@@ -78,9 +78,28 @@ function CefPoll(num_partitions, update_partition)
         });
     });
 
+
     // DISABLED FOR DEBUGGING
     if(!partitioned)
         console.log("Took ", performance.now() - t_start, "ms.");
+
+
+
+    /* EXPERIMENTAL */
+    var t_start = performance.now();
+    var input_selectors = ["input", "div[role='combobox']", "div[role='textbox']", "textarea"];
+    var num_elements = 0;
+    input_selectors.forEach((selector) => {
+        var inputs = document.querySelectorAll(selector);
+        var num_inputs = inputs.length;
+        num_elements += num_inputs;
+        var i = 0;
+        for(; i < num_inputs; i++)
+        {
+            AnalyzeNode(inputs[i]);
+        }
+    });
+    console.log("Analyzing ", num_elements,"nodes with selectors took: ", performance.now() - t_start, "ms");
 }
 
 var gtwPageHeight = 0.0;
