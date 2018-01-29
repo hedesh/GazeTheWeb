@@ -367,7 +367,16 @@ public:
 		float score = 0.f;
 		std::promise<nlohmann::json> scorePromise; auto scoreFuture = scorePromise.get_future(); // future provides score
 		bool pushedBack = FirebaseMailer::Instance().PushBack_Get(FirebaseJSONKey::SCORES_TOTAL, &scorePromise);
-		if (pushedBack && !scoreFuture.get().empty() && scoreFuture.get().is_number()) { score = scoreFuture.get().get<float>(); }; // check whether something was returned before casting
+
+		// Check whether it was returned
+		if (pushedBack)
+		{
+			auto result = scoreFuture.get(); // get future (get may be only called once)
+			if (!result.empty() && result.is_number()) // check whether there was really a score
+			{
+				score = result.get<float>();
+			}
+		}
 
 		// Decide on award
 		if (score <= 3.3f)
