@@ -26,11 +26,11 @@ struct TrackboxInfo
 
 	// Relative eye position in trackbox -1 to 1
 	float leftX = 0; // left to right
-	float leftY; // lower to upper
-	float leftZ; // near to far
-	float rightX; // left to right
-	float rightY; // lower to upper
-	float rightZ; // near to far
+	float leftY = 0; // lower to upper
+	float leftZ = 0; // near to far
+	float rightX = 0; // left to right
+	float rightY = 0; // lower to upper
+	float rightZ = 0; // near to far
 };
 
 // Enumeration about calibration

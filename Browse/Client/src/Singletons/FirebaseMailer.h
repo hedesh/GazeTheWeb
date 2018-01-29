@@ -10,6 +10,7 @@
 #define FIREBASEMAILER_H_
 
 #include "src/Setup.h"
+#include "src/Award.h"
 #include "submodules/json/src/json.hpp"
 #include <string>
 #include <deque>
@@ -99,6 +100,9 @@ enum class FirebaseJSONKey		{
 	GENERAL_GO_FORWARD_USAGE,
 	GENERAL_PAUSE,
 	GENERAL_UNPAUSE,
+
+	// Other
+	SCORES_TOTAL,
 
 	// TODO
 	GENERAL_DASHBOARD_USAGE,
@@ -301,6 +305,11 @@ private:
 			return "general/unpause";
 		case FirebaseJSONKey::GENERAL_DASHBOARD_USAGE:
 			return "general/dashboardUsage";
+
+		// Other
+		case FirebaseJSONKey::SCORES_TOTAL:
+			return "scores/total";
+
 		default: return "";
 		}
 	};
@@ -334,13 +343,13 @@ public:
 	// Pause mailer
 	void Pause() { _paused = true; }
 
-	// Available commands. Returns whether successful. If not, do not wait for the promise to be fulfilled!
+	// Available commands. Returns whether successful pushed back the command. If not, do not wait for the promise to be fulfilled!
 	bool PushBack_Login		(std::string email, std::string password, std::promise<std::string>* pPromise = nullptr); // promise delivers initial idToken value and sets internal start index
 	bool PushBack_Transform	(FirebaseIntegerKey key, int delta, std::promise<int>* pPromise = nullptr); // promise delivers future database value
 	bool PushBack_Maximum	(FirebaseIntegerKey key, int value, std::promise<int>* pPromise = nullptr); // promise delivers future database value
 	bool PushBack_Put		(FirebaseIntegerKey key, int value, std::string subpath = "");
 	bool PushBack_Put		(FirebaseStringKey key, std::string value, std::string subpath = "");
-	bool PushBack_Put		(FirebaseJSONKey key, nlohmann::json value, std::string subpath = "");
+	bool PushBack_Put		(FirebaseJSONKey key, nlohmann::json value, std::string subpath = ""); // json return value might be empty in case of failure
 	bool PushBack_Get		(FirebaseIntegerKey key, std::promise<int>* pPromise);
 	bool PushBack_Get		(FirebaseStringKey key, std::promise<std::string>* pPromise);
 	bool PushBack_Get		(FirebaseJSONKey key, std::promise<nlohmann::json>* pPromise);
@@ -350,6 +359,39 @@ public:
 
 	// Get start index (is -1 one at failure)
 	int GetStartIndex() const;
+
+	// Retrieve info about user award and wait for it
+	Award GetUserAward()
+	{
+		// Retrieve score
+		float score = 0.f;
+		std::promise<nlohmann::json> scorePromise; auto scoreFuture = scorePromise.get_future(); // future provides score
+		bool pushedBack = FirebaseMailer::Instance().PushBack_Get(FirebaseJSONKey::SCORES_TOTAL, &scorePromise);
+
+		// Check whether it was returned
+		if (pushedBack)
+		{
+			auto result = scoreFuture.get(); // get future (get may be only called once)
+			if (!result.empty() && result.is_number()) // check whether there was really a score
+			{
+				score = result.get<float>();
+			}
+		}
+
+		// Decide on award
+		if (score <= 3.3f)
+		{
+			return Award::BRONZE;
+		}
+		else if (score <= 6.6f)
+		{
+			return Award::SILVER;
+		}
+		else
+		{
+			return Award::GOLD;
+		}
+	}
 
 private:
 

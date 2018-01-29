@@ -7,6 +7,7 @@
 #include "src/Utils/Helper.h"
 #include "src/Utils/Logger.h"
 #include "src/Arguments.h"
+#include "src/ContentPath.h"
 #include "submodules/glfw/include/GLFW/glfw3.h"
 #include "submodules/text-csv/include/text/csv/ostream.hpp"
 #include <functional>
@@ -177,10 +178,11 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
     static std::function<void(int, int)> fC = [&](int w, int h) { this->GLFWResizeCallback(w, h); };
     glfwSetFramebufferSizeCallback(_pWindow, [](GLFWwindow* window, int w, int h) { fC(w, h); });
 
-	// ### WINDOW ICON ###
+	// ### CONTENT PATH ###
 
-	// Set content path (before using it in the helper)
-	eyegui::setRootFilepath(CONTENT_PATH);
+	eyegui::setRootFilepath(RUNTIME_CONTENT_PATH);
+
+	// ### WINDOW ICON ###
 
 	// Load window icons for GLFW
 	std::vector<unsigned char> icon16Data;
@@ -424,6 +426,12 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 	std::promise<std::string> idTokenPromise; auto idTokenFuture = idTokenPromise.get_future(); // future provides initial idToken
 	bool pushedBack = FirebaseMailer::Instance().PushBack_Login(_upSettings->GetFirebaseEmail(), _upSettings->GetFirebasePassword(), &idTokenPromise);
 	if (pushedBack) { LogInfo(idTokenFuture.get()); };
+
+	// Retrieve user award
+	Award award = FirebaseMailer::Instance().GetUserAward();
+
+	// Set award in Web
+	_upWeb->SetAward(award);
 
 	// ### JAVASCRIPT TO LAB STREAMING LAYER ###
 

@@ -21,8 +21,8 @@ std::shared_ptr<spdlog::logger> Log()
     {
         // Create logger since there is no, yet
         std::vector<spdlog::sink_ptr> sinks;
+		sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>(LogPath + LOG_FILE_NAME + ".txt", LOG_FILE_MAX_SIZE, LOG_FILE_COUNT));
         sinks.push_back(std::make_shared<spdlog::sinks::stdout_sink_mt>());
-        sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>(LogPath + LOG_FILE_NAME + ".txt", LOG_FILE_MAX_SIZE, LOG_FILE_COUNT));
         GlobalLog = std::make_shared<spdlog::logger>("global_log", begin(sinks), end(sinks));
         GlobalLog->set_pattern("[%D-%T] %l: %v");
 

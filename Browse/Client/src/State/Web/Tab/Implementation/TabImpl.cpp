@@ -1037,3 +1037,19 @@ std::string Tab::GetFaviconIdentifier() const
 {
 	return "tab_info_" + std::to_string(_pWeb->GetIdOfTab(this));
 }
+
+void Tab::SetAwardIcon(Award award)
+{
+	switch (award)
+	{
+	case Award::BRONZE:
+		eyegui::setIconOfIconElement(_pPanelLayout, "dashboard", "icons/Award_bronze.png");
+		break;
+	case Award::SILVER:
+		eyegui::setIconOfIconElement(_pPanelLayout, "dashboard", "icons/Award_silver.png");
+		break;
+	case Award::GOLD:
+		eyegui::setIconOfIconElement(_pPanelLayout, "dashboard", "icons/Award_gold.png");
+		break;
+	}
+}

@@ -60,13 +60,9 @@ endif()
 
 ### CONTENT ####################################################################
 
+# Only used when NOT in deployment mode
 set(CLIENT_CONTENT_PATH ${CMAKE_CURRENT_LIST_DIR}/content CACHE PATH "Path to content folder.")
-if(${CLIENT_DEPLOYMENT})
-	add_definitions(-DCONTENT_PATH="./content")
-else()
-	add_definitions(-DCONTENT_PATH="${CLIENT_CONTENT_PATH}")
-endif()
-
+add_definitions(-DCONTENT_PATH="${CLIENT_CONTENT_PATH}")
 add_subdirectory("${CLIENT_CONTENT_PATH}")
 
 ### SOURCES ####################################################################
@@ -326,7 +322,7 @@ if(CLIENT_DEPLOYMENT)
 		${CLIENT_CONTENT_PATH}
 		$<TARGET_FILE_DIR:${CEF_TARGET}>/content)
 		
-	# Copy Windows tile styltijg
+	# Copy Windows tile styling
 	add_custom_command(
 	TARGET ${CEF_TARGET} PRE_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy

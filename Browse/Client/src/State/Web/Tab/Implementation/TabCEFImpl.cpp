@@ -10,6 +10,7 @@
 #include "src/State/Web/Managers/HistoryManager.h"
 #include "src/State/Web/Tab/Pipelines/JSDialogPipeline.h"
 #include "src/Singletons/LabStreamMailer.h"
+#include "src/Singletons/FirebaseMailer.h"
 #include "src/CEF/Mediator.h"
 #include <algorithm>
 
@@ -32,9 +33,6 @@ void Tab::SetURL(std::string URL)
 
 	// Reset title
 	_title = "";
-
-	// Tell lab stream layer
-	LabStreamMailer::instance().Send("Loading URL: " + _url);
 
 	// Check whether current history page entry contains same URL. If not, create new one
 	if (_spHistoryPage == nullptr || _spHistoryPage->GetURL() != _url)
@@ -400,6 +398,9 @@ void Tab::SetLoadingStatus(bool isLoading, bool isMainFrame)
 
 		// Abort any pipeline execution when loading of main frame starts
 		AbortAndClearPipelines();
+
+		// Tell lab stream layer
+		LabStreamMailer::instance().Send("Start Loading New URL");
     }
     else
     {
@@ -415,6 +416,15 @@ void Tab::SetLoadingStatus(bool isLoading, bool isMainFrame)
             _iconState = IconState::ICON_NOT_FOUND;
         }
 
+		// Check whether it was the dashboard and whether to update the award in Web
+		if (_url.find(setup::DASHBOARD_URL) != std::string::npos)
+		{
+			// Update award TODO: will update on every subpage of the dashboard. maybe improve on that
+			_pWeb->PushUpdateAwardJob(this, FirebaseMailer::Instance().GetUserAward());
+		}
+
+		// Tell lab stream layer
+		LabStreamMailer::instance().Send("Finished Loading URL: " + _url);
     }
 }
 
