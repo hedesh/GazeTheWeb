@@ -5,12 +5,13 @@
 //============================================================================
 
 #include "JSCode.h"
+#include "src/ContentPath.h"
 #include <map>
 #include <fstream>
 #include <iostream> // as called from differen processes, one cannot simply use LogInfo / LogError :(
 
 // Folder with external JavaScript code
-const std::string src = CONTENT_PATH "/javascript/";
+const std::string src = RUNTIME_CONTENT_PATH + "/javascript/";
 
 // List of all available JS code file paths and how to access them with JSCode enum
 const std::map<JSFile, std::string> findJSFile =

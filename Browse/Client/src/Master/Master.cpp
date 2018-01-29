@@ -7,6 +7,7 @@
 #include "src/Utils/Helper.h"
 #include "src/Utils/Logger.h"
 #include "src/Arguments.h"
+#include "src/ContentPath.h"
 #include "submodules/glfw/include/GLFW/glfw3.h"
 #include "submodules/text-csv/include/text/csv/ostream.hpp"
 #include <functional>
@@ -16,7 +17,6 @@
 #include <iomanip>
 #include <string>
 #include <fstream>
-#include <experimental/filesystem>
 
 #ifdef _WIN32 // Windows
 // Native access to Windows functions is necessary to maximize window
@@ -178,14 +178,11 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
     static std::function<void(int, int)> fC = [&](int w, int h) { this->GLFWResizeCallback(w, h); };
     glfwSetFramebufferSizeCallback(_pWindow, [](GLFWwindow* window, int w, int h) { fC(w, h); });
 
-	// ### WINDOW ICON ###
+	// ### CONTENT PATH ###
 
-	// Set content path (before using it in the helper)
-	std::string contentPath = CONTENT_PATH;
-#ifdef CLIENT_DEPLOYMENT
-	contentPath = std::experimental::filesystem::current_path().generic_string() + "/content";
-#endif // CLIENT_DEPLOYMENT
-	eyegui::setRootFilepath(contentPath);
+	eyegui::setRootFilepath(RUNTIME_CONTENT_PATH);
+
+	// ### WINDOW ICON ###
 
 	// Load window icons for GLFW
 	std::vector<unsigned char> icon16Data;
