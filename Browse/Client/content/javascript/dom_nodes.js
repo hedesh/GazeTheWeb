@@ -414,6 +414,8 @@ DOMSelectField.prototype.getOptions = function(){
     return options;
 }
 DOMSelectField.prototype.setSelectionIdx = function(idx){
+    if(typeof(this.node.focus) === "function")
+        this.node.focus();
     this.node.selectedIndex = idx;
 }
 DOMSelectField.prototype.getSelectionIdx = function(){

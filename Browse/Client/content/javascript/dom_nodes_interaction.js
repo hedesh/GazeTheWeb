@@ -4,6 +4,10 @@ ConsolePrint("Starting to import dom_nodes_interaction.js ...");
 
 DOMTextInput.prototype.inputText = function(text, submit){
 	// TODO: To be refactored!
+
+	if(typeof(this.node.focus) === "function")
+		this.node.focus();
+		
 	if(this.node.tagName == "TEXTAREA")
 	{
 		this.node.value = text;
@@ -44,6 +48,14 @@ DOMTextInput.prototype.inputText = function(text, submit){
 	}
 	
 	this.setText(text);
+	try
+	{
+		this.node.focus();
+	}
+	catch(e)
+	{
+		console.log("Error: Focus after inserting text failed for node:", this.node);
+	}
 
 	if(!submit)
 		if(this.rects.length > 0)

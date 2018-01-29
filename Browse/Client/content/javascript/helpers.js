@@ -28,9 +28,13 @@ function CefPoll(num_partitions, update_partition)
 {
     var partitioned = (num_partitions !== undefined && update_partition !== undefined);
     
-    console.log("CefPoll triggerd...");
-    if(partitioned)
-        console.log("Polling "+update_partition+". of "+num_partitions+" partitions.");
+    // DISABLED FOR DEBUGGING
+    if(!partitioned)
+    {
+        console.log("CefPoll triggerd...");
+        if(partitioned)
+            console.log("Polling "+update_partition+". of "+num_partitions+" partitions.");
+    }
     var t_start = performance.now();
 
     // UpdateDOMRects();
@@ -74,7 +78,9 @@ function CefPoll(num_partitions, update_partition)
         });
     });
 
-    console.log("Took ", performance.now() - t_start, "ms.");
+    // DISABLED FOR DEBUGGING
+    if(!partitioned)
+        console.log("Took ", performance.now() - t_start, "ms.");
 }
 
 var gtwPageHeight = 0.0;

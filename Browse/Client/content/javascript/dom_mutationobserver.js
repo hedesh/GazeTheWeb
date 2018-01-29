@@ -6,6 +6,9 @@ ConsolePrint("Starting to import dom_mutationobserver.js ...");
 
 // Log which type of HTML element was clicked
 document.onclick = function(e){
+	console.log("Javascript realized click! Event available as var last_click_event");
+	window.last_click_event = e;
+
 	if (e && e.target && e.target.tagName)
 	{
 	    SendDataMessage(e.target.tagName.toLowerCase() + "," + e.target.id + "," + e.pageX + "," + e.pageY);
@@ -298,12 +301,33 @@ function AnalyzeNode(node)
 				// UpdateDOMRects("AnalyzeNode -- AddFixedElement "+node.className);
 		}
 
+		if(node.tagName == "DIV")
+		{
+			var role = node.getAttribute('role');
+			if(role)
+			{
+				role = role.toLowerCase();
+				if(role == "combobox" || role == "textbox")
+				{
+					CreateDOMTextInput(node);
+				}
+			}
+		}
+
 		if(node.tagName === "IFRAME")
 		{
-			if(node.contentDocument.children.length > 0)
+
+			try
 			{
-				console.log("iframe added, now also observing:", node.contentDocument.children[0]);
-				window.observer.observe(node.contentDocument.children[0], window.observer_config);
+				if(node.contentDocument && node.contentDocument.children.length > 0)
+				{
+					console.log("iframe added, now also observing:", node.contentDocument.children[0]);
+					window.observer.observe(node.contentDocument.children[0], window.observer_config);
+				}
+			}
+			catch(e)
+			{
+				console.log("Caught exception: ", e);
 			}
 		}
 
@@ -317,11 +341,12 @@ function AnalyzeNode(node)
 		}
 
 		// Fix for Facebook's in-site messenger
-		if(node.tagName == "DIV" && node.hasAttribute("data-offset-key"))
-		{
-			CreateDOMTextInput(node);
-			console.log("Found possible text area on Facebook? ", node);
-		}
+		// --> Added wrong elements as text inputs?!
+		// if(node.tagName == "DIV" && node.hasAttribute("data-offset-key"))
+		// {
+		// 	CreateDOMTextInput(node);
+		// 	console.log("Found possible text area on Facebook? ", node);
+		// }
 
 		// Find high res favicons
 		// TODO: Loading of smaller resolutions could be prevented
@@ -382,7 +407,7 @@ function AnalyzeNode(node)
 			}
 		}
 		// textareas or DIVs, who are treated as text fields
-		if(node.tagName == 'TEXTAREA' || (node.tagName == 'DIV' && node.getAttribute('role') == 'textbox'))
+		if(node.tagName == 'TEXTAREA')
 		{
 			CreateDOMTextInput(node);
 		}
@@ -445,18 +470,16 @@ function AnalyzeNode(node)
 
 		// Update whole <form> if transition happens in form's subtree
 		// (For shifting elements in form (e.g. Google Login) )
-		if(node.tagName == 'FORM')
-		{
+		// if(node.tagName == 'FORM')
+		// {
 
-			node.addEventListener('webkitTransitionEnd', function(event){
-
-				// DEBUG
+		// NOTE: Do this for every node, not only forms
+		node.addEventListener('webkitTransitionEnd', function(event){
 				console.log("Recognized webkitTransitionEnd for node: ", node);
-				ForEveryChild(node, function(child){
 
+				ForEveryChild(node, function(child){
 					if(!child.analyzed)
 						AnalyzeNode(child);
-
 					if(child.nodeType == 1)
 					{
 						var nodeType = child.getAttribute('nodeType');
@@ -470,10 +493,9 @@ function AnalyzeNode(node)
 							}
 						}
 					}
-					
-				});
-			}, false);
-		}
+				
+			});
+		}, false);
 
 
 	}

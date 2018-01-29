@@ -330,7 +330,17 @@ void RenderProcessHandler::OnFocusedNodeChanged(
     CefRefPtr<CefFrame> frame,
     CefRefPtr<CefDOMNode> node)
 {
-    // TODO, if needed
+	if (node == nullptr)
+		return;
+
+
+	const std::string tag_name = node->GetElementTagName().ToString();
+	IPCLog(browser, "OnFocusNodeChanged, now focused: "+tag_name);
+
+	// TODO:
+	// 1. Try to call node.focus() when hovering with your gaze over input fields
+	// 2. Get tagname (or even role) to decide, if cursor is set in possible input (OR find other way to determine if cursor is set)
+	//    If true, try to add DOMTextInput for this node
 }
 
 void RenderProcessHandler::OnContextCreated(
