@@ -666,4 +666,16 @@ function SetOverflowObjectViaId(node, id)
     return undefined;
 }
 
+function IsAncestor(child, ancestor, depth=0)
+{
+    if(!child.parentElement || child === document.documentElement)
+        return false;
+    
+    depth++;
+    if(child.parentElement === ancestor)
+        return depth;
+    else
+        return IsAncestor(child.parentElement, ancestor, depth);
+}
+
 ConsolePrint("Successfully imported helpers.js!");
