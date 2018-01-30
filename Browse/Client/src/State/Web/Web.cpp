@@ -834,8 +834,23 @@ void Web::UpdateTabOverview()
     }
     else
     {
-        // Show no URL
+        // Show no URL and title
         eyegui::setContentOfTextBlock(_pTabOverviewLayout, "url", " ");
+		eyegui::setContentOfTextBlock(_pTabOverviewLayout, "title", " ");
+
+		// Set color of title
+		_pMaster->SetStyleTreePropertyValue(
+			"tab_overview_page_title",
+			eyegui::property::Color::BackgroundColor,
+			RGBAToHexString(glm::vec4(0,0,0,1))
+		);
+
+		// Set color of title font
+		_pMaster->SetStyleTreePropertyValue(
+			"tab_overview_page_title",
+			eyegui::property::Color::FontColor,
+			RGBAToHexString(glm::vec4(0, 0, 0, 1))
+		);
 
         // Show placeholder in preview
 		eyegui::replaceElementWithBrick(_pTabOverviewLayout, "preview", "bricks/Nothing.beyegui", true);

@@ -44,7 +44,8 @@ bool HttpHeaderFirstLineContains(const std::string& rHeader, const std::string& 
 // Checks header for ok
 bool HttpHeaderOK(const std::string& rHeader)
 {
-	return HttpHeaderFirstLineContains(rHeader, "200 OK");
+	return HttpHeaderFirstLineContains(rHeader, "200 OK")
+		|| HttpHeaderFirstLineContains(rHeader, "100 Continue"); // Google sometimes returns this and in the third line 200. For now, treating as synonyms
 }
 
 // Checks header for failed precondition
