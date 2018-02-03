@@ -16,6 +16,8 @@
 #include <string>
 #include <cmath>
 #include "src/CEF/Data/DOMNode.h"
+// For keyboard emulation
+#include "submodules/glfw/include/GLFW/glfw3.h"
 
 Handler::Handler(Mediator* pMediator, CefRefPtr<Renderer> renderer) : _isClosing(false)
 {
@@ -226,36 +228,25 @@ bool Handler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 
 	if (msgName == "EmulateEnterKey")
 	{
-		// Emulate left mouse click where 'Enter' should be pressed
-		double x = msg->GetArgumentList()->GetDouble(0);
-		double y = msg->GetArgumentList()->GetDouble(1);
+		if (msg->GetArgumentList()->GetSize() > 1)
+		{
+			// Emulate left mouse click where 'Enter' should be pressed
+			double x = msg->GetArgumentList()->GetDouble(0);
+			double y = msg->GetArgumentList()->GetDouble(1);
 
-		LogDebug("Handler: Emulating a click (",x,",",y,") and 'Enter' being pressed.");
+			LogDebug("Handler: Emulating a click (", x, ",", y, ") and 'Enter' being pressed.");
 
-		EmulateLeftMouseButtonClick(browser, x, y);
+			EmulateLeftMouseButtonClick(browser, x, y);
+		}
+		EmulateEnterKey(browser);
 
-		// Emulate pressing 'Enter' down, pressed and up
-		CefKeyEvent event;
-		event.is_system_key = false;
-		event.modifiers = 0;
-
-		// Enter key. Everywhere
-		event.windows_key_code = 13;
-		event.native_key_code = 13;
-		event.character = event.unmodified_character = 13;
-
-		// Down
-		event.type = KEYEVENT_RAWKEYDOWN;
-		browser->GetHost()->SendKeyEvent(event);
-
-		// Character
-		event.type = KEYEVENT_CHAR;
-		browser->GetHost()->SendKeyEvent(event);
-
-		// Up
-		event.type = KEYEVENT_KEYUP;
-		browser->GetHost()->SendKeyEvent(event);
 	}
+	if (msgName == "EmulateKeyboardStrokes")
+	{
+		const std::string input = msg->GetArgumentList()->GetString(0).ToString();
+		EmulateKeyboardStrokes(browser, input);
+	}
+
 	if (msgName == "EmulateMouseClick")
 	{
 		double x = msg->GetArgumentList()->GetDouble(0);
@@ -594,4 +585,63 @@ bool Handler::StartFaviconImageDownload(CefRefPtr<CefBrowser> browser, CefString
 		return false;
 	StartImageDownload(browser, img_url);
 	return true;
+}
+
+void Handler::EmulateKeyboardKey(CefRefPtr<CefBrowser> browser, int key, int scancode, int mods)
+{
+	// Emulate pressing 'Enter' down, pressed and up
+	CefKeyEvent event;
+	event.is_system_key = false;
+	event.modifiers = mods;
+
+	// Enter key. Everywhere
+	event.windows_key_code = key;
+	event.native_key_code = scancode;
+	event.character = event.unmodified_character = key;
+
+	// Down
+	event.type = KEYEVENT_RAWKEYDOWN;
+	browser->GetHost()->SendKeyEvent(event);
+
+	// Character
+	event.type = KEYEVENT_CHAR;
+	browser->GetHost()->SendKeyEvent(event);
+
+	// Up
+	event.type = KEYEVENT_KEYUP;
+	browser->GetHost()->SendKeyEvent(event);
+}
+
+void Handler::EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, std::string input)
+{
+	for (int i = 0; i < input.length(); i++)
+	{
+		// Emulate pressing 'Enter' down, pressed and up
+		CefKeyEvent event;
+		event.character = input[i];
+		event.is_system_key = false;
+		//event.modifiers = mods;
+
+		event.windows_key_code = input[i];
+		//event.native_key_code = scancode;
+		event.unmodified_character = input[i];
+
+		// Down
+		event.type = KEYEVENT_RAWKEYDOWN;
+		browser->GetHost()->SendKeyEvent(event);
+
+		// Character
+		event.type = KEYEVENT_CHAR;
+		browser->GetHost()->SendKeyEvent(event);
+
+
+		// Up
+		event.type = KEYEVENT_KEYUP;
+		browser->GetHost()->SendKeyEvent(event);
+	}
+}
+
+void Handler::EmulateEnterKey(CefRefPtr<CefBrowser> browser)
+{
+	EmulateKeyboardKey(browser, 13, 13, 0);
 }

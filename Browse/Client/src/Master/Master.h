@@ -390,6 +390,7 @@ private:
 
 	// Last calibration points
 	std::vector<int> _lastCalibrationPointsFrameIndices;
+
 };
 
 #endif // MASTER_H_

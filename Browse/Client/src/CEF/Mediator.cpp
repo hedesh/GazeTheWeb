@@ -372,6 +372,34 @@ void Mediator::RemoveDOMVideo(CefRefPtr<CefBrowser> browser, int id)
 	}
 }
 
+void Mediator::EmulateKeyboardKey(int key, int scancode, int action, int mods)
+{
+	for (const auto& kvpair : _tabs)
+	{
+		_handler->EmulateKeyboardKey(GetBrowser(kvpair.second), key, scancode, mods);
+		break;
+	}
+}
+
+void Mediator::EmulateKeyboardStrokes(std::string input)
+{
+	for (const auto& kvpair : _tabs)
+	{
+		_handler->EmulateKeyboardStrokes(GetBrowser(kvpair.second), input);
+		LogInfo("Handler: EmulatedKeyboardStrokes\n'", input, "'");
+		break;
+	}
+}
+
+void Mediator::EmulateEnterKey()
+{
+	for (const auto& kvpair : _tabs)
+	{
+		_handler->EmulateEnterKey(GetBrowser(kvpair.second));
+		break;
+	}
+}
+
 void Mediator::ResetScrolling(TabCEFInterface * pTab)
 {
     if (CefRefPtr<CefBrowser> browser = GetBrowser(pTab))

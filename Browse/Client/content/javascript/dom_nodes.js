@@ -370,6 +370,9 @@ DOMTextInput.prototype.Class = "DOMTextInput";  // Override base class identifie
 DOMTextInput.prototype.getText = function(){
     return this.text;
 }
+
+// TODO: Get notified by mutation observer when specific text attribute gets changed
+// and notify CEF Node object
 DOMTextInput.prototype.setText = function(text){
    var informCEF = (this.text !== text);
     this.text = text;
@@ -387,6 +390,14 @@ DOMTextInput.prototype.getHTMLId = function(){
 }
 DOMTextInput.prototype.getHTMLClass = function(){
     return this.node.className;
+}
+DOMTextInput.prototype.focusNode = function(){
+    if(typeof(this.node.focus) !== "function")
+    {
+        console.log("DOMTextInput.focusNode() failed for id: ", getId(), ", type: ", getType())
+        return;
+    }
+    this.node.focus();
 }
 
 /*
