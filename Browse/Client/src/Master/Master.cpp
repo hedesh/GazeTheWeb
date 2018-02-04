@@ -960,6 +960,9 @@ void Master::Loop()
 		spInput->gazeUponGUI = eyeGUIInput.gazeUsed;
 		spInput->instantInteraction = eyeGUIInput.instantInteraction;
 
+		// eyeGUI returns drift corrected gaze (if DriftMap is activated).
+		// However, this is not used here. Instead, we ask for drift correction where required.
+
         // Bind framebuffer
         _upFramebuffer->Bind();
 

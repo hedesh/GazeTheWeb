@@ -55,7 +55,6 @@ namespace setup
 	static const FilterKernel FILTER_KERNEL = FilterKernel::GAUSSIAN;
 	static const float	FILTER_WINDOW_TIME = 1.f; // in seconds, limits the fixation duration in the input structure !!!
 	static const bool	FILTER_USE_OUTLIER_REMOVAL = true;
-	static const bool	USE_EYEGUI_DRIFT_MAP = false; // !DEMO_MODE;
 
 	// Distortion
 	static const bool	EYEINPUT_DISTORT_GAZE = false && !DEPLOYMENT;
@@ -63,6 +62,7 @@ namespace setup
 	static const float	EYEINPUT_DISTORT_GAZE_BIAS_Y = 32.f; // pixels
 
 	// Experiments
+	static const bool			USE_EYEGUI_DRIFT_MAP = true; // !DEMO_MODE;
 	static const std::string	LAB_STREAM_OUTPUT_NAME = "GazeTheWebOutput";
 	static const std::string	LAB_STREAM_OUTPUT_SOURCE_ID = std::to_string(CLIENT_VERSION); // use client version as source id
 	static const std::string	LAB_STREAM_INPUT_NAME = LAB_STREAM_OUTPUT_NAME; //  "GazeTheWebInput"; // may be set to same value as LAB_STREAM_OUTPUT_NAME to receive own events for debugging purposes
