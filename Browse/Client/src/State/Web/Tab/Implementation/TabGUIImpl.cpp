@@ -5,7 +5,7 @@
 //============================================================================
 
 #include "src/State/Web/Tab/Tab.h"
-#include "src/State/Web/Tab/Pipelines/ZoomClickPipeline.h"
+#include "src/State/Web/Tab/Pipelines/ClickPipeline.h"
 #include "src/State/Web/Tab/Pipelines/PivotMenuPipeline.h"
 #include "src/State/Web/Tab/Pipelines/TextSelectionPipeline.h"
 #include "src/CEF/Mediator.h"
@@ -19,7 +19,7 @@ void Tab::TabButtonListener::down(eyegui::Layout* pLayout, std::string id)
 		// ### Tab layout ###
 		if (id == "click_mode")
 		{
-			_pTab->PushBackPipeline(std::move(std::unique_ptr<ZoomClickPipeline>(new ZoomClickPipeline(_pTab))));
+			_pTab->PushBackPipeline(std::move(std::unique_ptr<ClickPipeline>(new ClickPipeline(_pTab))));
 		}
 		else if (id == "auto_scrolling")
 		{

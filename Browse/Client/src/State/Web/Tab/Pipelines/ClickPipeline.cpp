@@ -3,11 +3,11 @@
 // Author: Raphael Menges (raphaelmenges@uni-koblenz.de)
 //============================================================================
 
-#include "ZoomClickPipeline.h"
+#include "ClickPipeline.h"
 #include "src/State/Web/Tab/Pipelines/Actions/CoordinateActions/MagnificationCoordinateAction.h"
 #include "src/State/Web/Tab/Pipelines/Actions/LinkNavigationAction.h"
 
-ZoomClickPipeline::ZoomClickPipeline(TabInteractionInterface* pTab) : Pipeline(pTab)
+ClickPipeline::ClickPipeline(TabInteractionInterface* pTab) : Pipeline(pTab)
 {
     // Push back magnification coordinate action
 	std::shared_ptr<MagnificationCoordinateAction> spMagnificationCoordinateAction = std::make_shared<MagnificationCoordinateAction>(_pTab);

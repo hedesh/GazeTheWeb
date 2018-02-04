@@ -5,17 +5,17 @@
 // Pipeline to emulate clicking by zooming to a screen coordinate controlled
 // with gaze.
 
-#ifndef ZOOMCLICKPIPELINE_H_
-#define ZOOMCLICKPIPELINE_H_
+#ifndef CLICKPIPELINE_H_
+#define CLICKPIPELINE_H_
 
 #include "Pipeline.h"
 
-class ZoomClickPipeline : public Pipeline
+class ClickPipeline : public Pipeline
 {
 public:
 
     // Constructor
-    ZoomClickPipeline(TabInteractionInterface* pTab);
+    ClickPipeline(TabInteractionInterface* pTab);
 };
 
-#endif // ZOOMCLICKPIPELINE_H_
+#endif // CLICKPIPELINE_H_
