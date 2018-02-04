@@ -143,7 +143,7 @@ public:
 	virtual int GetWindowHeight() const = 0;
 
 	// Use eyeGUI drift map to perform drift correction. Does nothing if USE_EYEGUI_DRIFT_MAP is false
-	virtual void ApplyGazeDriftCorrection(float& rX, float& rY) const = 0;
+	virtual void ApplyGazeDriftCorrection(float& rPixelX, float& rPixelY) const = 0;
 };
 
 #endif // TABOVERLAYINTERFACE_H_

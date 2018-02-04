@@ -129,11 +129,11 @@ public:
 	void NotifyClick(std::string tag, std::string id, float x, float y);
 
 	// Use eyeGUI drift map to perform drift correction. Does nothing if USE_EYEGUI_DRIFT_MAP is false
-	void ApplyGazeDriftCorrection(float& rX, float& rY) const
+	void ApplyGazeDriftCorrection(float& rPixelX, float& rPixelY) const
 	{
 		if (setup::USE_EYEGUI_DRIFT_MAP) // only if drift map is used by GazeTheWeb
 		{
-			eyegui::applyDriftMap(_pGUI, rX, rY);
+			eyegui::applyDriftMap(_pGUI, rPixelX, rPixelY);
 		}
 	}
 

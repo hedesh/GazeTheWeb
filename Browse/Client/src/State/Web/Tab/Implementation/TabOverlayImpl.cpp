@@ -310,7 +310,7 @@ int Tab::GetWindowHeight() const
 	return _pMaster->GetWindowHeight();
 }
 
-void Tab::ApplyGazeDriftCorrection(float& rX, float& rY) const
+void Tab::ApplyGazeDriftCorrection(float& rPixelX, float& rPixelY) const
 {
-	_pMaster->ApplyGazeDriftCorrection(rX, rY);
+	_pMaster->ApplyGazeDriftCorrection(rPixelX, rPixelY);
 }

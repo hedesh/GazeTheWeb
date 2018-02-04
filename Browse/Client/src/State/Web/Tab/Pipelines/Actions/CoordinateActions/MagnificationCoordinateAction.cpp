@@ -5,6 +5,7 @@
 
 #include "MagnificationCoordinateAction.h"
 #include "src/State/Web/Tab/Interface/TabInteractionInterface.h"
+#include "src/Setup.h"
 #include "submodules/glm/glm/gtx/vector_angle.hpp"
 #include <algorithm>
 #include <iostream>
@@ -30,6 +31,21 @@ bool MagnificationCoordinateAction::Update(float tpf, const std::shared_ptr<cons
 		rCoordinate *= rZoom; // apply zoom
 		rCoordinate += rRelativeMagnificationCoordinate; // move back
 		rCoordinate *= glm::vec2(_pTab->GetWebViewResolutionX(), _pTab->GetWebViewResolutionY()); // bring into pixel space of CEF
+	};
+
+	// Function to apply eyeGUI gaze drift correction to WebView relative coordinate
+	const std::function<void(glm::vec2&)> driftCorrection = [&](glm::vec2& rCoordinate)
+	{
+		// From relative WebView gaze to window pixel coordinate
+		float windowPixelX = (rCoordinate.x * (float)_pTab->GetWebViewWidth()) + (float)_pTab->GetWebViewX();
+		float windowPixelY = (rCoordinate.y * (float)_pTab->GetWebViewHeight()) + (float)_pTab->GetWebViewY();
+
+		// Apply drift correction
+		_pTab->ApplyGazeDriftCorrection(windowPixelX, windowPixelY);
+
+		// Back from window pixel coordinate to relative WebView gaze
+		rCoordinate.x = (windowPixelX - (float)_pTab->GetWebViewX()) / (float)_pTab->GetWebViewWidth();
+		rCoordinate.y = (windowPixelY - (float)_pTab->GetWebViewY()) / (float)_pTab->GetWebViewHeight();
 	};
 
 	// Update magnification
@@ -64,6 +80,16 @@ bool MagnificationCoordinateAction::Update(float tpf, const std::shared_ptr<cons
 		{
 			// Set output
 			glm::vec2 coordinate = relativeGazeCoordinate;
+
+			// Drift correction
+			if (setup::USE_EYEGUI_DRIFT_MAP)
+			{
+				LogInfo("Coordinate before Drift Correction: ", coordinate.x, ", ", coordinate.y);
+				driftCorrection(coordinate);
+				LogInfo("Coordinate after Drift Correction: ", coordinate.x, ", ", coordinate.y);
+			}
+
+			// Further transformation to CEF pixel space
 			pageCoordinate(zoom, relativeMagnificationCenter, relativeCenterOffset, coordinate); // transform gaze relative to WebView to page coordinates
 			SetOutputValue("coordinate", coordinate); // into pixel space of CEF
 
@@ -74,6 +100,14 @@ bool MagnificationCoordinateAction::Update(float tpf, const std::shared_ptr<cons
 		{
 			// Set magnification center
 			_relativeMagnificationCenter = relativeGazeCoordinate;
+
+			// Drift correction
+			if (setup::USE_EYEGUI_DRIFT_MAP)
+			{
+				LogInfo("Coordinate before Drift Correction: ", _relativeMagnificationCenter.x, ", ", _relativeMagnificationCenter.y);
+				driftCorrection(_relativeMagnificationCenter);
+				LogInfo("Coordinate after Drift Correction: ", _relativeMagnificationCenter.x, ", ", _relativeMagnificationCenter.y);
+			}
 
 			// Remember magnification
 			_magnify = true;
@@ -88,7 +122,7 @@ bool MagnificationCoordinateAction::Update(float tpf, const std::shared_ptr<cons
 	_dimming += tpf;
 	_dimming = glm::min(_dimming, DIMMING_DURATION);
 
-	// Tell web view about zoom
+	// Tell WebView about zoom
 	WebViewParameters webViewParameters;
 	webViewParameters.centerOffset = relativeCenterOffset;
 	webViewParameters.zoom = zoom;
@@ -112,7 +146,7 @@ void MagnificationCoordinateAction::Activate()
 
 void MagnificationCoordinateAction::Deactivate()
 {
-	// Reset web view (necessary because of dimming)
+	// Reset WebView (necessary because of dimming)
 	WebViewParameters webViewParameters;
 	_pTab->SetWebViewParameters(webViewParameters);
 }

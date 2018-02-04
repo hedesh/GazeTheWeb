@@ -56,7 +56,7 @@ protected:
 	float fixationWaitTime = FIXATION_DURATION; // to avoid instant selection of coordinate after actiation and magnification
 
 	// Magnfication center. In relative page space
-	glm::vec2 _relativeMagnificationCenter;
+	glm::vec2 _relativeMagnificationCenter = glm::vec2(0.f,0.f);
 
 	// Variable to indicate how much magnified (0 if not and 1 if completely magnified)
 	float _magnification = 0.f; // [0..1]
