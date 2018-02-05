@@ -25,12 +25,18 @@ class Handler : public CefClient,
                 public CefLifeSpanHandler,
                 public CefLoadHandler,
 				public CefJSDialogHandler,
-				public HandlerImageInterface
+				public HandlerImageInterface,
+				public CefKeyboardHandler
 {
 public:
 
     Handler(Mediator* pMediator, CefRefPtr<Renderer> renderer);
     ~Handler();
+
+	// TODO: Not called?
+	bool OnKeyEvent(CefRefPtr<CefBrowser> browser,
+		const CefKeyEvent& event,
+		CefEventHandle os_event) OVERRIDE; 
 
     // Request that all existing browser windows close
     void CloseAllBrowsers(bool forceClose);
@@ -123,9 +129,10 @@ public:
     void EmulateMouseCursor(CefRefPtr<CefBrowser> browser, double x, double y, bool leftButtonPressed);
     void EmulateLeftMouseButtonClick(CefRefPtr<CefBrowser> browser, double x, double y);
     void EmulateMouseWheelScrolling(CefRefPtr<CefBrowser> browser, double deltaX, double deltaY);
-	void EmulateKeyboardKey(CefRefPtr<CefBrowser> browser, int key, int scancode, int mods);
+	void EmulateKeyboardKey(CefRefPtr<CefBrowser> browser, int key, int scancode, int mods, bool send_char_keyevent=true);
 	void EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, std::string input);
 	void EmulateEnterKey(CefRefPtr<CefBrowser> browser);
+	void SelectAll(CefRefPtr<CefBrowser> browser);
     
     void ResetMainFramesScrolling(CefRefPtr<CefBrowser> browser);
 

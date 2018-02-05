@@ -109,7 +109,8 @@ DOMVideo.prototype.jumpToSecond = function(sec)
 	ConsolePrint("DOMVideo id="+this.getId()+": Now playing from second "+sec);
 }
 
-DOMVideo.prototype.skipSeconds = function (sec) {
+DOMVideo.prototype.skipSeconds = function (sec)
+{
     this.node.currentTime += sec;
     ConsolePrint("DOMVideo id=" + this.getId() + ": Now playing from second " + sec);
 }
@@ -178,23 +179,28 @@ DOMVideo.prototype.setFullscreen = function(fullscreen)
 	ConsolePrint("DOMVideo id="+this.getId()+": Fullscreen is set to "+fullscreen);
 }
 
-DOMVideo.prototype.toggleMuted = function () {
+DOMVideo.prototype.toggleMuted = function()
+{
     this.node.muted = !this.node.muted;
     ConsolePrint("DOMVideo id=" + this.getId() + ": muted=" + this.node.muted);
 }
 
-DOMVideo.prototype.togglePlayPause = function () {
-    if (this.node.paused) {
+DOMVideo.prototype.togglePlayPause = function()
+{
+	if (this.node.paused) 
+	{
         this.node.play();
         ConsolePrint("DOMVideo id=" + this.getId() + ": Now playing.");
     }
-    else {
+	else 
+	{
         this.node.pause();
         ConsolePrint("DOMVideo id=" + this.getId() + ": Now paused.");
     }
 }
 
-DOMVideo.prototype.changeVolume = function (delta) {
+DOMVideo.prototype.changeVolume = function(delta)
+{
     var value = this.node.volume;
     value = Math.min(Math.max(0.0, value + delta), 1.0);
     this.node.volume = value;

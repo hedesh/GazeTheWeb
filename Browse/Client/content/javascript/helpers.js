@@ -100,6 +100,9 @@ function CefPoll(num_partitions, update_partition)
         }
     });
     console.log("Analyzing ", num_elements,"nodes with selectors took: ", performance.now() - t_start, "ms");
+
+    // TODO: Bitmask changes not propagated properly?
+    domTextInputs.forEach((o) => { SendAttributeChangesToCEF("OccBitmask", o); });
 }
 
 var gtwPageHeight = 0.0;
