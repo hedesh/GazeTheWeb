@@ -76,6 +76,15 @@ public:
 																								// between mouse button down and up during text selection
     void EmulateLeftMouseButtonClick(TabCEFInterface* pTab, double x, double y);
     void EmulateMouseWheelScrolling(TabCEFInterface* pTab, double deltaX, double deltaY);
+	/*
+	*  @param[in] key The [keyboard key](@ref keys) that was pressed or released.
+	*  @param[in] scancode The system-specific scancode of the key.
+	*  @param[in] action `GLFW_PRESS`, `GLFW_RELEASE` or `GLFW_REPEAT`.
+	*  @param[in] mods Bit field describing which [modifier keys](@ref mods) were
+	*/
+	void EmulateKeyboardKey(int key, int scancode, int action, int mods);
+	void EmulateKeyboardStrokes(std::string input);										// TODO: second paramter browser or tab
+	void EmulateEnterKey();																// TODO: Call with tab pointer
 
     void ResetScrolling(TabCEFInterface* pTab);
 

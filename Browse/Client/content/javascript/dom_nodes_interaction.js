@@ -1,72 +1,8 @@
 ConsolePrint("Starting to import dom_nodes_interaction.js ...");
 
 
-
-DOMTextInput.prototype.inputText = function(text, submit){
-	// TODO: To be refactored!
-	if(this.node.tagName == "TEXTAREA")
-	{
-		this.node.value = text;
-	}
-	else if (this.node.tagName == 'INPUT')
-	{
-		// GOOGLE FIX
-		var inputs = this.node.parentNode.getElementsByTagName("INPUT");
-		var n = inputs.length;
-		var zIndex = window.getComputedStyle(this.node, null).getPropertyValue('z-index');
-		for(var i = 0; i < n && n > 1; i++)
-		{
-			if(inputs[i] !== this.node && inputs[i].type == this.node.type)
-			{
-				if(zIndex < window.getComputedStyle(inputs[i], null).getPropertyValue('z-index'))
-				{
-					inputs[i].value = text;
-					ConsolePrint("Set text input on another input field with higher z-index");
-				}
-			}
-		}
-		this.node.value = text;
-	}
-	else
-	{
-		this.node.textContent = text;
-		ConsolePrint("Set input's value to given text");
-	}
-	
-	this.setText(text);
-
-	if(!submit)
-		if(this.rects.length > 0)
-		{
-			var rect = this.getRects()[0];
-			var response = {  
-						'command' : "EmulateMouseClick",
-						'x': rect[1] + (rect[3]-rect[1])/2, 
-						'y': rect[0] + (rect[2]-rect[0])/2
-			};
-			ConsolePrint("Returning rect's center: "+response.x+", "+response.y);
-			return response;
-		}
-
-	// Used for Enter-Button emulation, when submitting text
-	if(this.rects.length > 0)
-	{
-		var rect = this.getRects()[0];
-		var response = {  
-					'command' : "EmulateEnterKey",
-					'x': rect[1] + (rect[3]-rect[1])/2, 
-					'y': rect[0] + (rect[2]-rect[0])/2
-		};
-		ConsolePrint("Returning rect's center: "+response.x+", "+response.y);
-		return response;
-	}
-	else
-		return {
-			'command' : "Error",
-			'msg'	: "Input's rect w: 0, h: 0, can't perfom Enter emulation!"
-		}
-		;
-	}
+// Deprecated. Now done via keyboard key stroke emulation, when focused
+// DOMTextInput.prototype.inputText = function(text, submit){
 
 
 DOMOverflowElement.prototype.scroll = function(gazeX, gazeY, fixedIds){

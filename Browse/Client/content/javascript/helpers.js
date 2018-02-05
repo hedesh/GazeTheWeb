@@ -28,9 +28,13 @@ function CefPoll(num_partitions, update_partition)
 {
     var partitioned = (num_partitions !== undefined && update_partition !== undefined);
     
-    console.log("CefPoll triggerd...");
-    if(partitioned)
-        console.log("Polling "+update_partition+". of "+num_partitions+" partitions.");
+    // DISABLED FOR DEBUGGING
+    if(!partitioned)
+    {
+        console.log("CefPoll triggerd...");
+        if(partitioned)
+            console.log("Polling "+update_partition+". of "+num_partitions+" partitions.");
+    }
     var t_start = performance.now();
 
     // UpdateDOMRects();
@@ -74,7 +78,28 @@ function CefPoll(num_partitions, update_partition)
         });
     });
 
-    console.log("Took ", performance.now() - t_start, "ms.");
+
+    // DISABLED FOR DEBUGGING
+    if(!partitioned)
+        console.log("Took ", performance.now() - t_start, "ms.");
+
+
+
+    /* EXPERIMENTAL */
+    var t_start = performance.now();
+    var input_selectors = ["input", "div[role='combobox']", "div[role='textbox']", "textarea"];
+    var num_elements = 0;
+    input_selectors.forEach((selector) => {
+        var inputs = document.querySelectorAll(selector);
+        var num_inputs = inputs.length;
+        num_elements += num_inputs;
+        var i = 0;
+        for(; i < num_inputs; i++)
+        {
+            AnalyzeNode(inputs[i]);
+        }
+    });
+    console.log("Analyzing ", num_elements,"nodes with selectors took: ", performance.now() - t_start, "ms");
 }
 
 var gtwPageHeight = 0.0;
@@ -639,6 +664,18 @@ function SetOverflowObjectViaId(node, id)
         return domObj;
     }
     return undefined;
+}
+
+function IsAncestor(child, ancestor, depth=0)
+{
+    if(!child.parentElement || child === document.documentElement)
+        return false;
+    
+    depth++;
+    if(child.parentElement === ancestor)
+        return depth;
+    else
+        return IsAncestor(child.parentElement, ancestor, depth);
 }
 
 ConsolePrint("Successfully imported helpers.js!");

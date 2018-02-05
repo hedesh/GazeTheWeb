@@ -53,6 +53,11 @@ bool RenderProcessHandler::OnProcessMessageReceived(
     const std::string& msgName = msg->GetName().ToString();
     //IPCLogDebug(browser, "Received '" + msgName + "' IPC msg in RenderProcessHandler");
 
+	if ((msgName == "EmulateKeyboardStrokes") || (msgName == "EmulateEnterKey"))
+	{
+		browser->SendProcessMessage(PID_BROWSER, msg);
+	}
+
 	if (msgName == "ExecuteJavascriptFunction")
 	{
 		const auto& args = msg->GetArgumentList();
@@ -330,7 +335,17 @@ void RenderProcessHandler::OnFocusedNodeChanged(
     CefRefPtr<CefFrame> frame,
     CefRefPtr<CefDOMNode> node)
 {
-    // TODO, if needed
+	if (node == nullptr)
+		return;
+
+
+	const std::string tag_name = node->GetElementTagName().ToString();
+	IPCLog(browser, "OnFocusNodeChanged, now focused: "+tag_name);
+
+	// TODO:
+	// 1. Try to call node.focus() when hovering with your gaze over input fields
+	// 2. Get tagname (or even role) to decide, if cursor is set in possible input (OR find other way to determine if cursor is set)
+	//    If true, try to add DOMTextInput for this node
 }
 
 void RenderProcessHandler::OnContextCreated(
@@ -340,8 +355,12 @@ void RenderProcessHandler::OnContextCreated(
 {
 	_msgRouter->OnContextCreated(browser, frame, context);
 
+
     if (frame->IsMain())
     {
+	/*	frame->ExecuteJavaScript("window.addEventListener('message', (event) => {"
+			"if(window.debug) console.log('Window object',window,'received message ', event);}, false);", "", 0);*/
+
 		frame->ExecuteJavaScript("window.starting_time_ = window.performance.now();", "", 0);
 
 		// Clear previous DOM nodes in current Tab
@@ -406,12 +425,18 @@ void RenderProcessHandler::OnContextCreated(
 
             context->Exit();
         }
-        /*
-        *	GetFavIconBytes
-        * END *******************************************************************************/
+		else
+		{
+			// EXPERIMENTAL: Moved to Handler::OnLoadStart for sub-frames
+			//frame->ExecuteJavaScript(
+			//	"window.addEventListener('message', (event) => {"
+			//	"console.log('Window object',window,'received message from',event.source);"
+			//	"event.source.postMessage('Answering event source...', event.origin);"
+			//	"}, false);", "", 0);
+		}
 
     }
-    //else IPCLogDebug(browser, "Not able to enter context! (main frame?="+std::to_string(frame->IsMain())+")");
+
 }
 
 void RenderProcessHandler::OnContextReleased(CefRefPtr<CefBrowser> browser,

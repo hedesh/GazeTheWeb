@@ -161,8 +161,8 @@ DOMNode.prototype.updateOccBitmask = function(altNode, debug){
         if(debug)
             console.log("scroll X: ", window.scrollX, ", Y: ", window.scrollY, "\nrects before: ", r);
         var not_fixed = Number(!Boolean(this.fixObj));
-        r[0] = Math.ceil(r[0])+1 - window.scrollY * not_fixed;
-        r[1] = Math.ceil(r[1])+1 - window.scrollX * not_fixed;
+        r[0] = Math.floor(r[0])+1 - window.scrollY * not_fixed;
+        r[1] = Math.floor(r[1])+1 - window.scrollX * not_fixed;
         r[2] = Math.floor(r[2])-1 - window.scrollY * not_fixed;
         r[3] = Math.floor(r[3])-1 - window.scrollX * not_fixed;
         if(debug)
@@ -178,18 +178,80 @@ DOMNode.prototype.updateOccBitmask = function(altNode, debug){
             // NOTE: OccBitmask is updated less frequently than scrolling may happen!
             if(true)
             {
+                // Fix for facebook chat being occluded by child divs
+                if(this.node.tagName == "DIV")
+                {
+                    var layers = document.elementsFromPoint(pt[0], pt[1]);
+                    var layer_id = layers.indexOf(this.node); // TODO: Use altNode instead?
+                    
+                    if(debug)
+                    {
+                        console.log("layer_id:",layer_id);
+                        console.log("layers:", layers);
+                        console.log("pt:", pt);
+                    }
+                    if(layer_id === -1)
+                    {
+                        // Not in layers at all. Shouldn't happen!
+                        bm.push(1);
+                        return;
+                    }
+                    // Is in top layer!
+                    else if(layer_id === 0)
+                    {
+                        bm.push(0);
+                        return;
+                    }
+                    else
+                    {
+                        var parent_for_top_layers = true;
+                        for(var i = layer_id - 1; i >= 0 && parent_for_top_layers; i--)
+                        {
+                            try
+                            {
+                                // Surrounded by anonymous lambda function, because otherwise JS interrupts with maximum
+                                // call stack size reached. When redefining "IsAncestor" in console, it works - just like this.
+                                var generations = (() => { IsAncestor(layers[i], this.node) })();
+                            }
+                            catch(e)
+                            {
+                                var generations = 0;
+                                console.log("IsAncestor failed!");
+                            }
+                            
+                            if(debug)
+                            {
+                                console.log(i, generations, layers[i]);
+                            }
+                            if(generations <= 0) 
+                                parent_for_top_layers = false;
+                        }
+                        
+                        bm.push((!parent_for_top_layers & 1));
+                        return;
+                    }
+                }
+
                 var topNode = document.elementFromPoint(pt[0], pt[1]);
                 if(debug)
                 {
-                    console.log(this.getType(), this.getId(), ": (", pt[0], ",", pt[1],
-                        ") => ", topNode);
+                    console.log(this.getType(), this.getId(), ": (", pt[0], ",", pt[1], ") => ", topNode);
                     console.log(document.elementsFromPoint(pt[0], pt[1]));//.slice(0,3));
                 }
-                // TODO: Quick fix
-                if (topNode === null)
+
+                if (!topNode)
+                {
                     bm.push(0);
-                else if(this.node.tagName === "A" && topNode.parentElement === this.node)
-                    bm.push(0);
+                }
+                else if(this.node.tagName === "A" && 
+                            (topNode.parentElement === this.node || 
+                                // Quick fix for facebook chat, check if this can be generalized in some way
+                                (topNode.parentElement && topNode.parentElement.parentElement === this.node) 
+                            )
+                        )
+                        {
+                            bm.push(0);
+                        }
                 else
                     bm.push(Number(topNode !== (altNode || this.node)));
             }
@@ -308,8 +370,11 @@ DOMTextInput.prototype.Class = "DOMTextInput";  // Override base class identifie
 DOMTextInput.prototype.getText = function(){
     return this.text;
 }
+
+// TODO: Get notified by mutation observer when specific text attribute gets changed
+// and notify CEF Node object
 DOMTextInput.prototype.setText = function(text){
-    var informCEF = (this.text !== text);
+   var informCEF = (this.text !== text);
     this.text = text;
     if(informCEF)
         SendAttributeChangesToCEF("Text", this);
@@ -325,6 +390,14 @@ DOMTextInput.prototype.getHTMLId = function(){
 }
 DOMTextInput.prototype.getHTMLClass = function(){
     return this.node.className;
+}
+DOMTextInput.prototype.focusNode = function(){
+    if(typeof(this.node.focus) !== "function")
+    {
+        console.log("DOMTextInput.focusNode() failed for id: ", getId(), ", type: ", getType())
+        return;
+    }
+    this.node.focus();
 }
 
 /*
@@ -415,6 +488,8 @@ DOMSelectField.prototype.getOptions = function(){
     return options;
 }
 DOMSelectField.prototype.setSelectionIdx = function(idx){
+    if(typeof(this.node.focus) === "function")
+        this.node.focus();
     this.node.selectedIndex = idx;
 }
 DOMSelectField.prototype.getSelectionIdx = function(){

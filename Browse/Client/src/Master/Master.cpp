@@ -1105,10 +1105,12 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
             case GLFW_KEY_ENTER: { _enterKeyPressed = true; break; }
 			case GLFW_KEY_S: { LabStreamMailer::instance().Send("42"); break; } // TODO: testing
 			case GLFW_KEY_R: { ShowSuperCalibrationLayout(); break; } // just show the super calibration layout
-			case GLFW_KEY_0: { _pCefMediator->ShowDevTools(); break; }
 			case GLFW_KEY_6: { _upWeb->PushBackPointingEvaluationPipeline(PointingApproach::MAGNIFICATION); break; }
 			case GLFW_KEY_7: { _upWeb->PushBackPointingEvaluationPipeline(PointingApproach::FUTURE); break; }
+			case GLFW_KEY_1: { _pCefMediator->EmulateEnterKey(); break; }
+			case GLFW_KEY_8: { _pCefMediator->EmulateKeyboardStrokes("This input was emulated!\nline breaking.");  break; }
 			case GLFW_KEY_9: { _pCefMediator->Poll(); break; } // poll everything
+			case GLFW_KEY_0: { _pCefMediator->ShowDevTools(); break; }
 			case GLFW_KEY_SPACE: { _upVoiceInput->StartAudioRecording(); break; }
 			case GLFW_KEY_M: {
 
