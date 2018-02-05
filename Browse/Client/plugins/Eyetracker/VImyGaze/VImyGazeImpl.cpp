@@ -22,20 +22,17 @@ int __stdcall SampleCallbackFunction(SampleStruct sampleData)
 	double gazeY = std::max(sampleData.leftEye.gazeY, sampleData.rightEye.gazeY);
 
 	// Push back to vector
-	if (gazeX != 0 && gazeY != 0) // push only valid samples
-	{
-		using namespace std::chrono;
-		eyetracker_global::PushBackSample(
-			SampleData(
-				gazeX, // x
-				gazeY, // y
-				SampleDataCoordinateSystem::SCREEN_PIXELS,
-				duration_cast<milliseconds>(
-					system_clock::now().time_since_epoch() // timestamp
-					)
-			)
-		);
-	}
+	using namespace std::chrono;
+	eyetracker_global::PushBackSample(
+		SampleData(
+			gazeX, // x
+			gazeY, // y
+			SampleDataCoordinateSystem::SCREEN_PIXELS,
+			duration_cast<milliseconds>(
+				system_clock::now().time_since_epoch() // timestamp
+				)
+		)
+	);
 
 	return 1;
 }

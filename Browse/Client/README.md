@@ -62,6 +62,8 @@ Dependencies are provided in the __externals__ and __submodules__ folder.
 __externals__:
 * liblsl: https://github.com/sccn/labstreaminglayer
   * Boost: https://github.com/boostorg/boost
+* curl: https://github.com/curl/curl
+* SensorLib: https://github.com/MAMEM/SensorLib
 	
 __submodules__:
 * eyeGUI: https://github.com/raphaelmenges/eyeGUI
@@ -71,7 +73,6 @@ __submodules__:
 * GLM: http://glm.g-truc.net/0.9.7/index.html (MIT license chosen)
 * spdlog: https://github.com/gabime/spdlog
 * text-csv: https://github.com/roman-kashitsyn/text-csv
-* curl: https://github.com/curl/curl
 * JSON: https://github.com/nlohmann/json
 
 __plugins__:

@@ -11,6 +11,7 @@
 
 #include "src/Master/MasterNotificationInterface.h"
 #include "src/Master/MasterThreadsafeInterface.h"
+#include "src/Master/SensorRecorder.h"
 #include "src/Singletons/LabStreamMailer.h"
 #include "src/Singletons/FirebaseMailer.h"
 #include "src/CEF/Mediator.h"
@@ -400,6 +401,8 @@ private:
 	// Last calibration points
 	std::vector<int> _lastCalibrationPointsFrameIndices;
 
+	// Sensor recording
+	SensorRecorder _sensorRecorder;
 };
 
 #endif // MASTER_H_

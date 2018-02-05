@@ -591,7 +591,8 @@ void Master::SetDataTransfer(bool dataTransfer)
 		// Marker in LabStream
 		LabStreamMailer::instance().Send("Data transfer continued");
 
-		// TODO: what about local logging?
+		// Sensor recording
+		_sensorRecorder.Start();
 	}
 	else
 	{
@@ -610,6 +611,9 @@ void Master::SetDataTransfer(bool dataTransfer)
 
 		// Marker in LabStream
 		LabStreamMailer::instance().Send("Data transfer paused");
+
+		// Sensor recording
+		_sensorRecorder.Stop();
 	}
 }
 
