@@ -33,10 +33,12 @@ void DOMTextInputInteraction::InputText(std::string text, bool submit)
 	// Focus input node
 	SendExecuteFunctionMessage("focusNode");
 
-	// TODO: Clear text content and afterwards enter input
+	// Clear text content and afterwards enter input
+	CefRefPtr<CefProcessMessage> msg = CefProcessMessage::Create("SelectAll");
+	_sendRenderMessage(msg);
 
 	// Emulate keyboard streaks (Shift+Enter for line break?)
-	CefRefPtr<CefProcessMessage> msg = CefProcessMessage::Create("EmulateKeyboardStrokes");
+	msg = CefProcessMessage::Create("EmulateKeyboardStrokes");
 	const auto& args = msg->GetArgumentList();
 	args->SetString(0, text);
 	_sendRenderMessage(msg);
@@ -48,4 +50,6 @@ void DOMTextInputInteraction::InputText(std::string text, bool submit)
 		CefRefPtr<CefProcessMessage> msg = CefProcessMessage::Create("EmulateEnterKey");
 		_sendRenderMessage(msg);
 	}
+
+	SendExecuteFunctionMessage("setText", text);
 }

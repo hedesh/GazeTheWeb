@@ -394,10 +394,19 @@ DOMTextInput.prototype.getHTMLClass = function(){
 DOMTextInput.prototype.focusNode = function(){
     if(typeof(this.node.focus) !== "function")
     {
-        console.log("DOMTextInput.focusNode() failed for id: ", getId(), ", type: ", getType())
+        console.log("DOMTextInput.focusNode() failed for id: ", this.getId(), ", type: ", this.getType())
         return;
     }
+    console.log("DOMTextInput (id: "+this.getId()+") tries to gain focus...");
     this.node.focus();
+    if(document.activeElement === this.node)
+    {
+        ConsolePrint("Successfully gained focus!");
+    }
+    else
+    {
+        ConsolePrint("Failed to gain focus!");
+    }
 }
 
 /*

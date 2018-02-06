@@ -101,19 +101,6 @@ public:
 		SendProcessMessageToRenderer(msg);
 	}
 
-	// TODO: Is this function really neccessary?
-	//template<typename T>
-	//void SendExecuteFunctionMessage(std::string func_name, T param)
-	//{
-	//	CefRefPtr<CefListValue> params = CefListValue::Create();
-	//	AddToList<T>(params, param);
-
-	//	LogInfo("DOMNodeInteraction: Sending ExecuteFunctionMessage named ", func_name, " with ", params->GetSize(), " parameters.");
-
-	//	CefRefPtr<CefProcessMessage> msg = SetupExecuteFunctionMessage(func_name, params);
-	//	SendProcessMessageToRenderer(msg);
-	//}
-
 	// Setup process message by adding a header (node id and type) and given params to its argument list
 	CefRefPtr<CefProcessMessage> SetupExecuteFunctionMessage(
 		std::string func_name,
