@@ -1118,16 +1118,16 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 			case GLFW_KEY_SPACE: { _upVoiceInput->StartAudioRecording(); break; }
 			case GLFW_KEY_M: {
 
-				// Store grid in Firebase
+				// Store grid cells in Firebase
 				eyegui::DriftGrid grid = eyegui::getCurrentDriftMap(_pGUI);
-				std::vector<float> driftX; driftX.reserve(grid.RES_X + 1);
-				std::vector<float> driftY; driftY.reserve(grid.RES_Y + 1);
-				for (int x = 0; x <= grid.RES_X; x++)
+				std::vector<float> driftX; driftX.reserve(grid.RES_X);
+				std::vector<float> driftY; driftY.reserve(grid.RES_Y);
+				for (int x = 0; x < grid.RES_X; x++)
 				{
-					for (int y = 0; y <= grid.RES_Y; y++)
+					for (int y = 0; y < grid.RES_Y; y++)
 					{
-						driftX.push_back(grid.verts[x][y].first);
-						driftY.push_back(grid.verts[x][y].second);
+						driftX.push_back(grid.cells[x][y].first);
+						driftY.push_back(grid.cells[x][y].second);
 					}
 				}
 				nlohmann::json gridJSON =
