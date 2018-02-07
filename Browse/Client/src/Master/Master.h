@@ -283,6 +283,10 @@ private:
 	// Show super calibration layout
 	void ShowSuperCalibrationLayout();
 
+	// Persist drift grid of drift grid map in Firebase
+	enum class PersistDriftGridReason { EXIT, RECALIBRATION, MANUAL };
+	void PersistDriftGrid(PersistDriftGridReason reason);
+
     // Callbacks
     void GLFWKeyCallback(int key, int scancode, int action, int mods);
     void GLFWMouseButtonCallback(int button, int action, int mods);

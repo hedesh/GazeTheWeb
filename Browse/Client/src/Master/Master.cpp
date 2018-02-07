@@ -582,6 +582,9 @@ void Master::Exit(bool shutdown)
 	// Stop update loop
 	_exit = true;
 
+	// Persist drift grid
+	PersistDriftGrid(PersistDriftGridReason::EXIT);
+
 	// Should shutdown after exit
 	_shouldShutdownAtExit = shutdown;
 }
@@ -1117,6 +1120,61 @@ void Master::ShowSuperCalibrationLayout()
 	eyegui::playSound(_pGUI, "sounds/GameAudio/FlourishSpacey-1.ogg");
 }
 
+void Master::PersistDriftGrid(PersistDriftGridReason reason)
+{
+	// Attempt persisting only if drift map is actually used
+	if (_useDriftMap)
+	{
+		// Decide on reason for persisting
+		std::string strReason = "";
+		switch (reason)
+		{
+		case PersistDriftGridReason::EXIT:
+			strReason = "exit";
+			break;
+		case PersistDriftGridReason::RECALIBRATION:
+			strReason = "recalibration";
+			break;
+		case PersistDriftGridReason::MANUAL:
+			strReason = "manual";
+			break;
+		}
+
+		// Store grid cells in Firebase
+		eyegui::DriftGrid grid = eyegui::getCurrentDriftMap(_pGUI);
+		std::vector<float> driftX; driftX.reserve(grid.RES_X);
+		std::vector<float> driftY; driftY.reserve(grid.RES_Y);
+		for (int x = 0; x < grid.RES_X; x++)
+		{
+			for (int y = 0; y < grid.RES_Y; y++)
+			{
+				driftX.push_back(grid.cells[x][y].first);
+				driftY.push_back(grid.cells[x][y].second);
+			}
+		}
+		nlohmann::json gridJSON =
+		{
+			{ "startIndex", FirebaseMailer::Instance().GetStartIndex() }, // start index
+			{ "date", GetDate() }, // add date
+			{ "storeTimestamp", GetTimestamp() }, // add timestamp when the drift grid has been stored
+			{ "initTimestamp", grid.initTimestamp }, // add timestamp when the drift grid had been initialized
+			{ "reason", strReason }, // reason for persisting
+			{ "resX", grid.RES_X },
+			{ "resY", grid.RES_Y },
+			{ "driftX", driftX },
+			{ "driftY", driftY }
+		};
+		PushBackAsyncJob(
+			[gridJSON]() // provide copy of data
+		{
+			std::promise<int> promise; auto future = promise.get_future(); // future provides index
+			bool pushedBack = FirebaseMailer::Instance().PushBack_Transform(FirebaseIntegerKey::GENERAL_DRIFT_GRID_COUNT, 1, &promise); // adds one to the count
+			if (pushedBack) { FirebaseMailer::Instance().PushBack_Put(FirebaseJSONKey::GENERAL_DRIFT_GRID, gridJSON, std::to_string(future.get() - 1)); } // send JSON to database
+			return true; // give the future some value
+		});
+	}
+}
+
 void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 {
     if (action == GLFW_PRESS)
@@ -1135,42 +1193,7 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 			case GLFW_KEY_9: { _pCefMediator->Poll(); break; } // poll everything
 			case GLFW_KEY_0: { _pCefMediator->ShowDevTools(); break; }
 			case GLFW_KEY_SPACE: { _upVoiceInput->StartAudioRecording(); break; }
-			case GLFW_KEY_M: {
-
-				// Store grid cells in Firebase
-				eyegui::DriftGrid grid = eyegui::getCurrentDriftMap(_pGUI);
-				std::vector<float> driftX; driftX.reserve(grid.RES_X);
-				std::vector<float> driftY; driftY.reserve(grid.RES_Y);
-				for (int x = 0; x < grid.RES_X; x++)
-				{
-					for (int y = 0; y < grid.RES_Y; y++)
-					{
-						driftX.push_back(grid.cells[x][y].first);
-						driftY.push_back(grid.cells[x][y].second);
-					}
-				}
-				nlohmann::json gridJSON =
-				{
-					{ "startIndex", FirebaseMailer::Instance().GetStartIndex() }, // start index
-					{ "date", GetDate() }, // add date
-					{ "storeTimestamp", GetTimestamp() }, // add timestamp when the drift grid has been stored
-					{ "initTimestamp", grid.initTimestamp }, // add timestamp when the drift grid had been initialized
-					{ "resX", grid.RES_X },
-					{ "resY", grid.RES_Y },
-					{ "driftX", driftX },
-					{ "driftY", driftY }
-				};
-				PushBackAsyncJob(
-					[gridJSON]() // provide copy of data
-				{
-					std::promise<int> promise; auto future = promise.get_future(); // future provides index
-					bool pushedBack = FirebaseMailer::Instance().PushBack_Transform(FirebaseIntegerKey::GENERAL_DRIFT_GRID_COUNT, 1, &promise); // adds one to the count
-					if (pushedBack) { FirebaseMailer::Instance().PushBack_Put(FirebaseJSONKey::GENERAL_DRIFT_GRID, gridJSON, std::to_string(future.get())); } // send JSON to database
-					return true; // give the future some value
-				});
-
-				break;
-			}
+			case GLFW_KEY_M: { PersistDriftGrid(PersistDriftGridReason::MANUAL); break; }
         }
     }
 	else if (action == GLFW_RELEASE)
@@ -1254,6 +1277,7 @@ void Master::MasterButtonListener::down(eyegui::Layout* pLayout, std::string id)
 			{
 			case CALIBRATION_OK:
 				_pMaster->PushNotificationByKey("notification:calibration_success", MasterNotificationInterface::Type::SUCCESS, false);
+				_pMaster->PersistDriftGrid(Master::PersistDriftGridReason::RECALIBRATION); // before reset
 				eyegui::resetDriftMap(_pMaster->_pGUI); // reset drift map of GUI
 				success = true;
 				eyegui::setElementActivity(_pMaster->_pSuperCalibrationLayout, "continue", true, true); // allow user to continue
@@ -1261,6 +1285,7 @@ void Master::MasterButtonListener::down(eyegui::Layout* pLayout, std::string id)
 			case CALIBRATION_BAD:
 				// TODO: provide hints how to improve calibration
 				_pMaster->PushNotificationByKey("notification:calibration_bad", MasterNotificationInterface::Type::WARNING, false);
+				_pMaster->PersistDriftGrid(Master::PersistDriftGridReason::RECALIBRATION); // before reset
 				eyegui::resetDriftMap(_pMaster->_pGUI); // reset drift map of GUI
 				success = true;
 				eyegui::setElementActivity(_pMaster->_pSuperCalibrationLayout, "continue", true, true); // allow user to continue
