@@ -1151,6 +1151,10 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 				}
 				nlohmann::json gridJSON =
 				{
+					{ "startIndex", FirebaseMailer::Instance().GetStartIndex() }, // start index
+					{ "date", GetDate() }, // add date
+					{ "storeTimestamp", GetTimestamp() }, // add timestamp when the drift grid has been stored
+					{ "initTimestamp", grid.initTimestamp }, // add timestamp when the drift grid had been initialized
 					{ "resX", grid.RES_X },
 					{ "resY", grid.RES_Y },
 					{ "driftX", driftX },
