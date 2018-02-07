@@ -82,12 +82,7 @@ bool MagnificationCoordinateAction::Update(float tpf, const std::shared_ptr<cons
 			glm::vec2 coordinate = relativeGazeCoordinate;
 
 			// Drift correction
-			if (setup::USE_EYEGUI_DRIFT_MAP)
-			{
-				LogInfo("Coordinate before Drift Correction: ", coordinate.x, ", ", coordinate.y);
-				driftCorrection(coordinate);
-				LogInfo("Coordinate after Drift Correction: ", coordinate.x, ", ", coordinate.y);
-			}
+			driftCorrection(coordinate);
 
 			// Further transformation to CEF pixel space
 			pageCoordinate(zoom, relativeMagnificationCenter, relativeCenterOffset, coordinate); // transform gaze relative to WebView to page coordinates
@@ -102,12 +97,7 @@ bool MagnificationCoordinateAction::Update(float tpf, const std::shared_ptr<cons
 			_relativeMagnificationCenter = relativeGazeCoordinate;
 
 			// Drift correction
-			if (setup::USE_EYEGUI_DRIFT_MAP)
-			{
-				LogInfo("Coordinate before Drift Correction: ", _relativeMagnificationCenter.x, ", ", _relativeMagnificationCenter.y);
-				driftCorrection(_relativeMagnificationCenter);
-				LogInfo("Coordinate after Drift Correction: ", _relativeMagnificationCenter.x, ", ", _relativeMagnificationCenter.y);
-			}
+			driftCorrection(_relativeMagnificationCenter);
 
 			// Remember magnification
 			_magnify = true;

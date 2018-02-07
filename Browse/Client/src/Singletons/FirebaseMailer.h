@@ -344,7 +344,7 @@ public:
 	void Pause() { _paused = true; }
 
 	// Available commands. Returns whether successful pushed back the command. If not, do not wait for the promise to be fulfilled!
-	bool PushBack_Login		(std::string email, std::string password, std::promise<std::string>* pPromise = nullptr); // promise delivers initial idToken value and sets internal start index
+	bool PushBack_Login		(std::string email, std::string password, bool useDriftMap, std::promise<std::string>* pPromise = nullptr); // promise delivers initial idToken value and sets internal start index
 	bool PushBack_Transform	(FirebaseIntegerKey key, int delta, std::promise<int>* pPromise = nullptr); // promise delivers future database value
 	bool PushBack_Maximum	(FirebaseIntegerKey key, int value, std::promise<int>* pPromise = nullptr); // promise delivers future database value
 	bool PushBack_Put		(FirebaseIntegerKey key, int value, std::string subpath = "");
@@ -407,7 +407,7 @@ private:
 		FirebaseInterface(IdToken* pIdToken, std::atomic<int>* pStartIndex) : _pIdToken(pIdToken), _pStartIndex(pStartIndex) {}
 
 		// Log in. Return whether successful
-		bool Login(std::string email, std::string password, std::promise<std::string>* pPromise);
+		bool Login(std::string email, std::string password, bool useDriftMap, std::promise<std::string>* pPromise);
 
 		// Simple put functionality. Replaces existing value if available, no ETag used
 		template<typename T>

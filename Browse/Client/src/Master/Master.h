@@ -132,7 +132,7 @@ public:
 	// Use eyeGUI drift map to perform drift correction. Does nothing if USE_EYEGUI_DRIFT_MAP is false
 	void ApplyGazeDriftCorrection(float& rPixelX, float& rPixelY) const
 	{
-		if (setup::USE_EYEGUI_DRIFT_MAP) // only if drift map is used by GazeTheWeb
+		if (_useDriftMap) // only if drift map is used by GazeTheWeb
 		{
 			eyegui::applyDriftMap(_pGUI, rPixelX, rPixelY);
 		}
@@ -380,7 +380,7 @@ private:
 	// LabStreamMailer callback to print incoming messages to log
 	std::shared_ptr<LabStreamCallback> _spLabStreamCallback;
 
-	// Boolean to indicate exiting the applicatoin
+	// Boolean to indicate exiting the application
 	bool _exit = false;
 
 	// Buffer for jobs assigned by threads
@@ -403,6 +403,9 @@ private:
 
 	// Sensor recording
 	SensorRecorder _sensorRecorder;
+
+	// Store whether drift map is used
+	bool _useDriftMap = false;
 };
 
 #endif // MASTER_H_

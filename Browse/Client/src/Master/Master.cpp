@@ -216,6 +216,25 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 		(int)icons.size(),
 		icons.data());
 
+	// ### DRIFT MAP USAGE  ###
+
+	// Decide on whether to use the drift map
+	if (setup::ENABLE_EYEGUI_DRIFT_MAP_ACTIVATION)
+	{
+		std::srand(std::time(nullptr)); // use current time as seed for random generator
+		_useDriftMap = (std::rand() % 2) == 1;
+	}
+	
+	// Provide this info in log
+	if (_useDriftMap)
+	{
+		LogInfo("Drift Map is used");
+	}
+	else
+	{
+		LogInfo("Drift Map is *not* used");
+	}
+
     // ### EYEGUI ###
 
 	// Decide on localization
@@ -259,7 +278,7 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 	eyegui::terminateGUI(pSplashGUI);
 
     // Construct GUI
-	guiBuilder.useDriftMap = setup::USE_EYEGUI_DRIFT_MAP;
+	guiBuilder.useDriftMap = _useDriftMap;
     _pGUI = guiBuilder.construct(); // standard GUI object used everywhere
 	guiBuilder.useDriftMap = false;
     _pSuperGUI = guiBuilder.construct(); // GUI which is rendered on top of everything else
@@ -424,7 +443,7 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 
 	// Login (waits until complete)
 	std::promise<std::string> idTokenPromise; auto idTokenFuture = idTokenPromise.get_future(); // future provides initial idToken
-	bool pushedBack = FirebaseMailer::Instance().PushBack_Login(_upSettings->GetFirebaseEmail(), _upSettings->GetFirebasePassword(), &idTokenPromise);
+	bool pushedBack = FirebaseMailer::Instance().PushBack_Login(_upSettings->GetFirebaseEmail(), _upSettings->GetFirebasePassword(), _useDriftMap, &idTokenPromise);
 	if (pushedBack) { LogInfo(idTokenFuture.get()); };
 
 	// Retrieve user award

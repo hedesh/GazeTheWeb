@@ -85,7 +85,7 @@ std::string HttpHeaderExtractETag(const std::string& rHeader)
 // ### FIREBASE INTERFACE ###
 // ##########################
 
-bool FirebaseMailer::FirebaseInterface::Login(std::string email, std::string password, std::promise<std::string>* pPromise)
+bool FirebaseMailer::FirebaseInterface::Login(std::string email, std::string password, bool useDriftMap, std::promise<std::string>* pPromise)
 {
 	// Store email and password
 	_email = email;
@@ -103,7 +103,8 @@ bool FirebaseMailer::FirebaseInterface::Login(std::string email, std::string pas
 		nlohmann::json record = {
 			{ "date", GetDate() }, // add date
 			{ "timestamp", GetTimestamp() }, // add timestamp
-			{ "version", std::to_string(CLIENT_VERSION) } // add version
+			{ "version", std::to_string(CLIENT_VERSION) }, // add version
+			{ "useDriftMap", useDriftMap } // add information whether drift map is used
 		};
 		Put(FirebaseJSONKey::GENERAL_APPLICATION_START, record, std::to_string(index)); // send JSON to database
 		*_pStartIndex = index;
@@ -705,12 +706,12 @@ FirebaseMailer::FirebaseMailer()
 	}));
 }
 
-bool FirebaseMailer::PushBack_Login(std::string email, std::string password, std::promise<std::string>* pPromise)
+bool FirebaseMailer::PushBack_Login(std::string email, std::string password, bool useDriftMap, std::promise<std::string>* pPromise)
 {
 	// Add command to queue, take parameters as copy
 	return PushBackCommand(std::shared_ptr<Command>(new Command([=](FirebaseInterface& rInterface)
 	{
-		return rInterface.Login(email, password, pPromise);
+		return rInterface.Login(email, password, useDriftMap, pPromise);
 	})));
 }
 
