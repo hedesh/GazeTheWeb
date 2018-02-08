@@ -498,7 +498,6 @@ StateType Web::Update(float tpf, const std::shared_ptr<const Input> spInput)
         eyegui::setElementActivity(_pWebLayout, "back", _tabs.at(_currentTabId)->CanGoBack(), true);
         eyegui::setElementActivity(_pWebLayout, "forward", _tabs.at(_currentTabId)->CanGoForward(), true);
 
-		
 		_tabs.at(_currentTabId)->Update(tpf, spInput);
     }
 
@@ -507,11 +506,10 @@ StateType Web::Update(float tpf, const std::shared_ptr<const Input> spInput)
     {
         return StateType::SETTINGS;
     }
-    else
-    {
-        return StateType::WEB;
-    }
-
+	else
+	{
+		return StateType::WEB;
+	}
 }
 
 void Web::Draw() const
