@@ -72,7 +72,7 @@ bool MagnificationCoordinateAction::Update(float tpf, const std::shared_ptr<cons
 
 	// Decide whether to magnify or to finish
 	bool finished = false;
-	if (!spInput->gazeUponGUI && (spInput->instantInteraction || (fixationWaitTime <= 0 && spInput->fixationDuration >= FIXATION_DURATION))) // user demands on instant interaction or fixates on the screen
+	if (!spInput->gazeUponGUI && (spInput->instantInteraction || (!spInput->gazeEmulated && fixationWaitTime <= 0 && spInput->fixationDuration >= FIXATION_DURATION))) // user demands on instant interaction or fixates on the screen
 	{
 		// Check for magnification
 		if (_magnification >= 1.f) // already magnified, so finish this action
