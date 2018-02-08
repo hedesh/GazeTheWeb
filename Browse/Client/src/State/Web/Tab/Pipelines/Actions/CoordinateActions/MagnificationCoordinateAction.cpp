@@ -8,7 +8,6 @@
 #include "src/Setup.h"
 #include "submodules/glm/glm/gtx/vector_angle.hpp"
 #include <algorithm>
-#include <iostream>
 
 MagnificationCoordinateAction::MagnificationCoordinateAction(TabInteractionInterface* pTab, bool doDimming) : Action(pTab)
 {

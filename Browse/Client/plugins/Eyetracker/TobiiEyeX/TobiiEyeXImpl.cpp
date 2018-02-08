@@ -176,7 +176,7 @@ EyetrackerInfo Connect(EyetrackerGeometry geometry)
 	if (success)
 	{
 		info.connected = true;
-		info.samplerate = 60;
+		info.samplerate = 90;
 	}
 
 	// Return success
