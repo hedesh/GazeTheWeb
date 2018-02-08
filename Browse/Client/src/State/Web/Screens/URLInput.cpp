@@ -50,9 +50,9 @@ URLInput::~URLInput()
     _pMaster->RemoveLayout(_pLayout);
 }
 
-bool URLInput::Update()
+URLInput::Status URLInput::Update()
 {
-    return _finished;
+    return _status;
 }
 
 void URLInput::Activate(int tabId)
@@ -72,7 +72,7 @@ void URLInput::Activate(int tabId)
         eyegui::setContentOfTextBlock(_pLayout, "url_display", "");
 
         // Finished, not yet
-        _finished = false;
+		_status = Status::PENDING;
 
         // Remember id of tab which url shall be changed
         _currentTabId = tabId;
@@ -185,7 +185,7 @@ void URLInput::URLButtonListener::down(eyegui::Layout* pLayout, std::string id)
 		{
 			// Reset URL input to empty to indicate abortion
 			_pURLInput->_collectedURL = u"";
-			_pURLInput->_finished = true;
+			_pURLInput->_status = URLInput::Status::MANUAL_URL;
 
 			JSMailer::instance().Send("close");
 			LabStreamMailer::instance().Send("Close URL input");
@@ -210,7 +210,7 @@ void URLInput::URLButtonListener::down(eyegui::Layout* pLayout, std::string id)
 		}
 		else if (id == "complete")
 		{
-			_pURLInput->_finished = true;
+			_pURLInput->_status = URLInput::Status::MANUAL_URL;
 			nlohmann::json record = { { "charCount", _pURLInput->_collectedURL.length() } };
 			_pURLInput->_pMaster->SimplePushBackAsyncJob(FirebaseIntegerKey::GENERAL_URL_INPUT_COUNT, FirebaseJSONKey::GENERAL_URL_INPUT, record);
 			LabStreamMailer::instance().Send("URL input done");
@@ -320,7 +320,7 @@ void URLInput::URLButtonListener::down(eyegui::Layout* pLayout, std::string id)
 					std::u16string URL16;
 					eyegui_helper::convertUTF8ToUTF16(URL, URL16);
 					_pURLInput->_collectedURL = URL16;
-					_pURLInput->_finished = true;
+					_pURLInput->_status = URLInput::Status::BOOKMARK_URL;
 					nlohmann::json record = { { "url", URL } };
 					_pURLInput->_pMaster->SimplePushBackAsyncJob(FirebaseIntegerKey::GENERAL_BOOKMARK_USAGE_COUNT, FirebaseJSONKey::GENERAL_BOOKMARK_USAGE, record);
 					LabStreamMailer::instance().Send("Open bookmark: " + URL);

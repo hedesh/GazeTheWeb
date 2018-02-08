@@ -444,14 +444,15 @@ StateType Web::Update(float tpf, const std::shared_ptr<const Input> spInput)
     if (_upURLInput->IsActive())
     {
         // Update it and wait for finish of URL input
-        if (_upURLInput->Update())
+		auto status = _upURLInput->Update();
+        if (status != URLInput::Status::PENDING)
         {
             // Get input and decide
             std::string URL = _upURLInput->GetURL();
             if (!URL.empty())
             {
-				// Validate URL
-				if (!ValidateURL(URL))
+				// Validate URL if manual entered
+				if (status == URLInput::Status::MANUAL_URL && !ValidateURL(URL))
 				{
 					// Seems to be no url, so input it as search term
 					switch (Argument::localization)

@@ -19,6 +19,9 @@ class URLInput
 {
 public:
 
+	// Enumeration about status of URL
+	enum Status { PENDING, MANUAL_URL, BOOKMARK_URL };
+
     // Constructor
     URLInput(Master* pMaster, BookmarkManager* pBookmarkManager);
 
@@ -26,7 +29,7 @@ public:
     virtual ~URLInput();
 
     // Update while active. Returns whether input is finished. URL is empty if aborted
-    bool Update();
+	Status Update();
 
     // Activate
     void Activate(int tabId);
@@ -103,8 +106,8 @@ private:
     // Bool whether active
     bool _active = false;
 
-    // Bool whether input is finished
-    bool _finished = false;
+    // Status of URL input
+	Status _status = Status::PENDING;
 
     // Id of current tab
     int _currentTabId = -1;
