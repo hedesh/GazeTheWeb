@@ -29,10 +29,14 @@ bool LinkNavigationAction::Update(float tpf, const std::shared_ptr<const TabInpu
     // Decide what to click
 	double CEFPixelX = coordinate.x;
 	double CEFPixelY = coordinate.y;
+
+	// TODO: Deactivated link click correction
+	/*
     double scrollingX, scrollingY;
     _pTab->GetScrollingOffset(scrollingX, scrollingY);
-
+	
 	// Call function to find nearest neighbor
+	
 	float distance = 0.f;
     glm::vec2 pagePixelCoordinate = glm::vec2(CEFPixelX + scrollingX, CEFPixelY + scrollingY);
     std::weak_ptr<const DOMNode> wpNearestLink = _pTab->GetNearestLink(pagePixelCoordinate, distance);
@@ -53,6 +57,7 @@ bool LinkNavigationAction::Update(float tpf, const std::shared_ptr<const TabInpu
             }
         }
     }
+	*/
 
     // Emulate left mouse button click (TODO: assumption that this was actively triggered by a user)
     _pTab->EmulateLeftMouseButtonClick(CEFPixelX, CEFPixelY, visualize > 0, false, true); // coordinate already in CEFPixel space
