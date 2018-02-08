@@ -37,6 +37,7 @@ URLInput::URLInput(Master* pMaster, BookmarkManager* pBookmarkManager)
 	eyegui::registerButtonListener(_pLayout, "co_il", _spURLButtonListener);
 	// eyegui::registerButtonListener(_pLayout, "de", _spURLButtonListener);
 	eyegui::registerButtonListener(_pLayout, "space", _spURLButtonListener);
+	eyegui::registerButtonListener(_pLayout, "extra_keys", _spURLButtonListener);
 	eyegui::registerButtonListener(_pLayout, "layout", _spURLButtonListener);
 	eyegui::registerButtonListener(_pLayout, "layout_us_english", _spURLButtonListener);
 	eyegui::registerButtonListener(_pLayout, "layout_germany_german", _spURLButtonListener);
@@ -255,6 +256,10 @@ void URLInput::URLButtonListener::down(eyegui::Layout* pLayout, std::string id)
 			_pURLInput->_collectedURL += u" ";
 			eyegui::setContentOfTextBlock(_pURLInput->_pLayout, "url_display", _pURLInput->_collectedURL + u"|");
 		}
+		else if (id == "extra_keys")
+		{
+			eyegui::setKeymapOfKeyboard(_pURLInput->_pLayout, "keyboard", 1);
+		}
 		else if (id == "layout")
 		{
 			eyegui::setElementActivity(_pURLInput->_pLayout, "keyboard", false);
@@ -263,21 +268,25 @@ void URLInput::URLButtonListener::down(eyegui::Layout* pLayout, std::string id)
 		{
 			_pURLInput->_pMaster->SetKeyboardLayout(eyegui::KeyboardLayout::US_ENGLISH);
 			eyegui::buttonUp(_pURLInput->_pLayout, "layout");
+			eyegui::buttonUp(_pURLInput->_pLayout, "extra_keys");
 		}
 		else if (id == "layout_germany_german")
 		{
 			_pURLInput->_pMaster->SetKeyboardLayout(eyegui::KeyboardLayout::GERMANY_GERMAN);
 			eyegui::buttonUp(_pURLInput->_pLayout, "layout");
+			eyegui::buttonUp(_pURLInput->_pLayout, "extra_keys");
 		}
 		else if (id == "layout_israel_hebrew")
 		{
 			_pURLInput->_pMaster->SetKeyboardLayout(eyegui::KeyboardLayout::ISRAEL_HEBREW);
 			eyegui::buttonUp(_pURLInput->_pLayout, "layout");
+			eyegui::buttonUp(_pURLInput->_pLayout, "extra_keys");
 		}
 		else if (id == "layout_greece_greek")
 		{
 			_pURLInput->_pMaster->SetKeyboardLayout(eyegui::KeyboardLayout::GREECE_GREEK);
 			eyegui::buttonUp(_pURLInput->_pLayout, "layout");
+			eyegui::buttonUp(_pURLInput->_pLayout, "extra_keys");
 		}
 	}
 	else
@@ -339,6 +348,10 @@ void URLInput::URLButtonListener::up(eyegui::Layout* pLayout, std::string id)
 		if (id == "layout")
 		{
 			eyegui::setElementActivity(_pURLInput->_pLayout, "keyboard", true);
+		}
+		else if (id == "extra_keys")
+		{
+			eyegui::setKeymapOfKeyboard(_pURLInput->_pLayout, "keyboard", 0);
 		}
 	}
 }

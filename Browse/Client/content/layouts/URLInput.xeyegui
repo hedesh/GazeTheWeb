@@ -50,6 +50,7 @@
 								<boxbutton icon="icons/domain_gr.png" id="gr"/>
 								<boxbutton icon="icons/domain_co_il.png" id="co_il"/>
 								<!-- <boxbutton icon="icons/domain_de.png" id="de"/> -->
+								<boxbutton switch="true" icon="icons/ExtraKeys.png" id="extra_keys" desckey="action_keyboard:extra_keys" relativescale="75%"/> <!-- TODO: Replace desckey!-->
 								<dropbutton icon="icons/Layout.png" id="layout" desckey="url_input:layout" space="75%">
 									<stack separator="0.25%">
 										<boxbutton icon="icons/LayoutUSEnglish.png" id="layout_us_english" desckey="url_input:layout_us_english"/>
