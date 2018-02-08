@@ -5,7 +5,12 @@
 //============================================================================
 
 #include "DOMNodeInteraction.h"
-#include "src/State/Web/Tab/Tab.h"
+#include "src/CEF/Mediator.h"
+#include <locale>
+#include <memory>
+#include <codecvt>
+#include <string>
+#include <iostream>
 
 bool DOMJavascriptCommunication::SendProcessMessageToRenderer(CefRefPtr<CefProcessMessage> msg)
 {
@@ -28,7 +33,7 @@ CefRefPtr<CefProcessMessage> DOMJavascriptCommunication::SetupExecuteFunctionMes
 	return msg;
 }
 
-void DOMTextInputInteraction::InputText(std::string text, bool submit)
+void DOMTextInputInteraction::InputText(std::u16string text, bool submit)
 {
 	// Focus input node
 	SendExecuteFunctionMessage("focusNode");
@@ -38,11 +43,17 @@ void DOMTextInputInteraction::InputText(std::string text, bool submit)
 	_sendRenderMessage(msg);
 
 	// Emulate keyboard streaks (Shift+Enter for line break?)
-	msg = CefProcessMessage::Create("EmulateKeyboardStrokes");
-	const auto& args = msg->GetArgumentList();
-	args->SetString(0, text);
-	_sendRenderMessage(msg);
+	std::wstring_convert<std::codecvt_utf16<wchar_t, 0x10ffff, std::little_endian>, wchar_t> conv;
+	std::wstring ws = conv.from_bytes(
+		reinterpret_cast<const char*> (&text[0]),
+		reinterpret_cast<const char*> (&text[0] + text.size()));
+	_mediator->EmulateKeyboardStrokes(ws);
 
+	//msg = CefProcessMessage::Create("EmulateKeyboardStrokes");
+	//const auto& args = msg->GetArgumentList();
+	//args->SetString16(0, text);
+	//_sendRenderMessage(msg);
+	
 
 	// Emulate Enter key, when submitting
 	if (submit)
@@ -51,5 +62,6 @@ void DOMTextInputInteraction::InputText(std::string text, bool submit)
 		_sendRenderMessage(msg);
 	}
 
+	// TODO: Special handling needed due to utf16
 	SendExecuteFunctionMessage("setText", text);
 }

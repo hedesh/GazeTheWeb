@@ -381,12 +381,11 @@ void Mediator::EmulateKeyboardKey(int key, int scancode, int action, int mods)
 	}
 }
 
-void Mediator::EmulateKeyboardStrokes(std::string input)
+void Mediator::EmulateKeyboardStrokes(base::string16 input)
 {
 	for (const auto& kvpair : _tabs)
 	{
 		_handler->EmulateKeyboardStrokes(GetBrowser(kvpair.second), input);
-		LogInfo("Handler: EmulatedKeyboardStrokes\n'", input, "'");
 		break;
 	}
 }

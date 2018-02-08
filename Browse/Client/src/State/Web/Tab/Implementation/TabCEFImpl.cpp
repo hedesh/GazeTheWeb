@@ -144,8 +144,7 @@ bool Tab::IsFaviconAlreadyAvailable(std::string img_url)
 void Tab::AddDOMTextInput(CefRefPtr<CefBrowser> browser, int id)
 {
 	std::shared_ptr<DOMTextInput> spNode = std::make_shared<DOMTextInput>(
-		id,
-		SendRenderMessage);
+		id, _pCefMediator, SendRenderMessage);
 
 	// Add node to ID->node map
 	_TextInputMap.emplace(id, spNode);

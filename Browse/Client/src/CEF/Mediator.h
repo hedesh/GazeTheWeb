@@ -17,6 +17,7 @@
 #include <memory>
 #include <queue>
 #include <functional>
+#include "include\cef_base.h"
 
 /**
 *	Expand CefApp by methods and attributes used to communicate with Master and
@@ -83,7 +84,7 @@ public:
 	*  @param[in] mods Bit field describing which [modifier keys](@ref mods) were
 	*/
 	void EmulateKeyboardKey(int key, int scancode, int action, int mods);
-	void EmulateKeyboardStrokes(std::string input);										// TODO: second paramter browser or tab
+	void EmulateKeyboardStrokes(base::string16 input);										// TODO: second paramter browser or tab
 	void EmulateEnterKey();																// TODO: Call with tab pointer
 
     void ResetScrolling(TabCEFInterface* pTab);

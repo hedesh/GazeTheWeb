@@ -118,10 +118,10 @@ class DOMTextInput :
 public:
 
 	// Empty construction
-	DOMTextInput(int id, SendRenderMessage sendRenderMessage) :
-        DOMNode(id),
+	DOMTextInput(int id, Mediator* mediator, SendRenderMessage sendRenderMessage) :
+		DOMNode(id),
         DOMJavascriptCommunication(sendRenderMessage),
-        DOMTextInputInteraction() {}
+        DOMTextInputInteraction(mediator) {}
 
 	// Define initialization through ICP message in each DOMNode subclass
 	virtual int Initialize(CefRefPtr<CefProcessMessage> msg) override;
@@ -174,6 +174,7 @@ private:
 	bool _isPassword = false;
 	std::string _htmlId = "";
 	std::string _htmlClass = "";
+
 };
 
 /*

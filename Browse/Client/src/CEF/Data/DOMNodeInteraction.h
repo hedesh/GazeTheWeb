@@ -13,7 +13,8 @@
 #include "src/Utils/Logger.h"
 #include <functional>
 
-class Tab;	// Forward declaration
+// Forward declaration
+class Mediator;
 
 typedef std::function<bool(CefRefPtr<CefProcessMessage>)> SendRenderMessage;
 
@@ -133,10 +134,11 @@ class DOMTextInputInteraction : public virtual DOMJavascriptCommunication
 public:
 
 	// Constructor
-    DOMTextInputInteraction() {}
+    DOMTextInputInteraction(Mediator* mediator) : _mediator(mediator) {}
 
 	// Send IPC message to JS in order to execute text input function
-	void InputText(std::string text, bool submit);
+	void InputText(std::u16string text, bool submit);
+	Mediator* _mediator;
 };
 
 // Interaction with overflow element
