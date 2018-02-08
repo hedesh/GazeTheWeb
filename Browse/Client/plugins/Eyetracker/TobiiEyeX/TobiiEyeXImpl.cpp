@@ -64,7 +64,8 @@ void OnGazeDataEvent(TX_HANDLE hGazeDataBehavior)
 				SampleDataCoordinateSystem::SCREEN_PIXELS,
 				duration_cast<milliseconds>(
 					system_clock::now().time_since_epoch() // timestamp
-					)
+					),
+				true // EyeX only delivers valid samples
 			)
 		);
 

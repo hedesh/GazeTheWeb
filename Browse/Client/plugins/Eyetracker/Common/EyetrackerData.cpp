@@ -68,7 +68,7 @@ namespace eyetracker_global
 		if (spLabStreamOutput) { spLabStreamOutput->Update({ sample.x, sample.y }); } // handles pause etc. internally
 
 		// Push sample to queue
-		if (sample.x > 0.f && sample.y > 0.f) // only push valid samples to the queue
+		if (sample.valid) // only push valid samples to the queue
 		{
 			spSampleDataQueue->push_back(sample); // pushes sample
 		}

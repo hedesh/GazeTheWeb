@@ -34,7 +34,8 @@ int __stdcall SampleCallbackFunction(SampleStruct sampleData)
 			SampleDataCoordinateSystem::SCREEN_PIXELS,
 			duration_cast<milliseconds>(
 				system_clock::now().time_since_epoch() // timestamp
-				)
+				),
+			!(gazeX == 0 && gazeY == 0)
 		)
 	);
 
