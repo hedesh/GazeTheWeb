@@ -118,9 +118,9 @@ class DOMTextInput :
 public:
 
 	// Empty construction
-	DOMTextInput(int id, std::shared_ptr<TabDOMNodeInterface> spTab) :
+	DOMTextInput(int id, TabDOMNodeInterface* pTab) :
 		DOMNode(id),
-        DOMJavascriptCommunication(std::move(spTab)),
+        DOMJavascriptCommunication(pTab),
         DOMTextInputInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -256,9 +256,9 @@ class DOMSelectField :
 public:
 
 	// Empty construction
-	DOMSelectField(int id, std::shared_ptr<TabDOMNodeInterface> spTab) :
+	DOMSelectField(int id, TabDOMNodeInterface* pTab) :
 		DOMNode(id), 
-        DOMJavascriptCommunication(std::move(spTab)),
+        DOMJavascriptCommunication(pTab),
         DOMSelectFieldInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -317,9 +317,9 @@ class DOMOverflowElement :
 public:
 
 	// Empty construction
-	DOMOverflowElement(int id, std::shared_ptr<TabDOMNodeInterface> spTab) :
+	DOMOverflowElement(int id, TabDOMNodeInterface* pTab) :
 		DOMNode(id),
-        DOMJavascriptCommunication(std::move(spTab)),
+        DOMJavascriptCommunication(pTab),
         DOMOverflowElementInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -383,9 +383,9 @@ class DOMVideo :
 public:
 
 	// Empty construction
-	DOMVideo(int id, std::shared_ptr<TabDOMNodeInterface> spTab) :
+	DOMVideo(int id, TabDOMNodeInterface* pTab) :
 		DOMNode(id),
-		DOMJavascriptCommunication(std::move(spTab)),
+		DOMJavascriptCommunication(pTab),
 		DOMVideoInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -436,9 +436,9 @@ class DOMCheckbox :
 	public virtual DOMCheckboxInteraction
 {
 public:
-	DOMCheckbox(int id, std::shared_ptr<TabDOMNodeInterface> spTab) :
+	DOMCheckbox(int id, TabDOMNodeInterface* pTab) :
 		DOMNode(id), 
-		DOMJavascriptCommunication(std::move(spTab)), 
+		DOMJavascriptCommunication(pTab), 
 		DOMCheckboxInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass

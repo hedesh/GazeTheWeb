@@ -11,8 +11,7 @@
 
 class DOMBaseInterface;	// forward declaration
 
-class TabDOMNodeInterface : 
-	std::enable_shared_from_this<TabDOMNodeInterface>
+class TabDOMNodeInterface 
 {
 public:
 	// No params given for execution of function
@@ -33,8 +32,6 @@ public:
 	virtual bool EmulateKeyboardStrokes(std::u16string text, bool submit) = 0;
 	virtual bool EmulateSelectAll() = 0;
 	virtual bool EmulateEnterKey() = 0;
-
-	std::shared_ptr<TabDOMNodeInterface> getDOMNodeInterface() { return shared_from_this(); }
 
 private:
 

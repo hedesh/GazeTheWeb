@@ -41,10 +41,10 @@ class DOMJavascriptCommunication  : public virtual DOMBaseInterface
 public:
 
 	// Constructor
-	DOMJavascriptCommunication(std::shared_ptr<TabDOMNodeInterface> tab) :
+	DOMJavascriptCommunication(TabDOMNodeInterface* tab) :
         _pTab(tab) {}
 
-	std::shared_ptr<TabDOMNodeInterface> _pTab;
+	TabDOMNodeInterface* _pTab;
 
 
 private:

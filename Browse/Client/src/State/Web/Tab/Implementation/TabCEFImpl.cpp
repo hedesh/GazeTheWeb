@@ -143,8 +143,7 @@ bool Tab::IsFaviconAlreadyAvailable(std::string img_url)
 
 void Tab::AddDOMTextInput(int id)
 {
-	std::shared_ptr<DOMTextInput> spNode = std::make_shared<DOMTextInput>(
-		id, this->getDOMNodeInterface());
+	std::shared_ptr<DOMTextInput> spNode = std::make_shared<DOMTextInput>(id, this);
 
 	// Add node to ID->node map
 	_TextInputMap.emplace(id, spNode);
@@ -169,8 +168,7 @@ void Tab::AddDOMLink(int id)
 
 void Tab::AddDOMSelectField(int id)
 {
-	std::shared_ptr<DOMSelectField> spNode = std::make_shared<DOMSelectField>(
-		id, this->getDOMNodeInterface());
+	std::shared_ptr<DOMSelectField> spNode = std::make_shared<DOMSelectField>(id, this);
 
 	// Add node to ID->node map
 	_SelectFieldMap.emplace(id, spNode);
@@ -190,14 +188,12 @@ void Tab::AddDOMSelectField(int id)
 
 void Tab::AddDOMOverflowElement(int id)
 {
-	_OverflowElementMap.emplace(id, std::make_shared<DOMOverflowElement>(
-		id, std::make_shared<TabDOMNodeInterface>(this)));
+	_OverflowElementMap.emplace(id, std::make_shared<DOMOverflowElement>(id, this));
 }
 
 void Tab::AddDOMVideo(int id)
 {
-	std::shared_ptr<DOMVideo> spNode = std::make_shared<DOMVideo>(
-		id, this->getDOMNodeInterface());
+	std::shared_ptr<DOMVideo> spNode = std::make_shared<DOMVideo>(id, this);
 
 	// Add node to ID->node map
 	_VideoMap.emplace(id, spNode);
@@ -221,8 +217,7 @@ void Tab::AddDOMVideo(int id)
 
 void Tab::AddDOMCheckbox(int id)
 {
-	_CheckboxMap.emplace(id, std::make_shared<DOMCheckbox>(
-		id, this->getDOMNodeInterface()));
+	_CheckboxMap.emplace(id, std::make_shared<DOMCheckbox>(id, this));
 }
 
 
