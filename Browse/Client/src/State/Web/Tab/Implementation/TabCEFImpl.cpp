@@ -66,8 +66,19 @@ void Tab::ReceiveFaviconBytes(std::unique_ptr< std::vector<unsigned char> > upDa
 		steps = glm::max(1, steps);
 		int maxIndex = 0;
 		int maxSaturation = 0;
+		bool foundColor = false;
 		for (int i = 0; i < size; i += steps * 4)
 		{
+			// Discard pixels that are transparent
+			if (upData->at(i + 3) < 200)
+			{
+				continue;
+			}
+			else
+			{
+				foundColor = true;
+			}
+
 			// Extract colors
 			float r = upData->at(i);
 			float g = upData->at(i + 1);
@@ -92,27 +103,34 @@ void Tab::ReceiveFaviconBytes(std::unique_ptr< std::vector<unsigned char> > upDa
 			}
 		}
 
-		// Extract accent color
-		_targetColorAccent = glm::vec4(
-			((float)upData->at(maxIndex) / 255.f),
-			((float)upData->at(maxIndex + 1) / 255.f),
-			((float)upData->at(maxIndex + 2) / 255.f),
-			1.f);
+		if (foundColor)
+		{
+			// Extract accent color
+			_targetColorAccent = glm::vec4(
+				((float)upData->at(maxIndex) / 255.f),
+				((float)upData->at(maxIndex + 1) / 255.f),
+				((float)upData->at(maxIndex + 2) / 255.f),
+				1.f);
 
-		// Check, whether new target color is too much white
-		float sum = _targetColorAccent.r + _targetColorAccent.g + _targetColorAccent.b; // maximal 3
-		float whiteBorder = 2.5f;
-		if (sum >= whiteBorder)
-		{
-			// Too bright, darken it
-			float multiplier = (1.f - (sum - whiteBorder));
-			_targetColorAccent.r *= multiplier;
-			_targetColorAccent.g *= multiplier;
-			_targetColorAccent.b *= multiplier;
+			// Check, whether new target color is too much white
+			float sum = _targetColorAccent.r + _targetColorAccent.g + _targetColorAccent.b; // maximal 3
+			float whiteBorder = 2.0;
+			if (sum >= whiteBorder)
+			{
+				// Too bright, darken it
+				float multiplier = (1.f - ((sum - whiteBorder)/3.f));
+				_targetColorAccent.r *= multiplier;
+				_targetColorAccent.g *= multiplier;
+				_targetColorAccent.b *= multiplier;
+			}
+			else if (sum <= 0.3f)
+			{
+				// Too dark, use default instead
+				_targetColorAccent = TAB_DEFAULT_COLOR_ACCENT;
+			}
 		}
-		else if (sum <= 0.3f)
+		else
 		{
-			// Too dark, use default instead
 			_targetColorAccent = TAB_DEFAULT_COLOR_ACCENT;
 		}
 
