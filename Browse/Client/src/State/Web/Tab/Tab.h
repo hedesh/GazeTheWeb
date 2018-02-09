@@ -22,6 +22,7 @@
 
 #include "src/State/Web/Tab/Interface/TabInteractionInterface.h"
 #include "src/State/Web/Tab/Interface/TabCEFInterface.h"
+#include "src/State/Web/Tab/Interface/TabDOMNodeInterface.h"
 #include "src/State/Web/WebTabInterface.h"
 #include "src/CEF/Data/DOMNode.h"
 #include "src/State/Web/Tab/WebView.h"
@@ -49,7 +50,9 @@ class SocialRecord;
 enum class SocialPlatform;
 
 // Class
-class Tab : public TabInteractionInterface, public TabCEFInterface
+class Tab : public TabInteractionInterface, 
+			public TabCEFInterface,
+			public TabDOMNodeInterface
 {
 public:
 
@@ -302,6 +305,12 @@ public:
 	// Emulate left mouse button up. Can be used to end text selection. Optional offset in rendered pixels
 	virtual void EmulateLeftMouseButtonUp(double x, double y, bool isWebViewPixelCoordinate = true, double xOffset = 0, double yOffset = 0);
 
+	// Emulate keyboard strokes for given Tab and string
+	virtual bool EmulateKeyboardStrokes(std::u16string text, bool submit);
+
+	virtual bool EmulateSelectAll();
+	virtual bool EmulateEnterKey();
+
 	// Asynchronous javascript call
 	virtual void PutTextSelectionToClipboardAsync();
 
@@ -362,12 +371,12 @@ public:
     virtual std::weak_ptr<Texture> GetWebViewTexture() { return _upWebView->GetTexture(); }
 
     // Add, remove and update Tab's current DOMNodes
-	virtual void AddDOMTextInput(CefRefPtr<CefBrowser> browser, int id);
-	virtual void AddDOMLink(CefRefPtr<CefBrowser> browser, int id);
-	virtual void AddDOMSelectField(CefRefPtr<CefBrowser> browser, int id);
-	virtual void AddDOMOverflowElement(CefRefPtr<CefBrowser> browser, int id);
-	virtual void AddDOMVideo(CefRefPtr<CefBrowser> browser, int id);
-	virtual void AddDOMCheckbox(CefRefPtr<CefBrowser> browser, int id);
+	virtual void AddDOMTextInput(int id);
+	virtual void AddDOMLink(int id);
+	virtual void AddDOMSelectField(int id);
+	virtual void AddDOMOverflowElement(int id);
+	virtual void AddDOMVideo(int id);
+	virtual void AddDOMCheckbox(int id);
 
 	virtual std::weak_ptr<DOMTextInput> GetDOMTextInput(int id);
 	virtual std::weak_ptr<DOMLink> GetDOMLink(int id);
@@ -552,6 +561,9 @@ private:
 
 	// Unique name for favicon which is stored in eyeGUI
 	std::string GetFaviconIdentifier() const;
+
+	// Used by TabDOMInterface in order to be able to execute node functions in Javascript
+	bool SendProcessMessageToRenderer(CefRefPtr<CefProcessMessage> msg);
 
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	// >>> Implemented in TabDebuggingImpl.cpp >>>

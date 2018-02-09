@@ -118,10 +118,10 @@ class DOMTextInput :
 public:
 
 	// Empty construction
-	DOMTextInput(int id, Mediator* mediator, SendRenderMessage sendRenderMessage) :
+	DOMTextInput(int id, std::shared_ptr<TabDOMNodeInterface> spTab) :
 		DOMNode(id),
-        DOMJavascriptCommunication(sendRenderMessage),
-        DOMTextInputInteraction(mediator) {}
+        DOMJavascriptCommunication(std::move(spTab)),
+        DOMTextInputInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
 	virtual int Initialize(CefRefPtr<CefProcessMessage> msg) override;
@@ -193,7 +193,7 @@ class DOMLink :
 public:
 
 	// Empty construction
-	DOMLink(int id, SendRenderMessage sendRenderMessage) :
+	DOMLink(int id) :
 		DOMNode(id) {};
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -256,9 +256,9 @@ class DOMSelectField :
 public:
 
 	// Empty construction
-	DOMSelectField(int id, SendRenderMessage sendRenderMessage) :
+	DOMSelectField(int id, std::shared_ptr<TabDOMNodeInterface> spTab) :
 		DOMNode(id), 
-        DOMJavascriptCommunication(sendRenderMessage),
+        DOMJavascriptCommunication(std::move(spTab)),
         DOMSelectFieldInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -317,9 +317,9 @@ class DOMOverflowElement :
 public:
 
 	// Empty construction
-	DOMOverflowElement(int id, SendRenderMessage sendRenderMessage) :
+	DOMOverflowElement(int id, std::shared_ptr<TabDOMNodeInterface> spTab) :
 		DOMNode(id),
-        DOMJavascriptCommunication(sendRenderMessage),
+        DOMJavascriptCommunication(std::move(spTab)),
         DOMOverflowElementInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -383,9 +383,9 @@ class DOMVideo :
 public:
 
 	// Empty construction
-	DOMVideo(int id, SendRenderMessage sendRenderMessage) :
+	DOMVideo(int id, std::shared_ptr<TabDOMNodeInterface> spTab) :
 		DOMNode(id),
-		DOMJavascriptCommunication(sendRenderMessage),
+		DOMJavascriptCommunication(std::move(spTab)),
 		DOMVideoInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -436,8 +436,10 @@ class DOMCheckbox :
 	public virtual DOMCheckboxInteraction
 {
 public:
-	DOMCheckbox(int id, SendRenderMessage sendRenderMessage) :
-		DOMNode(id), DOMJavascriptCommunication(sendRenderMessage), DOMCheckboxInteraction() {}
+	DOMCheckbox(int id, std::shared_ptr<TabDOMNodeInterface> spTab) :
+		DOMNode(id), 
+		DOMJavascriptCommunication(std::move(spTab)), 
+		DOMCheckboxInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
 	virtual int Initialize(CefRefPtr<CefProcessMessage> msg) override;

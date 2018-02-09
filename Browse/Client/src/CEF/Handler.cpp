@@ -226,9 +226,9 @@ bool Handler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 {
     const std::string& msgName = msg->GetName().ToString();
 
-	if (msgName == "SelectAll")
+	if (msgName == "EmulateSelectAll")
 	{
-		SelectAll(browser);
+		EmulateSelectAll(browser);
 		return true;
 	}
 	if (msgName == "EmulateEnterKey")
@@ -659,7 +659,7 @@ void Handler::EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, base::string
 	}
 }
 
-void Handler::SelectAll(CefRefPtr<CefBrowser> browser)
+void Handler::EmulateSelectAll(CefRefPtr<CefBrowser> browser)
 {
 	EmulateKeyboardKey(browser, 'A', 'A', EVENTFLAG_CONTROL_DOWN, false);
 }

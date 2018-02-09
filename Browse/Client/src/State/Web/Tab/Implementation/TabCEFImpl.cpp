@@ -141,10 +141,10 @@ bool Tab::IsFaviconAlreadyAvailable(std::string img_url)
 	return true;
 }
 
-void Tab::AddDOMTextInput(CefRefPtr<CefBrowser> browser, int id)
+void Tab::AddDOMTextInput(int id)
 {
 	std::shared_ptr<DOMTextInput> spNode = std::make_shared<DOMTextInput>(
-		id, _pCefMediator, SendRenderMessage);
+		id, this->getDOMNodeInterface());
 
 	// Add node to ID->node map
 	_TextInputMap.emplace(id, spNode);
@@ -162,18 +162,15 @@ void Tab::AddDOMTextInput(CefRefPtr<CefBrowser> browser, int id)
 	_textInputTriggers.emplace(id, std::move(upDOMTrigger));
 }
 
-void Tab::AddDOMLink(CefRefPtr<CefBrowser> browser, int id)
+void Tab::AddDOMLink(int id)
 {
-	_TextLinkMap.emplace(id, std::make_shared<DOMLink>(
-		id,
-		SendRenderMessage));
+	_TextLinkMap.emplace(id, std::make_shared<DOMLink>(id));
 }
 
-void Tab::AddDOMSelectField(CefRefPtr<CefBrowser> browser, int id)
+void Tab::AddDOMSelectField(int id)
 {
 	std::shared_ptr<DOMSelectField> spNode = std::make_shared<DOMSelectField>(
-		id,
-		SendRenderMessage);
+		id, this->getDOMNodeInterface());
 
 	// Add node to ID->node map
 	_SelectFieldMap.emplace(id, spNode);
@@ -191,18 +188,16 @@ void Tab::AddDOMSelectField(CefRefPtr<CefBrowser> browser, int id)
 	_selectFieldTriggers.emplace(id, std::move(upDOMTrigger));
 }
 
-void Tab::AddDOMOverflowElement(CefRefPtr<CefBrowser> browser, int id)
+void Tab::AddDOMOverflowElement(int id)
 {
 	_OverflowElementMap.emplace(id, std::make_shared<DOMOverflowElement>(
-		id,
-		SendRenderMessage));
+		id, std::make_shared<TabDOMNodeInterface>(this)));
 }
 
-void Tab::AddDOMVideo(CefRefPtr<CefBrowser> browser, int id)
+void Tab::AddDOMVideo(int id)
 {
 	std::shared_ptr<DOMVideo> spNode = std::make_shared<DOMVideo>(
-		id,
-		SendRenderMessage);
+		id, this->getDOMNodeInterface());
 
 	// Add node to ID->node map
 	_VideoMap.emplace(id, spNode);
@@ -224,11 +219,10 @@ void Tab::AddDOMVideo(CefRefPtr<CefBrowser> browser, int id)
 	_videoModeTriggers.emplace(id, std::move(upDOMTrigger));
 }
 
-void Tab::AddDOMCheckbox(CefRefPtr<CefBrowser> browser, int id)
+void Tab::AddDOMCheckbox(int id)
 {
 	_CheckboxMap.emplace(id, std::make_shared<DOMCheckbox>(
-		id,
-		SendRenderMessage));
+		id, this->getDOMNodeInterface()));
 }
 
 

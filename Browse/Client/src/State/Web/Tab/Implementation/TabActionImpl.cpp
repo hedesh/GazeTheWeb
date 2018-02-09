@@ -10,6 +10,11 @@
 #include "src/Singletons/LabStreamMailer.h"
 #include "src/Master/Master.h"
 #include "src/State/Web/Tab/SocialRecord.h"
+#include <locale>
+#include <memory>
+#include <codecvt>
+#include <string>
+#include <iostream>
 
 void Tab::PushBackPipeline(std::unique_ptr<Pipeline> upPipeline)
 {
@@ -93,6 +98,25 @@ void Tab::EmulateLeftMouseButtonUp(double x, double y, bool isWebViewPixelCoordi
 
 	// Tell mediator about mouse button up
 	_pCefMediator->EmulateLeftMouseButtonUp(this, x + xOffset, y + yOffset);
+}
+
+bool Tab::EmulateKeyboardStrokes(std::u16string text, bool submit)
+{
+	std::wstring_convert<std::codecvt_utf16<wchar_t, 0x10ffff, std::little_endian>, wchar_t> conv;
+	std::wstring ws = conv.from_bytes(
+		reinterpret_cast<const char*> (&text[0]),
+		reinterpret_cast<const char*> (&text[0] + text.size()));
+	return _pCefMediator->EmulateKeyboardStrokes(this, ws);
+}
+
+bool Tab::EmulateSelectAll()
+{
+	return _pCefMediator->EmulateSelectAll(this);
+}
+
+bool Tab::EmulateEnterKey()
+{
+	return _pCefMediator->EmulateEnterKey(this);
 }
 
 void Tab::PutTextSelectionToClipboardAsync()
