@@ -172,7 +172,8 @@ CalibrationResult Calibrate(std::shared_ptr<CalibrationInfo>& rspInfo)
 		for (int i = 1; i <= 5; i++) // go over calibration points
 		{
 			int count = 0;
-			while(true)
+			bool check = true;
+			while (check)
 			{
 				// Check calibration quality of this calibration point
 				CalibrationPointQualityStruct left, right;
@@ -190,17 +191,19 @@ CalibrationResult Calibrate(std::shared_ptr<CalibrationInfo>& rspInfo)
 					{
 						result = CALIBRATION_BAD;
 					}
-					break;
+					check = false;
 				}
-
-				// Decide how to proceed
-				if (badCalibration) // bad calibration
+				else
 				{
-					iV_RecalibrateOnePoint(i);
-				}
-				else // good calibration
-				{
-					break; // break the loop of this point
+					// Decide how to proceed
+					if (badCalibration) // bad calibration
+					{
+						iV_RecalibrateOnePoint(i);
+					}
+					else // good calibration
+					{
+						check = false;
+					}
 				}
 
 				// Increase count of attempts
