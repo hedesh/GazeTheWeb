@@ -71,7 +71,7 @@ protected:
     float _linZoom = 0.f;
 
 	// Adapted zoom, decreased while zooming
-	float _zoom = 0.f;
+	float _zoom = 1.f;
 
     // Offset to center of web view
     glm::vec2 _relativeCenterOffset = glm::vec2(0, 0);
