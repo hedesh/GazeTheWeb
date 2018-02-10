@@ -643,18 +643,10 @@ void Handler::EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, base::string
 		event.windows_key_code = key;
 		//event.native_key_code = scancode;
 		event.unmodified_character = key;
-
-		// Down
-		event.type = KEYEVENT_RAWKEYDOWN;
-		browser->GetHost()->SendKeyEvent(event);
+		event.focus_on_editable_field = true;
 
 		// Character
 		event.type = KEYEVENT_CHAR;
-		browser->GetHost()->SendKeyEvent(event);
-
-
-		// Up
-		event.type = KEYEVENT_KEYUP;
 		browser->GetHost()->SendKeyEvent(event);
 	}
 }
