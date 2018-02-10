@@ -31,7 +31,7 @@ void Tab::TabButtonListener::down(eyegui::Layout* pLayout, std::string id)
 		}
 		else if (id == "zoom")
 		{
-			_pTab->_zoomLevel = 1.3;
+			_pTab->_zoomLevel = 1.5;
 
 			// Trigger zooming in CefMediator
 			_pTab->_pCefMediator->SetZoomLevel(_pTab);
