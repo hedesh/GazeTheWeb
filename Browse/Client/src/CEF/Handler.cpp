@@ -226,9 +226,9 @@ bool Handler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 {
     const std::string& msgName = msg->GetName().ToString();
 
-	if (msgName == "SelectAll")
+	if (msgName == "EmulateSelectAll")
 	{
-		SelectAll(browser);
+		EmulateSelectAll(browser);
 		return true;
 	}
 	if (msgName == "EmulateEnterKey")
@@ -248,7 +248,7 @@ bool Handler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 	}
 	if (msgName == "EmulateKeyboardStrokes")
 	{
-		const std::string input = msg->GetArgumentList()->GetString(0).ToString();
+		const auto input = msg->GetArgumentList()->GetString(0).ToString16();
 		EmulateKeyboardStrokes(browser, input);
 		return true;
 	}
@@ -621,7 +621,7 @@ void Handler::EmulateKeyboardKey(CefRefPtr<CefBrowser> browser, int key, int sca
 	browser->GetHost()->SendKeyEvent(event);
 }
 
-void Handler::EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, std::string input)
+void Handler::EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, base::string16 input)
 {
 	for (int i = 0; i < input.length(); i++)
 	{
@@ -635,7 +635,7 @@ void Handler::EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, std::string 
 
 		CefKeyEvent event;
 		event.character = key;
-		// TODO: bool event.focus_on_editable_field exists!
+		// NOTE: bool event.focus_on_editable_field exists!
 		
 		event.is_system_key = false;
 		event.modifiers = mods;
@@ -659,7 +659,7 @@ void Handler::EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, std::string 
 	}
 }
 
-void Handler::SelectAll(CefRefPtr<CefBrowser> browser)
+void Handler::EmulateSelectAll(CefRefPtr<CefBrowser> browser)
 {
 	EmulateKeyboardKey(browser, 'A', 'A', EVENTFLAG_CONTROL_DOWN, false);
 }

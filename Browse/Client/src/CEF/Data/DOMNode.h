@@ -118,9 +118,9 @@ class DOMTextInput :
 public:
 
 	// Empty construction
-	DOMTextInput(int id, SendRenderMessage sendRenderMessage) :
-        DOMNode(id),
-        DOMJavascriptCommunication(sendRenderMessage),
+	DOMTextInput(int id, TabDOMNodeInterface* pTab) :
+		DOMNode(id),
+        DOMJavascriptCommunication(pTab),
         DOMTextInputInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -174,6 +174,7 @@ private:
 	bool _isPassword = false;
 	std::string _htmlId = "";
 	std::string _htmlClass = "";
+
 };
 
 /*
@@ -192,7 +193,7 @@ class DOMLink :
 public:
 
 	// Empty construction
-	DOMLink(int id, SendRenderMessage sendRenderMessage) :
+	DOMLink(int id) :
 		DOMNode(id) {};
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -255,9 +256,9 @@ class DOMSelectField :
 public:
 
 	// Empty construction
-	DOMSelectField(int id, SendRenderMessage sendRenderMessage) :
+	DOMSelectField(int id, TabDOMNodeInterface* pTab) :
 		DOMNode(id), 
-        DOMJavascriptCommunication(sendRenderMessage),
+        DOMJavascriptCommunication(pTab),
         DOMSelectFieldInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -316,9 +317,9 @@ class DOMOverflowElement :
 public:
 
 	// Empty construction
-	DOMOverflowElement(int id, SendRenderMessage sendRenderMessage) :
+	DOMOverflowElement(int id, TabDOMNodeInterface* pTab) :
 		DOMNode(id),
-        DOMJavascriptCommunication(sendRenderMessage),
+        DOMJavascriptCommunication(pTab),
         DOMOverflowElementInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -382,9 +383,9 @@ class DOMVideo :
 public:
 
 	// Empty construction
-	DOMVideo(int id, SendRenderMessage sendRenderMessage) :
+	DOMVideo(int id, TabDOMNodeInterface* pTab) :
 		DOMNode(id),
-		DOMJavascriptCommunication(sendRenderMessage),
+		DOMJavascriptCommunication(pTab),
 		DOMVideoInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
@@ -435,8 +436,10 @@ class DOMCheckbox :
 	public virtual DOMCheckboxInteraction
 {
 public:
-	DOMCheckbox(int id, SendRenderMessage sendRenderMessage) :
-		DOMNode(id), DOMJavascriptCommunication(sendRenderMessage), DOMCheckboxInteraction() {}
+	DOMCheckbox(int id, TabDOMNodeInterface* pTab) :
+		DOMNode(id), 
+		DOMJavascriptCommunication(pTab), 
+		DOMCheckboxInteraction() {}
 
 	// Define initialization through ICP message in each DOMNode subclass
 	virtual int Initialize(CefRefPtr<CefProcessMessage> msg) override;

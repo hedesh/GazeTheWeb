@@ -172,7 +172,7 @@ void Mediator::AddDOMTextInput(CefRefPtr<CefBrowser> browser, int id)
 {
 	if (TabCEFInterface* pTab = GetTab(browser))
 	{
-		pTab->AddDOMTextInput(browser, id);
+		pTab->AddDOMTextInput(id);
 	}
 }
 
@@ -180,7 +180,7 @@ void Mediator::AddDOMLink(CefRefPtr<CefBrowser> browser, int id)
 {
 	if (TabCEFInterface* pTab = GetTab(browser))
 	{
-		pTab->AddDOMLink(browser, id);
+		pTab->AddDOMLink(id);
 	}
 }
 
@@ -188,7 +188,7 @@ void Mediator::AddDOMSelectField(CefRefPtr<CefBrowser> browser, int id)
 {
 	if (TabCEFInterface* pTab = GetTab(browser))
 	{
-		pTab->AddDOMSelectField(browser, id);
+		pTab->AddDOMSelectField(id);
 	}
 }
 
@@ -196,7 +196,7 @@ void Mediator::AddDOMOverflowElement(CefRefPtr<CefBrowser> browser, int id)
 {
 	if (TabCEFInterface* pTab = GetTab(browser))
 	{
-		pTab->AddDOMOverflowElement(browser, id);
+		pTab->AddDOMOverflowElement(id);
 	}
 }
 
@@ -204,7 +204,7 @@ void Mediator::AddDOMVideo(CefRefPtr<CefBrowser> browser, int id)
 {
 	if (TabCEFInterface* pTab = GetTab(browser))
 	{
-		pTab->AddDOMVideo(browser, id);
+		pTab->AddDOMVideo(id);
 	}
 }
 
@@ -212,7 +212,7 @@ void Mediator::AddDOMCheckbox(CefRefPtr<CefBrowser> browser, int id)
 {
 	if (TabCEFInterface* pTab = GetTab(browser))
 	{
-		pTab->AddDOMCheckbox(browser, id);
+		pTab->AddDOMCheckbox(id);
 	}
 }
 
@@ -223,7 +223,6 @@ void Mediator::ClearDOMNodes(CefRefPtr<CefBrowser> browser)
     {
         // Clear corresponding Tabs DOM Node list (implicitly destroy all DOM Node objects)
         pTab->ClearDOMNodes();
-		//LogDebug("Mediator: ### DISABLED DOM CLEARING FOR LINK TESTING ###");
         LogDebug("Mediator: Clearing Tab's DOM nodes belonging to browserID = ", browser->GetIdentifier());
     }
 }
@@ -381,23 +380,34 @@ void Mediator::EmulateKeyboardKey(int key, int scancode, int action, int mods)
 	}
 }
 
-void Mediator::EmulateKeyboardStrokes(std::string input)
+bool Mediator::EmulateKeyboardStrokes(TabCEFInterface* pTab, base::string16 input)
 {
-	for (const auto& kvpair : _tabs)
+	if(const auto& browser = GetBrowser(pTab))
 	{
-		_handler->EmulateKeyboardStrokes(GetBrowser(kvpair.second), input);
-		LogInfo("Handler: EmulatedKeyboardStrokes\n'", input, "'");
-		break;
+		_handler->EmulateKeyboardStrokes(browser, input);
+		return true;
 	}
+	return false;
 }
 
-void Mediator::EmulateEnterKey()
+bool Mediator::EmulateEnterKey(TabCEFInterface* pTab)
 {
-	for (const auto& kvpair : _tabs)
+	if(const auto& browser = GetBrowser(pTab))
 	{
-		_handler->EmulateEnterKey(GetBrowser(kvpair.second));
-		break;
+		_handler->EmulateEnterKey(browser);
+		return true;
 	}
+	return false;
+}
+
+bool Mediator::EmulateSelectAll(TabCEFInterface* pTab)
+{
+	if (const auto& browser = GetBrowser(pTab))
+	{
+		_handler->EmulateSelectAll(browser);
+		return true;
+	}
+	return false;
 }
 
 void Mediator::ResetScrolling(TabCEFInterface * pTab)

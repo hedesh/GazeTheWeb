@@ -130,9 +130,9 @@ public:
     void EmulateLeftMouseButtonClick(CefRefPtr<CefBrowser> browser, double x, double y);
     void EmulateMouseWheelScrolling(CefRefPtr<CefBrowser> browser, double deltaX, double deltaY);
 	void EmulateKeyboardKey(CefRefPtr<CefBrowser> browser, int key, int scancode, int mods, bool send_char_keyevent=true);
-	void EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, std::string input);
+	void EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, base::string16 input);
 	void EmulateEnterKey(CefRefPtr<CefBrowser> browser);
-	void SelectAll(CefRefPtr<CefBrowser> browser);
+	void EmulateSelectAll(CefRefPtr<CefBrowser> browser);
     
     void ResetMainFramesScrolling(CefRefPtr<CefBrowser> browser);
 

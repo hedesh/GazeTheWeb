@@ -53,7 +53,7 @@ bool RenderProcessHandler::OnProcessMessageReceived(
     const std::string& msgName = msg->GetName().ToString();
     //IPCLogDebug(browser, "Received '" + msgName + "' IPC msg in RenderProcessHandler");
 
-	if ((msgName == "EmulateKeyboardStrokes") || (msgName == "EmulateEnterKey") || (msgName == "SelectAll"))
+	if ((msgName == "EmulateKeyboardStrokes") || (msgName == "EmulateEnterKey") || (msgName == "EmulateSelectAll"))
 	{
 		browser->SendProcessMessage(PID_BROWSER, msg);
 	}

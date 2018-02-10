@@ -8,23 +8,25 @@
 #ifndef DOMNODEINTERACTION_H_
 #define DOMNODEINTERACTION_H_
 
+#include "src/State/Web/Tab/Interface/TabDOMNodeInterface.h"
 #include "include/cef_browser.h"
 #include "src/CEF/Data/DOMAttribute.h"
 #include "src/Utils/Logger.h"
 #include <functional>
+#include <memory>
 
-class Tab;	// Forward declaration
 
-typedef std::function<bool(CefRefPtr<CefProcessMessage>)> SendRenderMessage;
 
 // TODO: Strange place (this header file) for BaseInterface?
-class DOMBaseInterface
+class DOMBaseInterface : std::enable_shared_from_this<DOMBaseInterface>
 {
 public:
 
 	// Required in order to being able to access corresponding JS DOM object
 	virtual int GetId() = 0;
 	virtual int GetType() = 0;
+
+	std::shared_ptr<DOMBaseInterface> getBasePtr() { return shared_from_this(); }
 
 	// Enable accessing attribute data while running the program
 	virtual bool PrintAttribute(DOMAttribute attr) = 0;
@@ -39,77 +41,11 @@ class DOMJavascriptCommunication  : public virtual DOMBaseInterface
 public:
 
 	// Constructor
-	DOMJavascriptCommunication(SendRenderMessage sendRenderMessage) :
-        _sendRenderMessage(sendRenderMessage) {}
+	DOMJavascriptCommunication(TabDOMNodeInterface* tab) :
+        _pTab(tab) {}
 
-	// Sending message to renderer
-	bool SendProcessMessageToRenderer(CefRefPtr<CefProcessMessage> msg);
+	TabDOMNodeInterface* _pTab;
 
-
-	/* ### Helpers ### */
-
-	// Maps given data type to CefListValue function in order to set idx to this value
-	template<typename T>
-	void AppendToList(CefRefPtr<CefListValue> list, T val) { LogInfo("DOMJavascriptCommunication: Unhandled data type!"); };
-
-	void AppendToList(CefRefPtr<CefListValue> list, bool val)	{ list->SetBool(list->GetSize(), val);   };
-	void AppendToList(CefRefPtr<CefListValue> list, double val) { list->SetDouble(list->GetSize(), val); };
-	void AppendToList(CefRefPtr<CefListValue> list, float val)	{ list->SetDouble(list->GetSize(), val); };
-	void AppendToList(CefRefPtr<CefListValue> list, int val)	{ list->SetInt(list->GetSize(), val);	 };
-	void AppendToList(CefRefPtr<CefListValue> list, std::string val) { list->SetString(list->GetSize(), val); };
-
-	template<typename T>
-	void AppendToList(CefRefPtr<CefListValue> list, std::vector<T> val)
-	{
-		CefRefPtr<CefListValue> sublist = CefListValue::Create();
-		for (const auto subval : val)
-			AppendToList(sublist, subval);
-		list->SetList(list->GetSize(), sublist);
-	};
-
-	// Add an arbitrarily typed value to a CefListValue
-	template<typename T>
-	void AddToList(CefRefPtr<CefListValue> list, T val)
-	{
-		AppendToList(list, val);
-	};
-
-	// Add several arbitrarily typed values to a CefListValue
-	template<typename T, typename... Args>
-	void AddToList(CefRefPtr<CefListValue> list, T val, Args... args)
-	{
-		AppendToList(list, val);
-		AddToList(list, args...);
-	}
-
-	void SendExecuteFunctionMessage(std::string func_name)
-	{
-		CefRefPtr<CefListValue> params = CefListValue::Create();
-		CefRefPtr<CefProcessMessage> msg = SetupExecuteFunctionMessage(func_name, params);
-		SendProcessMessageToRenderer(msg);
-	}
-
-	// Given a JS function name and a list of parameters, a process message is send to JS, which executes given
-	// node's function with the provided parameters
-	template<typename T, typename... Args>
-	void SendExecuteFunctionMessage(std::string func_name, T param, Args... args)
-	{
-		CefRefPtr<CefListValue> params = CefListValue::Create();
-		AddToList<T>(params, param, args...);
-
-		CefRefPtr<CefProcessMessage> msg = SetupExecuteFunctionMessage(func_name, params);
-		SendProcessMessageToRenderer(msg);
-	}
-
-	// Setup process message by adding a header (node id and type) and given params to its argument list
-	CefRefPtr<CefProcessMessage> SetupExecuteFunctionMessage(
-		std::string func_name,
-		CefRefPtr<CefListValue> param);
-
-
-
-	// Member
-	SendRenderMessage _sendRenderMessage;
 
 private:
 
@@ -136,7 +72,7 @@ public:
     DOMTextInputInteraction() {}
 
 	// Send IPC message to JS in order to execute text input function
-	void InputText(std::string text, bool submit);
+	void InputText(std::u16string text, bool submit);
 };
 
 // Interaction with overflow element
@@ -149,7 +85,10 @@ public:
 
 	// TODO taking gaze, should take scrolling offset
 	// Send IPC message to JS in order to execute scrolling function
-	void Scroll(int x, int y, std::vector<int> fixedIds = {}) { SendExecuteFunctionMessage("scroll", x, y, fixedIds); }
+	void Scroll(int x, int y, std::vector<int> fixedIds = {}) 
+	{
+		_pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "scroll", x, y, fixedIds); 
+	}
 };
 
 // Interaction with select field
@@ -161,7 +100,7 @@ public:
     DOMSelectFieldInteraction() {}
 
 	// Send IPC message to JS in order to execute JS function
-	void SetSelectionIndex(int idx) { SendExecuteFunctionMessage("setSelectionIdx", idx); }
+	void SetSelectionIndex(int idx) { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "setSelectionIdx", idx); }
 };
 
 // Interaction with videos
@@ -173,16 +112,16 @@ public:
 	DOMVideoInteraction() {}
 
 	// Send IPC message to JS in order to execute JS function
-	void JumpToSecond(float sec = 0.f) { SendExecuteFunctionMessage("jumpToSecond", sec); }
-	void SkipSeconds(float sec = 0.f) { SendExecuteFunctionMessage("skipSeconds", sec); }
-	void SetPlaying(bool playing = true) { SendExecuteFunctionMessage("setPlaying", playing); }
-	void SetMuted(bool muted = true) { SendExecuteFunctionMessage("setMuted", muted); }
-	void SetVolume(float volume) { SendExecuteFunctionMessage("setVolume", volume); }
-	void ShowControls(bool show = true) { SendExecuteFunctionMessage("showControls", show); }
-	void SetFullscreen(bool fullscreen = true) { SendExecuteFunctionMessage("setFullscreen", fullscreen); }
-	void ToggleMuted() { SendExecuteFunctionMessage("toggleMuted"); }
-	void TogglePlayPause() { SendExecuteFunctionMessage("togglePlayPause"); }
-	void ChangeVolume(float delta) { SendExecuteFunctionMessage("changeVolume", delta); }
+	void JumpToSecond(float sec = 0.f) { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "jumpToSecond", sec); }
+	void SkipSeconds(float sec = 0.f) { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "skipSeconds", sec); }
+	void SetPlaying(bool playing = true) { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "setPlaying", playing); }
+	void SetMuted(bool muted = true) { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "setMuted", muted); }
+	void SetVolume(float volume) { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "setVolume", volume); }
+	void ShowControls(bool show = true) { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "showControls", show); }
+	void SetFullscreen(bool fullscreen = true) { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "setFullscreen", fullscreen); }
+	void ToggleMuted() { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "toggleMuted"); }
+	void TogglePlayPause() { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "togglePlayPause"); }
+	void ChangeVolume(float delta) { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "changeVolume", delta); }
 };
 
 class DOMCheckboxInteraction : public virtual DOMJavascriptCommunication
@@ -190,7 +129,7 @@ class DOMCheckboxInteraction : public virtual DOMJavascriptCommunication
 public:
 	DOMCheckboxInteraction() {}
 
-	void SetChecked(bool state) { SendExecuteFunctionMessage("setChecked", state); }
+	void SetChecked(bool state) { _pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "setChecked", state); }
 };
 
 

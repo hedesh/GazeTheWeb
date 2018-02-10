@@ -1038,6 +1038,11 @@ std::string Tab::GetFaviconIdentifier() const
 	return "tab_info_" + std::to_string(_pWeb->GetIdOfTab(this));
 }
 
+bool Tab::SendProcessMessageToRenderer(CefRefPtr<CefProcessMessage> msg)
+{
+	return _pCefMediator->SendProcessMessageToRenderer(msg, this);
+}
+
 void Tab::SetAwardIcon(Award award)
 {
 	switch (award)
