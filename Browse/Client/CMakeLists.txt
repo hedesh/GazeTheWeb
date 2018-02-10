@@ -4,8 +4,11 @@ set(CEF_TARGET Client)
 
 message(STATUS "*** CLIENT ***")
 
-set(VERSION "0.8")
-add_definitions(-DCLIENT_VERSION=${VERSION})
+set(CLIENT_MAJOR_VERSION "0")
+set(CLIENT_MINOR_VERSION "8")
+add_definitions(-DCLIENT_MAJOR_VERSION=${CLIENT_MAJOR_VERSION})
+add_definitions(-DCLIENT_MINOR_VERSION=${CLIENT_MINOR_VERSION})
+add_definitions(-DCLIENT_VERSION="${CLIENT_MAJOR_VERSION}.${CLIENT_MINOR_VERSION}")
 
 string(TIMESTAMP DATE %d/%m/%Y)
 
@@ -34,7 +37,7 @@ if(OS_WINDOWS) # Windows
 	
 endif()
 
-# Deployment prepares ready to share binary version (TODO: installer creation)
+# Deployment prepares ready to share binary version
 set(CLIENT_DEPLOYMENT OFF CACHE BOOL "Setup for Deployment.")
 if(${CLIENT_DEPLOYMENT})
 	add_definitions(-DCLIENT_DEPLOYMENT)

@@ -103,7 +103,7 @@ bool FirebaseMailer::FirebaseInterface::Login(std::string email, std::string pas
 		nlohmann::json record = {
 			{ "date", GetDate() }, // add date
 			{ "timestamp", GetTimestamp() }, // add timestamp
-			{ "version", std::to_string(CLIENT_VERSION) }, // add version
+			{ "version", CLIENT_VERSION }, // add version
 			{ "useDriftMap", useDriftMap } // add information whether drift map is used
 		};
 		Put(FirebaseJSONKey::GENERAL_APPLICATION_START, record, std::to_string(index)); // send JSON to database

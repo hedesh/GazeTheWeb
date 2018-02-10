@@ -112,7 +112,7 @@ Tab::Tab(
 	InitDebuggingOverlay();
 
 	// Fill version string
-	eyegui::setContentOfTextBlock(_pPanelLayout, "version_info", "Version " + std::to_string(CLIENT_VERSION));
+	eyegui::setContentOfTextBlock(_pPanelLayout, "version_info", "Version " + std::string(CLIENT_VERSION));
 }
 
 Tab::~Tab()

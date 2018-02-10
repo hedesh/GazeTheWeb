@@ -1,6 +1,6 @@
 ### Binary release of GazeTheWeb - Browse ###
 Date: ${DATE}
-Version: ${VERSION}
+Version: ${CLIENT_MAJOR_VERSION}.${CLIENT_MINOR_VERSION}
 
 Please go to our GitHub repository at https://github.com/MAMEM/GazeTheWeb/tree/master/Browse for more information about the project!
 

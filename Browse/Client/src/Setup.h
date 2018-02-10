@@ -64,7 +64,7 @@ namespace setup
 	// Experiments
 	static const bool			ENABLE_EYEGUI_DRIFT_MAP_ACTIVATION = !DEMO_MODE;
 	static const std::string	LAB_STREAM_OUTPUT_NAME = "GazeTheWebOutput";
-	static const std::string	LAB_STREAM_OUTPUT_SOURCE_ID = std::to_string(CLIENT_VERSION); // use client version as source id
+	static const std::string	LAB_STREAM_OUTPUT_SOURCE_ID = CLIENT_VERSION; // use client version as source id
 	static const std::string	LAB_STREAM_INPUT_NAME = LAB_STREAM_OUTPUT_NAME; //  "GazeTheWebInput"; // may be set to same value as LAB_STREAM_OUTPUT_NAME to receive own events for debugging purposes
 	static const bool			LOG_INTERACTIONS = false; // on eyeGUI level, deprecated
 	static const bool			TAB_TRIGGER_SHOW_BADGE = false;
