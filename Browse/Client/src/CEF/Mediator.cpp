@@ -380,7 +380,7 @@ void Mediator::EmulateKeyboardKey(int key, int scancode, int action, int mods)
 	}
 }
 
-bool Mediator::EmulateKeyboardStrokes(TabCEFInterface* pTab, base::string16 input)
+bool Mediator::EmulateKeyboardStrokes(TabCEFInterface* pTab, std::string input)
 {
 	if(const auto& browser = GetBrowser(pTab))
 	{

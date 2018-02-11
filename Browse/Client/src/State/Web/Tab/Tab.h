@@ -346,7 +346,7 @@ public:
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 	// Emulate keyboard strokes for given Tab and string
-	virtual bool EmulateKeyboardStrokes(std::u16string text);
+	virtual bool EmulateKeyboardStrokes(std::string text);
 	virtual bool EmulateSelectAll();
 	virtual bool EmulateEnterKey();
 

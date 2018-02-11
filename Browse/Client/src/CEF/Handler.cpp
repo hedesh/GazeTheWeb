@@ -18,6 +18,7 @@
 #include "src/CEF/Data/DOMNode.h"
 // For keyboard emulation
 #include "submodules/glfw/include/GLFW/glfw3.h"
+#include "submodules/eyeGUI/include/eyeGUI.h"
 
 Handler::Handler(Mediator* pMediator, CefRefPtr<Renderer> renderer) : _isClosing(false)
 {
@@ -248,11 +249,10 @@ bool Handler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 	}
 	if (msgName == "EmulateKeyboardStrokes")
 	{
-		const auto input = msg->GetArgumentList()->GetString(0).ToString16();
+		const auto input = msg->GetArgumentList()->GetString(0).ToString();
 		EmulateKeyboardStrokes(browser, input);
 		return true;
 	}
-
 	if (msgName == "EmulateMouseClick")
 	{
 		double x = msg->GetArgumentList()->GetDouble(0);
@@ -621,13 +621,17 @@ void Handler::EmulateKeyboardKey(CefRefPtr<CefBrowser> browser, int key, int sca
 	browser->GetHost()->SendKeyEvent(event);
 }
 
-void Handler::EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, base::string16 input)
+void Handler::EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, std::string input)
 {
-	for (int i = 0; i < input.length(); i++)
+	// Convert UTF8 to UTF16 (right now over eyeGUI functions, should be available through Chromium)
+	std::u16string input16;
+	eyegui_helper::convertUTF8ToUTF16(input, input16);
+
+	for (int i = 0; i < input16.length(); i++)
 	{
-		char16 key = input[i];
+		char16 key = input16.at(i);
 		uint32 mods = 0;
-		if (key == '\n')
+		if (key == u'\n')
 		{
 			key = 13;
 			mods = EVENTFLAG_SHIFT_DOWN;

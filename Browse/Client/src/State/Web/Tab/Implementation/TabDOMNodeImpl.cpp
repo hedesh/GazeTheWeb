@@ -14,9 +14,9 @@ bool TabDOMNodeInterface::ExecuteCorrespondingJavascriptFunction(std::shared_ptr
 	return SendProcessMessageToRenderer(msg);
 }
 
-bool Tab::EmulateKeyboardStrokes(std::u16string text)
+bool Tab::EmulateKeyboardStrokes(std::string text)
 {
-	return _pCefMediator->EmulateKeyboardStrokes(this, u16string_to_wstring(text));
+	return _pCefMediator->EmulateKeyboardStrokes(this, text);
 }
 
 bool Tab::EmulateSelectAll()

@@ -84,7 +84,7 @@ public:
 	*  @param[in] mods Bit field describing which [modifier keys](@ref mods) were
 	*/
 	void EmulateKeyboardKey(int key, int scancode, int action, int mods);
-	bool EmulateKeyboardStrokes(TabCEFInterface* pTab, base::string16 input);
+	bool EmulateKeyboardStrokes(TabCEFInterface* pTab, std::string input);
 	bool EmulateEnterKey(TabCEFInterface* pTab);
 	bool EmulateSelectAll(TabCEFInterface* pTab);
 

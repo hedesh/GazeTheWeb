@@ -6,21 +6,8 @@
 
 #include "DOMNodeInteraction.h"
 #include "src/CEF/Mediator.h"
-#include <locale>
-#include <memory>
-#include <codecvt>
-#include <string>
-#include <iostream>
 
-std::wstring u16string_to_wstring(std::u16string str)
-{
-	std::wstring_convert<std::codecvt_utf16<wchar_t, 0x10ffff, std::little_endian>, wchar_t> conv;
-	return conv.from_bytes(
-		reinterpret_cast<const char*> (&str[0]),
-			reinterpret_cast<const char*> (&str[0] + str.size()));
-
-}
-void DOMTextInputInteraction::InputText(std::u16string text, bool submit)
+void DOMTextInputInteraction::InputText(std::string text, bool submit)
 {
 	// Focus input node
 	_pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "focusNode");

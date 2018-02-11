@@ -70,7 +70,7 @@ public:
     DOMTextInputInteraction() {}
 
 	// Send IPC message to JS in order to execute text input function
-	void InputText(std::u16string text, bool submit);
+	void InputText(std::string text, bool submit);
 };
 
 // Interaction with overflow element
