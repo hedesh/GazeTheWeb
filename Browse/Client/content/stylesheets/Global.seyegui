@@ -158,6 +158,7 @@ notification : default
 dangerous
 {
 	ButtonThresholdIncreaseDuration = 2
+	ThresholdColor = 0xCC1100FF
 }
 
 dashboard : default
