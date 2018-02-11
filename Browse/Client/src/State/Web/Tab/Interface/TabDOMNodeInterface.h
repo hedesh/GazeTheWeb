@@ -11,6 +11,8 @@
 
 class DOMBaseInterface;	// forward declaration
 
+std::wstring u16string_to_wstring(std::u16string str);
+
 class TabDOMNodeInterface 
 {
 public:
@@ -29,7 +31,7 @@ public:
 		return SendProcessMessageToRenderer(msg);
 	}
 
-	virtual bool EmulateKeyboardStrokes(std::u16string text, bool submit) = 0;
+	virtual bool EmulateKeyboardStrokes(std::u16string textt) = 0;
 	virtual bool EmulateSelectAll() = 0;
 	virtual bool EmulateEnterKey() = 0;
 
@@ -47,6 +49,8 @@ private:
 	void AppendToList(CefRefPtr<CefListValue> list, float val) { list->SetDouble(list->GetSize(), val); };
 	void AppendToList(CefRefPtr<CefListValue> list, int val) { list->SetInt(list->GetSize(), val); };
 	void AppendToList(CefRefPtr<CefListValue> list, std::string val) { list->SetString(list->GetSize(), val); };
+	void AppendToList(CefRefPtr<CefListValue> list, std::u16string val) { list->SetString(list->GetSize(), u16string_to_wstring(val)); };
+
 
 	template<typename T>
 	void AppendToList(CefRefPtr<CefListValue> list, std::vector<T> val)

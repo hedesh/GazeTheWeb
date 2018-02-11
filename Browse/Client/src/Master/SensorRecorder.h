@@ -33,9 +33,10 @@ public:
 	void Stop();
 
 private:
-
+#ifdef CLIENT_SENSOR_LIB_INTEGRATION
 	// Members
 	std::unique_ptr<SensorLib::SensorLibrary> _upSensorLib;
+#endif
 };
 
 #endif // SENSORRECORDER_H_

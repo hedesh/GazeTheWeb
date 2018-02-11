@@ -309,8 +309,7 @@ public:
 	virtual void EmulateLeftMouseButtonUp(double x, double y, bool isWebViewPixelCoordinate = true, double xOffset = 0, double yOffset = 0);
 
 	// Emulate keyboard strokes for given Tab and string
-	virtual bool EmulateKeyboardStrokes(std::u16string text, bool submit);
-
+	virtual bool EmulateKeyboardStrokes(std::u16string text);
 	virtual bool EmulateSelectAll();
 	virtual bool EmulateEnterKey();
 

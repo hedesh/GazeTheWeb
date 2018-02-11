@@ -635,7 +635,6 @@ void Handler::EmulateKeyboardStrokes(CefRefPtr<CefBrowser> browser, base::string
 
 		CefKeyEvent event;
 		event.character = key;
-		// NOTE: bool event.focus_on_editable_field exists!
 		
 		event.is_system_key = false;
 		event.modifiers = mods;
