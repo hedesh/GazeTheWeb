@@ -2,11 +2,15 @@
 // Distributed under the Apache License, Version 2.0.
 // Author: Daniel Müller (muellerd@uni-koblenz.de)
 //============================================================================
-// Provide outgoing communication for DOM node objects via its corresponding Tab parent
+// Provide outgoing communication for DOM node objects via its corresponding
+// Tab parent.
+// TODO: strange that some methods are implemented by the interface.
 
-#pragma once
-#include "include/cef_browser.h"
+#ifndef TABDOMNODEINTERFACE_H_
+#define TABDOMNODEINTERFACE_H_
+
 #include "src/State/Web/Tab/Interface/TabActionInterface.h"
+#include "include/cef_browser.h" // TODO: very bad to have this included here.
 #include <memory>
 
 class DOMBaseInterface;	// forward declaration
@@ -39,7 +43,6 @@ private:
 
 	virtual bool SendProcessMessageToRenderer(CefRefPtr<CefProcessMessage> msg) = 0;
 
-
 	// Maps given data type to CefListValue function in order to set idx to this value
 	template<typename T>
 	void AppendToList(CefRefPtr<CefListValue> list, T val) { LogInfo("TabDOMNodeInterface: Unhandled data type as input!"); };
@@ -50,7 +53,6 @@ private:
 	void AppendToList(CefRefPtr<CefListValue> list, int val) { list->SetInt(list->GetSize(), val); };
 	void AppendToList(CefRefPtr<CefListValue> list, std::string val) { list->SetString(list->GetSize(), val); };
 	void AppendToList(CefRefPtr<CefListValue> list, std::u16string val) { list->SetString(list->GetSize(), u16string_to_wstring(val)); };
-
 
 	template<typename T>
 	void AppendToList(CefRefPtr<CefListValue> list, std::vector<T> val)
@@ -78,6 +80,6 @@ private:
 
 	CefRefPtr<CefProcessMessage> SetupExecuteFunctionMessage(
 		std::shared_ptr<DOMBaseInterface> spNode, std::string func_name, CefRefPtr<CefListValue> param);
-
 };
 
+#endif // TABDOMNODEINTERFACE_H_

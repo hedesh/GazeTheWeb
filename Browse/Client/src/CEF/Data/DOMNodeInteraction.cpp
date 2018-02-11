@@ -36,6 +36,4 @@ void DOMTextInputInteraction::InputText(std::u16string text, bool submit)
 	}
 
 	_pTab->ExecuteCorrespondingJavascriptFunction(getBasePtr(), "setText", text);
-
-
 }

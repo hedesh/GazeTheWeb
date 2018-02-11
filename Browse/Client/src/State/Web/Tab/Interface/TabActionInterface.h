@@ -39,11 +39,6 @@ public:
 	// Emulate left mouse button up. Can be used to end text selection. Optional offset in rendered pixels
 	virtual void EmulateLeftMouseButtonUp(double x, double y, bool isWebViewPixelCoordinate = true, double xOffset = 0, double yOffset = 0) = 0;
 
-	// Emulate keyboard strokes for given Tab and string
-	virtual bool EmulateKeyboardStrokes(std::u16string text) = 0;
-	virtual bool EmulateSelectAll() = 0;
-	virtual bool EmulateEnterKey() = 0;
-
 	// Asynchronous javascript call
 	virtual void PutTextSelectionToClipboardAsync() = 0;
 

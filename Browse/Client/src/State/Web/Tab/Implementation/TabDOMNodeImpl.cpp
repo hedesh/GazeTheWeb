@@ -2,10 +2,9 @@
 // Distributed under the Apache License, Version 2.0.
 // Author: Daniel Müller (muellerd@uni-koblenz.de)
 //============================================================================
-// Provide outgoing communication for DOM node objects via its corresponding Tab parent
 
-#include "src/State/Web/Tab/Interface/TabDOMNodeInterface.h"
-
+#include "src/State/Web/Tab/Tab.h"
+#include "src/CEF/Mediator.h"
 #include "src/CEF/Data/DOMNode.h"
 
 bool TabDOMNodeInterface::ExecuteCorrespondingJavascriptFunction(std::shared_ptr<DOMBaseInterface> spNode, std::string function)
@@ -15,6 +14,20 @@ bool TabDOMNodeInterface::ExecuteCorrespondingJavascriptFunction(std::shared_ptr
 	return SendProcessMessageToRenderer(msg);
 }
 
+bool Tab::EmulateKeyboardStrokes(std::u16string text)
+{
+	return _pCefMediator->EmulateKeyboardStrokes(this, u16string_to_wstring(text));
+}
+
+bool Tab::EmulateSelectAll()
+{
+	return _pCefMediator->EmulateSelectAll(this);
+}
+
+bool Tab::EmulateEnterKey()
+{
+	return _pCefMediator->EmulateEnterKey(this);
+}
 
 CefRefPtr<CefProcessMessage> TabDOMNodeInterface::SetupExecuteFunctionMessage(
 	std::shared_ptr<DOMBaseInterface> spNode, std::string func_name, CefRefPtr<CefListValue> param)

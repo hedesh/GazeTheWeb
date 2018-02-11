@@ -100,21 +100,6 @@ void Tab::EmulateLeftMouseButtonUp(double x, double y, bool isWebViewPixelCoordi
 	_pCefMediator->EmulateLeftMouseButtonUp(this, x + xOffset, y + yOffset);
 }
 
-bool Tab::EmulateKeyboardStrokes(std::u16string text)
-{
-	return _pCefMediator->EmulateKeyboardStrokes(this, u16string_to_wstring(text));
-}
-
-bool Tab::EmulateSelectAll()
-{
-	return _pCefMediator->EmulateSelectAll(this);
-}
-
-bool Tab::EmulateEnterKey()
-{
-	return _pCefMediator->EmulateEnterKey(this);
-}
-
 void Tab::PutTextSelectionToClipboardAsync()
 {
 	_pCefMediator->PutTextSelectionToClipboardAsync(this);

@@ -15,8 +15,6 @@
 #include <functional>
 #include <memory>
 
-
-
 // TODO: Strange place (this header file) for BaseInterface?
 class DOMBaseInterface : std::enable_shared_from_this<DOMBaseInterface>
 {

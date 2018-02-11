@@ -308,11 +308,6 @@ public:
 	// Emulate left mouse button up. Can be used to end text selection. Optional offset in rendered pixels
 	virtual void EmulateLeftMouseButtonUp(double x, double y, bool isWebViewPixelCoordinate = true, double xOffset = 0, double yOffset = 0);
 
-	// Emulate keyboard strokes for given Tab and string
-	virtual bool EmulateKeyboardStrokes(std::u16string text);
-	virtual bool EmulateSelectAll();
-	virtual bool EmulateEnterKey();
-
 	// Asynchronous javascript call
 	virtual void PutTextSelectionToClipboardAsync();
 
@@ -342,6 +337,18 @@ public:
 
 	// Set WebViewParameters for WebView
 	virtual void SetWebViewParameters(WebViewParameters parameters) { _webViewParameters = parameters; }
+
+	// ###############################
+	// ### TAB DOM NODE INTERFACE ###
+	// ###############################
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	// >>> Implemented in TabDOMNodeImpl.cpp >>>
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+	// Emulate keyboard strokes for given Tab and string
+	virtual bool EmulateKeyboardStrokes(std::u16string text);
+	virtual bool EmulateSelectAll();
+	virtual bool EmulateEnterKey();
 
     // #########################
     // ### TAB CEF INTERFACE ###
@@ -386,7 +393,6 @@ public:
 	virtual std::weak_ptr<DOMOverflowElement> GetDOMOverflowElement(int id);
 	virtual std::weak_ptr<DOMVideo> GetDOMVideo(int id);
 	virtual std::weak_ptr<DOMCheckbox> GetDOMCheckbox(int id);
-
 
 	virtual void RemoveDOMTextInput(int id);
 	virtual void RemoveDOMLink(int id);
@@ -563,6 +569,10 @@ private:
 
 	// Unique name for favicon which is stored in eyeGUI
 	std::string GetFaviconIdentifier() const;
+
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	// >>> Implemented in TabDOMNodeImpl.cpp >>>
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 	// Used by TabDOMInterface in order to be able to execute node functions in Javascript
 	bool SendProcessMessageToRenderer(CefRefPtr<CefProcessMessage> msg);
