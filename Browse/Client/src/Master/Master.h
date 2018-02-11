@@ -376,7 +376,7 @@ private:
 	std::queue<Notification> _notificationStack;
 
 	// Time of notification displaying
-	float _notificationTime;
+	float _notificationTime = 0.f;
 
 	// Whether current notification is overridable or not
 	bool _notificationOverridable = false;

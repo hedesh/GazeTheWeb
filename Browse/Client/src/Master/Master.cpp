@@ -845,7 +845,7 @@ void Master::Loop()
 					eyegui::playSound(_pGUI, notification.sound);
 				}
 			}
-			else if(_notificationTime <= 0) // hide notification, if empty and time is over
+			else
 			{
 				// Hide notification display
 				eyegui::setVisibilityOFloatingFrame(_pSuperNotificationLayout, _notificationFrameIndex, false, false, true);
