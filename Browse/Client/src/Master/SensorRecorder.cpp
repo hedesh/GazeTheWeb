@@ -3,9 +3,11 @@
 // Author: Raphael Menges (raphaelmenges@uni-koblenz.de)
 //============================================================================
 
+#include "SensorRecorder.h"
+
 #ifdef CLIENT_SENSOR_LIB_INTEGRATION
 
-#include "SensorRecorder.h"
+
 #include "SensorLibrary.h"
 
 SensorRecorder::SensorRecorder()
@@ -31,6 +33,14 @@ void SensorRecorder::Stop()
 }
 
 #else // no SensorLib integrated
+
+namespace SensorLib
+{
+	class SensorLibrary
+	{
+
+	};
+}
 
 SensorRecorder::SensorRecorder()
 {
