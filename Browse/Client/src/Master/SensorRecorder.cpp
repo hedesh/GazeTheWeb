@@ -34,14 +34,6 @@ void SensorRecorder::Stop()
 
 #else // no SensorLib integrated
 
-namespace SensorLib
-{
-	class SensorLibrary
-	{
-
-	};
-}
-
 SensorRecorder::SensorRecorder()
 {
 	// Do nothing
