@@ -22,7 +22,7 @@ enum class SocialPlatform
 // List of identifying domain parts for social platforms (mind the order)
 static const std::map < SocialPlatform, std::vector<std::string> > SocialIdentifiers =
 {
-	{ SocialPlatform::News,		{ "yahoo.com", "reddit.com", "msn.com", "thegurdian.com"," nba.com", "ekathimerini.com", "protothema.gr", "sport24.gr",
+	{ SocialPlatform::News,		{ "yahoo.com", "reddit.com", "msn.com", "theguardian.com"," nba.com", "ekathimerini.com", "protothema.gr", "sport24.gr",
 								"gazzetta.gr", "protothema.gr", "newsit.gr", "iefimerida.gr", "news247.gr", "newsbomb.gr", "sport24.gr", "newsbeast.gr", "zougla.gr",
 								"contra.gr", "lifo.gr", "pronews.gr", "in.gr", "taxheaven.gr", "protothema.gr", "kathimerini.gr", "tovima.gr", "iefimerida.gr", "diaforetiko.gr",
 								"protothema.gr", "novasports.gr", "ynet.co.il", "walla.co.il", "mako.co.il", "sport5.co.il", "haaretz.co.il", "globes.co.il", "one.co.il", "calcalist.co.il",
