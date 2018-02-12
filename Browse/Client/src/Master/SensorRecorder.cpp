@@ -16,7 +16,7 @@ SensorRecorder::SensorRecorder()
 
 SensorRecorder::~SensorRecorder()
 {
-	Stop();
+	_upSensorLib->shutdownSensors();
 }
 
 void SensorRecorder::Start()
