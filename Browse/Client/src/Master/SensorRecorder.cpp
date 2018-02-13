@@ -16,6 +16,10 @@ SensorRecorder::SensorRecorder()
 
 SensorRecorder::~SensorRecorder()
 {
+<<<<<<< HEAD
+=======
+	Stop();
+>>>>>>> sensor_lib_integration
 	_upSensorLib->shutdownSensors();
 }
 

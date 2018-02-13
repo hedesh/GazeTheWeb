@@ -68,7 +68,10 @@ namespace eyetracker_global
 		if (spLabStreamOutput) { spLabStreamOutput->Update({ sample.x, sample.y }); } // handles pause etc. internally
 
 		// Push sample to queue
-		spSampleDataQueue->push_back(sample); // pushes sample
+		if (sample.x > 0.f && sample.y > 0.f) // only push valid samples to the queue
+		{
+			spSampleDataQueue->push_back(sample); // pushes sample
+		}
 
 		mutex.unlock(); // unlock
     }
