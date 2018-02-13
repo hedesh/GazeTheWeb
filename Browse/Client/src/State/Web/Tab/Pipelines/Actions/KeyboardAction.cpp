@@ -380,6 +380,15 @@ KeyboardAction::KeyboardAction(TabInteractionInterface *pTab) : Action(pTab)
 	{
 		for (const std::string& rMessage : messages)
 		{
+			LogInfo(rMessage);
+			if (!strcmp(rMessage.c_str(), "-1"))
+			{
+				_pTab->DeleteContentAtCursorInTextEdit(_overlayTextEditId, -1);
+				lastkeyresult = false;
+			}
+			else {
+				lastkeyresult = true;
+			}
 			// ######################################################
 			// ### TODO CERTH #######################################
 			// ######################################################
@@ -444,18 +453,16 @@ bool KeyboardAction::Update(float tpf, const std::shared_ptr<const TabInput> spI
 		_classificationTime -= tpf; // decrement timer
 		_classificationTime = glm::max(0.f, _classificationTime); // lower limit of timer
 
-		// When timer is complete, accept selection
+																  // When timer is complete, accept selection
 		if (_classificationTime <= 0)
 		{
-			if (_classifyingButton)
-			{
-				_pTab->ClassifyButton(_overlaySpaceButtonId, true); // true for accept (TODO: encode id of button-to-classify in LabStream message or store it in member)
-
-			}
-			else // key from keyboard
-			{
-				_pTab->ClassifyKey(_overlayKeyboardId, true); // true for accept
-			}
+			//if (lastkeyresult) {
+			_pTab->ClassifyKey(_overlayKeyboardId, true); // true for accept
+														  /*}
+														  else {
+														  _pTab->ClassifyKey(_overlayKeyboardId, false);
+														  }
+														  */
 		}
 	}
 
