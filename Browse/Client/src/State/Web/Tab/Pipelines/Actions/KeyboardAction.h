@@ -102,9 +102,8 @@ protected:
 	// Key selection classification duration in seconds
 	const float CLASSIFICATION_DURATION = 0.01f; // set low since currently not used
 
-	bool lastkeyresult = true;
 	// Key selection classification time in seconds
-	float _classificationTime = 0.0001f;
+	float _classificationTime = 0.f;
 
 	// Bool indicating whether currently a key or a button is classified
 	bool _classifyingButton = false;
