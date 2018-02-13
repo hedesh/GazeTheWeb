@@ -53,6 +53,12 @@ Settings::Settings(Master* pMaster) : State(pMaster)
 
 	// Deactivate buttons which are not used, yet
 	eyegui::setElementActivity(_pSettingsLayout, "input", false, false);
+
+	// Deactivate shutdown button when in demo mode
+	if (setup::DEMO_MODE)
+	{
+		eyegui::setElementActivity(_pSettingsLayout, "shutdown", false, false);
+	}
 }
 
 Settings::~Settings()
