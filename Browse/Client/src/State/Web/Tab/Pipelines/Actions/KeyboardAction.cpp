@@ -380,15 +380,13 @@ KeyboardAction::KeyboardAction(TabInteractionInterface *pTab) : Action(pTab)
 	{
 		for (const std::string& rMessage : messages)
 		{
-			// ######################################################
-			// ### TODO CERTH #######################################
-			// ######################################################
-			
-			// Parse string and check for classification. If available,
-			// set some member in keyboard action to know in update
-			// that classification is done and how to proceed
-
-			// ######################################################
+			// Check for the message content
+			LogInfo("ERRP Message: ", rMessage);
+			if (!strcmp(rMessage.c_str(), "-1"))
+			{
+				// Just delete last character
+				_pTab->DeleteContentAtCursorInTextEdit(_overlayTextEditId, -1);
+			}
 		}
 	}
 	));
@@ -432,10 +430,7 @@ bool KeyboardAction::Update(float tpf, const std::shared_ptr<const TabInput> spI
 	GetOutputValue("duration", duration);
 	SetOutputValue("duration", duration + tpf);
 
-	// ######################################################
-	// ### TODO CERTH #######################################
-	// ######################################################
-	// When classification timer is set, it is decremted at each update.
+	// When classification timer is set, it is decremented at each update.
 	// When timer is zero, selection is ALWAYS accepted. Please change as required.
 
 	// Check classification
@@ -450,7 +445,6 @@ bool KeyboardAction::Update(float tpf, const std::shared_ptr<const TabInput> spI
 			if (_classifyingButton)
 			{
 				_pTab->ClassifyButton(_overlaySpaceButtonId, true); // true for accept (TODO: encode id of button-to-classify in LabStream message or store it in member)
-
 			}
 			else // key from keyboard
 			{
