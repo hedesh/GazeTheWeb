@@ -8,17 +8,27 @@ Please go to our GitHub repository at https://github.com/MAMEM/GazeTheWeb/tree/m
 Windows 7, 8, 8.1 or 10
 Graphics card with OpenGL 3.3 or higher support
 
+## Compatible eyetrackers
+- SMI RED-n series
+- Visual Interactive myGaze-n
+- Tobii EyeX
+- Tobii 4C
+
 ## Installation
-1. Install Microsoft Visual C++ 2015 Redistributable for x86 applications
-	Get it here: https://www.microsoft.com/en-us/download/details.aspx?id=51682
+1. Install Microsoft Visual C++ 2015 Redistributable for x86 applications (on both x86 and 64bit systems!)
+	Get vc_redist.x86.exe here: https://www.microsoft.com/en-us/download/details.aspx?id=53840
 2. Install eyetracker software (instructions should be included)
 3. Unzip content of this zip (if not already done)
 
-## Usage
+## Usage with Eyetracker
 1. Connect eyetracker
-2. Start eyetracker server application
+2. Start eyetracker server application (not required for Visual Interactive myGaze-n)
 3. Calibrate eyetracker
-4. Start Client.exe which was included in this zip 
+4. Start Client.exe that was included in this zip 
+
+## Usage with Mouse
+1. Start Client.exe that was included in this zip
+2. Gaze is emulated through mouse pointer. Fixation is emulated through mouse click.
 
 ## Shortcuts
 ESC: Exit application
