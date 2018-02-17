@@ -266,13 +266,13 @@ bool DefaultMsgHandler::OnQuery(CefRefPtr<CefBrowser> browser,
 				}
 
 				// TODO: This could be done in DOMExtraction
-				std::vector<std::string> names = { "TextInput", "Link", "SelectField", "OverflowElement", "Video", "Checkbox" };
+				const std::vector<std::string> names = { "TextInput", "Link", "SelectField", "OverflowElement", "Video", "Checkbox" };
 				if (type >= names.size() || type < 0)
 				{
 					LogError("MsgRouter: - ERROR: Unknown numeric DOM node type value: ", type);
 					return true;
 				}
-				std::string& ipcName = names[type];
+				const std::string& ipcName = names[type];
 
 				// Instruct Renderer Process to initialize empty DOM Nodes with data
 				// TODO: Move this to DOM node constructor?

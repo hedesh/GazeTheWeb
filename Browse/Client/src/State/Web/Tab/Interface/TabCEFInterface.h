@@ -92,7 +92,7 @@ public:
     virtual void SetTitle(std::string title) = 0;
 
     // Add new Tab after that one
-    virtual void AddTabAfter(std::string URL) = 0;
+    virtual void AddTabAfter(std::string URL, CefRefPtr<CefRequestContext> request_context) = 0;
 
 	// Receive current loading status of each frame
 	virtual void SetLoadingStatus(bool isLoading, bool isMainFrame) = 0;

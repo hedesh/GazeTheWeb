@@ -15,6 +15,10 @@ document.onclick = function(e){
 	}
 }
 
+document.addEventListener("auth.statusChange", (e) => {
+	console.log("Noticed auth.statusChange event!");	
+	ConsolePrint("Noticed auth.statusChange event!");	
+}, false);
 // window.appendedSubtreeRoots = new Set();
 
 // Trigger DOM data update on changing document loading status
@@ -291,9 +295,13 @@ function AnalyzeNode(node)
 		// }
 
 		var computedStyle = window.getComputedStyle(node, null);
+		if(!computedStyle)
+		{
+			console.log("AnalyzeNode: computedStyle is null.");
+		}
 
 		// Identify fixed elements on appending them to DOM tree
-		if(computedStyle.getPropertyValue('position') == 'fixed') 
+		if(computedStyle && computedStyle.getPropertyValue('position') == 'fixed') 
 		{
 			// Returns true if new FixedElement was added; false if already linked to FixedElement Object
 			if(AddFixedElement(node))
@@ -447,7 +455,7 @@ function AnalyzeNode(node)
 		var rect = node.getBoundingClientRect();
 
 		// Detect scrollable elements inside of webpage
-		if((node.tagName === "DIV" || node.tagName === "P"))// && rect.width > 0 && rect.height > 0)
+		if(computedStyle && (node.tagName === "DIV" || node.tagName === "P"))// && rect.width > 0 && rect.height > 0)
 		{
 			var overflow = computedStyle.getPropertyValue("overflow");
 			var valid_overflow = ["scroll", "auto", "hidden"];

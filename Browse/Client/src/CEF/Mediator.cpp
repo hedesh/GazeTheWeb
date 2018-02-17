@@ -22,7 +22,7 @@ void Mediator::SetMaster(MasterNotificationInterface* pMaster)
 	_pMaster = pMaster;
 }
 
-void Mediator::RegisterTab(TabCEFInterface* pTab, std::string URL)
+void Mediator::RegisterTab(TabCEFInterface* pTab, std::string URL, CefRefPtr<CefRequestContext> request_context)
 {
     CEF_REQUIRE_UI_THREAD();
 
@@ -56,7 +56,9 @@ void Mediator::RegisterTab(TabCEFInterface* pTab, std::string URL)
     LogDebug("Mediator: Creating new CefBrowser at Tab registration.");
     // Create new CefBrowser with given information
     CefRefPtr<CefBrowser> browser = CefBrowserHost::CreateBrowserSync(
-        window_info, _handler.get(), URL, browser_settings, NULL);
+        window_info, _handler.get(), URL, browser_settings, request_context);
+
+	LogDebug("Mediator::RegisterTab: request_context == nullptr? ", request_context == nullptr);
 
     // Fill maps with correlating Tab and CefBrowsre
     _browsers.emplace(pTab, browser);
@@ -599,11 +601,12 @@ void Mediator::OnTabTitleChange(CefRefPtr<CefBrowser> browser, std::string title
 	}
 }
 
-void Mediator::OpenPopupTab(CefRefPtr<CefBrowser> browser, std::string url)
+void Mediator::OpenPopupTab(CefRefPtr<CefBrowser> browser, std::string url, bool javascript_access)
 {
 	if (TabCEFInterface* pTab = GetTab(browser))
 	{
-        pTab->AddTabAfter(url);
+		CefRefPtr<CefRequestContext> request_context = (javascript_access) ? browser->GetHost()->GetRequestContext() : nullptr;
+        pTab->AddTabAfter(url, request_context);
 	}
 }
 

@@ -76,7 +76,7 @@ int Web::AddTab(bool show)
 	return AddTab("", show);
 }
 
-int Web::AddTab(std::string URL, bool show)
+int Web::AddTab(std::string URL, bool show, CefRefPtr<CefRequestContext> request_context)
 {
     // Go over existing pairs and determine first free id
     int id = 0;
@@ -99,7 +99,7 @@ int Web::AddTab(std::string URL, bool show)
 
     // Create tab
     std::unique_ptr<Tab> upTab =
-        std::unique_ptr<Tab>(new Tab(_pMaster, _pCefMediator, this, URL, _dataTransfer));
+        std::unique_ptr<Tab>(new Tab(_pMaster, _pCefMediator, this, URL, _dataTransfer, request_context));
 
 	// Set award icon
 	upTab->SetAwardIcon(_award);
@@ -124,7 +124,7 @@ int Web::AddTab(std::string URL, bool show)
     return id;
 }
 
-int Web::AddTabAfter(Tab *other, std::string URL, bool show)
+int Web::AddTabAfter(Tab *other, std::string URL, bool show, CefRefPtr<CefRequestContext> request_context)
 {
     // Find other tab
     int otherId = -1;
@@ -140,7 +140,7 @@ int Web::AddTabAfter(Tab *other, std::string URL, bool show)
     }
 
     // Add new tab
-    int id = AddTab(URL, show);
+    int id = AddTab(URL, show, request_context);
 
     // If the other tab exists, move created one after that
     if(otherId >= 0)
@@ -554,9 +554,9 @@ void Web::Deactivate()
     ShowTabOverview(false);
 }
 
-void Web::PushAddTabAfterJob(Tab* pCaller, std::string URL)
+void Web::PushAddTabAfterJob(Tab* pCaller, std::string URL, CefRefPtr<CefRequestContext> request_context)
 {
-    _jobs.push_front(std::unique_ptr<TabJob>(new AddTabAfterJob(pCaller, URL, true)));
+    _jobs.push_front(std::unique_ptr<TabJob>(new AddTabAfterJob(pCaller, URL, true, request_context)));
 }
 
 void Web::PushUpdateAwardJob(Tab* pCaller, Award award)
@@ -922,7 +922,7 @@ Web::TabJob::TabJob(Tab* pCaller)
 void Web::AddTabAfterJob::Execute(Web* pCallee)
 {
 	// Add tab after caller
-    pCallee->AddTabAfter(_pCaller, _URL, _show);
+    pCallee->AddTabAfter(_pCaller, _URL, _show, _request_context);
 
 	// Flash tab overview button to indicate, that new tab was created by application
 	eyegui::flash(pCallee->_pWebLayout, "tab_overview");

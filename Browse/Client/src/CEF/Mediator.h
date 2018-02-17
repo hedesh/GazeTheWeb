@@ -46,7 +46,7 @@ public:
 	void SetMaster(MasterNotificationInterface* pMaster);
 
     // Receive tab specific commands
-    void RegisterTab(TabCEFInterface* pTab, std::string URL);
+    void RegisterTab(TabCEFInterface* pTab, std::string URL, CefRefPtr<CefRequestContext> request_context = nullptr);
     void UnregisterTab(TabCEFInterface* pClosing);
     void LoadURLInTab(TabCEFInterface* pTab, std::string URL);
     void ReloadTab(TabCEFInterface* pTab);
@@ -136,7 +136,8 @@ public:
 	void OnTabTitleChange(CefRefPtr<CefBrowser> browser, std::string title);
 
 	// Add new Tab with given URL at the position after the current Tab (in context of Tab overview)
-	void OpenPopupTab(CefRefPtr<CefBrowser> browser, std::string url);
+	void OpenPopupTab(CefRefPtr<CefBrowser> browser, std::string url, bool javascript_access = false);
+
 
 	bool SetLoadingStatus(CefRefPtr<CefBrowser> browser, bool isLoading, bool isMainFrame);
 

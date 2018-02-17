@@ -12,6 +12,14 @@ function ConsolePrint(msg)
         onSuccess : (response) => {}, 
         onFailure : (error_code, error_message) => {} 
     });
+
+    // window.cefQuery({ 
+    //     request: ("DEBUG#" + msg), 
+    //     persistent : false, 
+    //     onSuccess : (response) => {}, 
+    //     onFailure : (error_code, error_message) => {} 
+    // });
+
 }
 
 // TODO: Differentiate between different message types
@@ -29,7 +37,7 @@ function CefPoll(num_partitions, update_partition)
     var partitioned = (num_partitions !== undefined && update_partition !== undefined);
     
     // DISABLED FOR DEBUGGING
-    if(!partitioned)
+    if(false)
     {
         console.log("CefPoll triggerd...");
         if(partitioned)

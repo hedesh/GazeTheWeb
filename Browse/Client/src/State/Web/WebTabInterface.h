@@ -22,7 +22,7 @@ class WebTabInterface
 public:
 
 	// Add tab after that tab
-    virtual void PushAddTabAfterJob(Tab* pCaller, std::string URL) = 0;
+    virtual void PushAddTabAfterJob(Tab* pCaller, std::string URL, CefRefPtr<CefRequestContext> request_context) = 0;
 
 	// Update award
 	virtual void PushUpdateAwardJob(Tab* pCaller, Award award) = 0;

@@ -40,10 +40,10 @@ public:
 
     // Add tab and return id of it
 	int AddTab(bool show = true);
-    int AddTab(std::string URL, bool show = true);
+    int AddTab(std::string URL, bool show = true, CefRefPtr<CefRequestContext> request_context = nullptr);
 
     // Add tab after another
-    int AddTabAfter(Tab* other, std::string URL, bool show = true);
+    int AddTabAfter(Tab* other, std::string URL, bool show = true, CefRefPtr<CefRequestContext> request_context = nullptr);
 
     // Remove tab
     void RemoveTab(int id);
@@ -102,7 +102,7 @@ public:
 	// #########################
 
 	// Add tab after that tab
-    virtual void PushAddTabAfterJob(Tab* pCaller, std::string URL);
+    virtual void PushAddTabAfterJob(Tab* pCaller, std::string URL, CefRefPtr<CefRequestContext> request_context);
 
 	// Update award
 	virtual void PushUpdateAwardJob(Tab* pCaller, Award award);
@@ -137,10 +137,11 @@ private:
     public:
 
         // Constructor
-		AddTabAfterJob(Tab* pCaller, std::string URL, bool show) : TabJob(pCaller)
+		AddTabAfterJob(Tab* pCaller, std::string URL, bool show, CefRefPtr<CefRequestContext> request_context) : TabJob(pCaller)
 		{
 			_URL = URL;
 			_show = show;
+			_request_context = request_context;
 		}
 
         // Execute
@@ -150,8 +151,9 @@ private:
 
         // Members
         std::string _URL;
-        bool _show;
-    };
+		bool _show;
+		CefRefPtr<CefRequestContext> _request_context;
+	};
 
 	class UpdateAwardJob : public TabJob
 	{

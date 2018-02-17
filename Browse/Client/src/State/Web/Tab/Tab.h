@@ -61,7 +61,8 @@ public:
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     // Constructor
-    Tab(Master* pMaster, Mediator* pCefMediator, WebTabInterface* pWeb, std::string url, bool dataTransfer);
+    Tab(Master* pMaster, Mediator* pCefMediator, WebTabInterface* pWeb, std::string url, bool dataTransfer, 
+	CefRefPtr<CefRequestContext> request_context = nullptr);
 
     // Destructor
     virtual ~Tab();
@@ -420,7 +421,7 @@ public:
 	virtual void SetMetaKeywords(std::string content);
 
     // Add new Tab after that one
-	virtual void AddTabAfter(std::string URL) { _pWeb->PushAddTabAfterJob(this, URL); }
+	virtual void AddTabAfter(std::string URL, CefRefPtr<CefRequestContext> request_context) { _pWeb->PushAddTabAfterJob(this, URL, request_context); }
 
 	// Receive current loading status of each frame
 	virtual void SetLoadingStatus(bool isLoading, bool isMainFrame);

@@ -243,7 +243,7 @@ DOMNode.prototype.updateOccBitmask = function(altNode, debug){
                 {
                     bm.push(0);
                 }
-                else if(this.node.tagName === "A" && 
+                else if(//this.node.tagName === "A" && 
                             (topNode.parentElement === this.node || 
                                 // Quick fix for facebook chat, check if this can be generalized in some way
                                 (topNode.parentElement && topNode.parentElement.parentElement === this.node) 

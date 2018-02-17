@@ -17,7 +17,7 @@ Tab::Tab(
 	Mediator* pCefMediator,
 	WebTabInterface* pWeb,
 	std::string url,
-	bool dataTransfer) : _dataTransfer(dataTransfer)
+	bool dataTransfer, CefRefPtr<CefRequestContext> request_context) : _dataTransfer(dataTransfer)
 {
 	// Fill members
 	_pMaster = pMaster;
@@ -106,7 +106,7 @@ Tab::Tab(
     _upWebView = std::unique_ptr<WebView>(new WebView(webViewInGUI.x, webViewInGUI.y, webViewInGUI.width, webViewInGUI.height));
 
 	// Register itself and painted texture in mediator to receive DOMNodes
-	_pCefMediator->RegisterTab(this, url);
+	_pCefMediator->RegisterTab(this, url, request_context);
 
 	// Prepare debugging overlay
 	InitDebuggingOverlay();
