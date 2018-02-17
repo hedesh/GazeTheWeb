@@ -163,9 +163,9 @@ bool DOMTrigger<T>::Update(float tpf, const std::shared_ptr<const TabInput> spIn
 {
 	// Decide visibility
 	bool visible =
-		!_spNode->IsOccluded() // node is not occluded
-		&& !_spNode->GetRects().empty() // DOM node has rects
-		&& _spNode->GetRects().front().Width() != 0 && _spNode->GetRects().front().Height() != 0; // At least the first rect is bigger than zero
+		// !_spNode->IsOccluded() && // node is not occluded
+		!_spNode->GetRects().empty() && // DOM node has rects
+		_spNode->GetRects().front().Width() != 0 && _spNode->GetRects().front().Height() != 0; // At least the first rect is bigger than zero
 	if (_visible != visible)
 	{
 		_visible = visible;
