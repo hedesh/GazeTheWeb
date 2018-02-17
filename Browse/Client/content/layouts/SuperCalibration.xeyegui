@@ -38,15 +38,15 @@
 			</column>
 			<column size="50%">
 				<grid>
-					<row size="5%">
+					<row size="2%">
 						<column size="100%"/>
 					</row>
-					<row size="65%">
+					<row size="71%">
 						<column size="100%">
 							<circlebutton id="recalibration" style="recalibration" icon="icons/Recalibration.png" desckey="super_calibration:recalibration"/>
 						</column>
 					</row>
-					<row size="5%">
+					<row size="2%">
 						<column size="100%"/>
 					</row>
 					<row size="20%">
