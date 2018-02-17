@@ -66,11 +66,17 @@ void URLInput::Activate(int tabId)
 		// Make bookmarks layout invisble
 		eyegui::setVisibilityOfLayout(_pBookmarksLayout, false, false, false);
 
+		// Set keymap
+		eyegui::setKeymapOfKeyboard(_pLayout, "keyboard", 0);
+
         // Reset collected URL
         _collectedURL = u"";
 
-        // Set initial content of text block
-        eyegui::setContentOfTextBlock(_pLayout, "url_display", "");
+		// Set display
+		eyegui::setContentOfTextBlock(_pLayout, "url_display", u"|");
+
+        // Reset extra key button
+		eyegui::buttonUp(_pLayout, "extra_keys", true);
 
         // Finished, not yet
 		_status = Status::PENDING;
