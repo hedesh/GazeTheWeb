@@ -253,8 +253,15 @@ void DOMTrigger<T>::CalculatePositionOfOverlayFrame(float& rRelativePositionX, f
 		// Center of node
 		const auto& nodeCenter = _spNode->GetRects()[0].Center();
 
+		// Relative horizontal page pixel position of trigger within node
+		const std::vector<float> relPositions = { 0.5f, 0.25f, 0.75f };
+		int i = _spNode->GetId() % relPositions.size();
+		auto xCoord = _spNode->GetRects()[0].left + (_spNode->GetRects()[0].Width() * relPositions.at(i));
+
+
+
 		// Center of node in WebViewPixel space
-		double webViewPixelX = nodeCenter.x - scrollingOffsetX;
+		double webViewPixelX = xCoord - scrollingOffsetX;
 		double webViewPixelY = nodeCenter.y - scrollingOffsetY;
 		_pTab->ConvertToWebViewPixel(webViewPixelX, webViewPixelY);
 
