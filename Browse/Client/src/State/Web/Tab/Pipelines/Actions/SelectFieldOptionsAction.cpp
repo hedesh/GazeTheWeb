@@ -18,7 +18,7 @@ SelectFieldOptionsAction::SelectFieldOptionsAction(TabInteractionInterface *pTab
 	_optionCount = options.size();
 
 	// TODO: Hacky way to limit option count. Otherwise rendering / selection gets too hard
-	_optionCount = glm::min(_optionCount, 15);
+	_optionCount = glm::min(_optionCount, 100);
 
 	// Calculate size of overlay (TODO: maybe move this into tab so it is easy to make WebView filling overlay)
 	float x, y, sizeX, sizeY;
