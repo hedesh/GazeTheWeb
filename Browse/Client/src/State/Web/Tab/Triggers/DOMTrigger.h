@@ -258,8 +258,6 @@ void DOMTrigger<T>::CalculatePositionOfOverlayFrame(float& rRelativePositionX, f
 		int i = _spNode->GetId() % relPositions.size();
 		auto xCoord = _spNode->GetRects()[0].left + (_spNode->GetRects()[0].Width() * relPositions.at(i));
 
-
-
 		// Center of node in WebViewPixel space
 		double webViewPixelX = xCoord - scrollingOffsetX;
 		double webViewPixelY = nodeCenter.y - scrollingOffsetY;
