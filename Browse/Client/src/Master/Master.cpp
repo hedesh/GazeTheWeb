@@ -1199,14 +1199,14 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
             case GLFW_KEY_ESCAPE: { Exit(); break; }
             case GLFW_KEY_TAB:  { eyegui::hitButton(_pSuperLayout, "pause"); break; }
             case GLFW_KEY_ENTER: { _enterKeyPressed = true; break; }
-			case GLFW_KEY_S: { LabStreamMailer::instance().Send("42"); break; } // TODO: testing
+			// case GLFW_KEY_S: { LabStreamMailer::instance().Send("42"); break; } // TODO: testing
 			case GLFW_KEY_R: { ShowSuperCalibrationLayout(); break; } // just show the super calibration layout
-			case GLFW_KEY_6: { _upWeb->PushBackPointingEvaluationPipeline(PointingApproach::MAGNIFICATION); break; }
-			case GLFW_KEY_7: { _upWeb->PushBackPointingEvaluationPipeline(PointingApproach::FUTURE); break; }
-			case GLFW_KEY_9: { _pCefMediator->Poll(); break; } // poll everything
+			// case GLFW_KEY_6: { _upWeb->PushBackPointingEvaluationPipeline(PointingApproach::MAGNIFICATION); break; }
+			// case GLFW_KEY_7: { _upWeb->PushBackPointingEvaluationPipeline(PointingApproach::FUTURE); break; }
+			// case GLFW_KEY_9: { _pCefMediator->Poll(); break; } // poll everything
 			case GLFW_KEY_0: { _pCefMediator->ShowDevTools(); break; }
-			case GLFW_KEY_SPACE: { _upVoiceInput->StartAudioRecording(); break; }
-			case GLFW_KEY_M: { PersistDriftGrid(PersistDriftGridReason::MANUAL); break; }
+			// case GLFW_KEY_SPACE: { _upVoiceInput->StartAudioRecording(); break; }
+			// case GLFW_KEY_M: { PersistDriftGrid(PersistDriftGridReason::MANUAL); break; }
         }
     }
 	else if (action == GLFW_RELEASE)
