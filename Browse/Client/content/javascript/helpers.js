@@ -94,6 +94,7 @@ function CefPoll(num_partitions, update_partition)
 
 
     /* EXPERIMENTAL */
+    /*
     var t_start = performance.now();
     var input_selectors = ["input", "div[role='combobox']", "div[role='textbox']", "textarea"];
     var num_elements = 0;
@@ -111,6 +112,7 @@ function CefPoll(num_partitions, update_partition)
 
     // TODO: Bitmask changes not propagated properly?
     domTextInputs.forEach((o) => { SendAttributeChangesToCEF("OccBitmask", o); });
+    */
 }
 
 var gtwPageHeight = 0.0;
