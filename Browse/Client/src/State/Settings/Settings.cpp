@@ -343,11 +343,23 @@ void Settings::SettingsButtonListener::down(eyegui::Layout* pLayout, std::string
 		else if (id == "toggle_descriptions")
 		{
             _pSettings->_globalSetup.showDescriptions = true;
+
+			// Do notification if layout visible to user
+			if(eyegui::isLayoutVisible(_pSettings->_pGeneralLayout))
+			{
+				_pSettings->_pMaster->PushNotificationByKey("notification:settings:description_on", MasterNotificationInterface::Type::NEUTRAL, true);
+			}
 		}
 		else if (id == "toggle_gaze_visualization")
 		{
             _pSettings->_globalSetup.showGazeVisualization = true;
 			JSMailer::instance().Send("gaze_on");
+
+			// Do notification if layout visible to user
+			if (eyegui::isLayoutVisible(_pSettings->_pGeneralLayout))
+			{
+				_pSettings->_pMaster->PushNotificationByKey("notification:settings:gaze_visualization_on", MasterNotificationInterface::Type::NEUTRAL, true);
+			}
 		}
 	}
 	else if (pLayout == _pSettings->_pAdBlockingLayout)
@@ -361,6 +373,12 @@ void Settings::SettingsButtonListener::down(eyegui::Layout* pLayout, std::string
 		else if (id == "toggle_ad_blocking")
 		{
 			_pSettings->_globalSetup.adBlocking = true;
+
+			// Do notification if layout visible to user
+			if (eyegui::isLayoutVisible(_pSettings->_pAdBlockingLayout))
+			{
+				_pSettings->_pMaster->PushNotificationByKey("notification:settings:ad_blocking_on", MasterNotificationInterface::Type::NEUTRAL, true);
+			}
 		}
 	}
 	else if (pLayout == _pSettings->_pInfoLayout)
@@ -381,11 +399,23 @@ void Settings::SettingsButtonListener::up(eyegui::Layout* pLayout, std::string i
         if (id == "toggle_descriptions")
         {
             _pSettings->_globalSetup.showDescriptions = false;
+
+			// Do notification if layout visible to user
+			if (eyegui::isLayoutVisible(_pSettings->_pGeneralLayout))
+			{
+				_pSettings->_pMaster->PushNotificationByKey("notification:settings:description_off", MasterNotificationInterface::Type::NEUTRAL, true);
+			}
         }
         else if (id == "toggle_gaze_visualization")
         {
             _pSettings->_globalSetup.showGazeVisualization = false;
 			JSMailer::instance().Send("gaze_off");
+
+			// Do notification if layout visible to user
+			if (eyegui::isLayoutVisible(_pSettings->_pGeneralLayout))
+			{
+				_pSettings->_pMaster->PushNotificationByKey("notification:settings:gaze_visualization_off", MasterNotificationInterface::Type::NEUTRAL, true);
+			}
         }
     }
 	else if (pLayout == _pSettings->_pAdBlockingLayout)
@@ -394,6 +424,12 @@ void Settings::SettingsButtonListener::up(eyegui::Layout* pLayout, std::string i
 		if (id == "toggle_ad_blocking")
 		{
 			_pSettings->_globalSetup.adBlocking = false;
+
+			// Do notification if layout visible to user
+			if (eyegui::isLayoutVisible(_pSettings->_pAdBlockingLayout))
+			{
+				_pSettings->_pMaster->PushNotificationByKey("notification:settings:ad_blocking_off", MasterNotificationInterface::Type::NEUTRAL, true);
+			}
 		}
 	}
 }
