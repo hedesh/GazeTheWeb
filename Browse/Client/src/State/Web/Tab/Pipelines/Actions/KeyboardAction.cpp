@@ -112,6 +112,9 @@ KeyboardAction::KeyboardAction(TabInteractionInterface *pTab) : Action(pTab)
             _pTab->DisplaySuggestionsInWordSuggest(
 				_overlayWordSuggestId,
 				_pTab->GetActiveEntityContentInTextEdit(_overlayTextEditId));
+
+			// Make letters in keyboard small again
+			_pTab->ButtonUp(_overlayShiftButtonId);
         });
 
 	// Complete button
