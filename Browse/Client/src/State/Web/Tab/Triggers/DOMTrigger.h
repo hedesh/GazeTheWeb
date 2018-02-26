@@ -41,6 +41,22 @@ public:
 	// Trigger in next update
 	virtual void Schedule() { _scheduled = true; }
 
+	// Get relative screen position
+	virtual glm::vec2 GetPosition() const { return _position; }
+
+	// Get CEF pixel position of center on page
+	virtual glm::vec2 GetDOMPosition() const
+	{
+		if (_spNode->GetRects().size() > 0)
+		{
+			return _spNode->GetRects()[0].Center();
+		}
+		return glm::vec2(0, 0);
+	}
+
+	// Get button offset index
+	virtual int GetButtonOffsetIndex() const { return _buttonOffsetIndex; }
+
 	// Get rects of DOMNode
     std::vector<Rect> GetDOMRects() const { return _spNode->GetRects(); }
 
@@ -84,8 +100,11 @@ private:
     // Visibility of overlay
     bool _visible = false;
 
-	// Store offset of button to move badge accordingly
-	float _buttonOffset = 0.f;
+	// Store offset index of button to move badge accordingly
+	int _buttonOffsetIndex = 0;
+
+	// Relative screen position
+	glm::vec2 _position;
 };
 
 // ######################
@@ -259,9 +278,7 @@ void DOMTrigger<T>::UpdatePositionOfOverlayFrame(bool isButton)
 				((float)webViewPixelY + (float)_pTab->GetWebViewY()) / (float)_pTab->GetWindowHeight());
 		};
 
-		/*
-
-		// If button, try to find empty space
+		// If button, try to find empty space. Update offset of button
 		if (isButton)
 		{
 			// Go over triggers so far
@@ -269,56 +286,63 @@ void DOMTrigger<T>::UpdatePositionOfOverlayFrame(bool isButton)
 			for (int i = 0; i < (int)_pTriggerCollection->size(); i++)
 			{
 				// Check for different kind of triggers
-				auto pTrigger = _pTriggerCollection.at(i);
-				if (i = 0) // this if first trigger, just place it conveniently
-				{
-					buttonOffset = _offset.at(0);
-				}
-				else if(pTrigger == nullptr) // ups
+				auto pTrigger = _pTriggerCollection->at(i);
+				if(pTrigger == nullptr) // ups
 				{
 					continue;
-				} // TODO: if trigger on same original position as this, use its placement
+				}
 				else if (pTrigger == this) // ok this is this so stop it
 				{
+					break;
+				}
+				else if (glm::distance(pTrigger->GetDOMPosition(), nodeCenter) < 1) // should be treated same as already existing trigger
+				{
+					buttonOffsetIndex = pTrigger->GetButtonOffsetIndex();
 					break;
 				}
 				else
 				{
 					// Determine buttonOffset (may only become bigger)
-					for (int j = buttonOffsetIndex; j < (int)_offsets; j++)
+					for (; buttonOffsetIndex < (int)_offsets.size(); buttonOffsetIndex++)
 					{
-
-						if()
+						glm::vec2 potentialRelativePosition = ToRelativeScreenPosition(glm::vec2(
+							_spNode->GetRects()[0].left + (nodeWidth * _offsets.at(buttonOffsetIndex)),
+							nodeCenter.y));
+						if (glm::distance(pTrigger->GetPosition(), potentialRelativePosition) >= (0.75f * TAB_TRIGGER_BUTTON_SIZE))
+						{
+							break;
+						}
 					}
 				}
 			}
+
+			// Adapt button offset index
+			if (buttonOffsetIndex >= (int)_offsets.size()) { buttonOffsetIndex = 0; }
+			_buttonOffsetIndex = buttonOffsetIndex; // overwrite member
 		}
 
-		*/
-
-		// Relative horizontal page pixel position of trigger within node
-		auto xCoord = _spNode->GetRects()[0].left + (nodeWidth * 0.5f);
-
 		// Calculate relative screen position
-		glm::vec2 relativePosition = ToRelativeScreenPosition(glm::vec2(xCoord, nodeCenter.y));
-
-		// Subtract half of size to center frame
-		relativePosition.x -= size / 2.f;
-		relativePosition.y -= size / 2.f;
+		glm::vec2 relativePosition = ToRelativeScreenPosition(
+			glm::vec2(_spNode->GetRects()[0].left + (nodeWidth * _offsets.at(_buttonOffsetIndex)),
+				nodeCenter.y));
 
 		// If badge, add offset
 		if (!isButton)
 		{
+			// Add offset for badge
 			relativePosition.x += TAB_TRIGGER_BADGE_OFFSET.x;
 			relativePosition.y += TAB_TRIGGER_BADGE_OFFSET.y;
 
 			// Tell it floating frames
-			_pTab->SetPositionOfFloatingFrameInOverlay(_overlayBadgeFrameIndex, relativePosition.x, relativePosition.y);
+			_pTab->SetPositionOfFloatingFrameInOverlay(_overlayBadgeFrameIndex, relativePosition.x - (size / 2.f), relativePosition.y - (size / 2.f));
 		}
-		else
+		else // button
 		{
+			// Store relative screen position for next triggers to compare against
+			_position = relativePosition;
+
 			// Tell it floating frames
-			_pTab->SetPositionOfFloatingFrameInOverlay(_overlayButtonFrameIndex, relativePosition.x, relativePosition.y);
+			_pTab->SetPositionOfFloatingFrameInOverlay(_overlayButtonFrameIndex, relativePosition.x - (size / 2.f), relativePosition.y - (size / 2.f));
 		}
 	}
 }
