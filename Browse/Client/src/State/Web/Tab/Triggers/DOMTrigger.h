@@ -54,8 +54,8 @@ protected:
 
 private:
 
-    // Calculate position of overlay
-    void CalculatePositionOfOverlayFrame(float& rRelativePositionX, float& rRelativePositionY, bool isButton) const; // button or badge
+    // Update position of overlay
+    void UpdatePositionOfOverlayFrame(bool isButton); // button or badge
 
 	// Calculate width of badge overlay
 	float CalculateWidthOfBadgeOverlay() const;
@@ -101,12 +101,8 @@ DOMTrigger<T>::DOMTrigger(TabInteractionInterface* pTab, std::vector<Trigger*>& 
 	std::map<std::string, std::string> idMapper;
 	idMapper.emplace("button", _overlayButtonId);
 
-	// Calculate position of overlay button
-	float x, y;
-	CalculatePositionOfOverlayFrame(x, y, true);
-
 	// Add overlay
-	_overlayButtonFrameIndex = _pTab->AddFloatingFrameToOverlay(brickPath, x, y, TAB_TRIGGER_BUTTON_SIZE, TAB_TRIGGER_BUTTON_SIZE, idMapper);
+	_overlayButtonFrameIndex = _pTab->AddFloatingFrameToOverlay(brickPath, 0, 0, TAB_TRIGGER_BUTTON_SIZE, TAB_TRIGGER_BUTTON_SIZE, idMapper);
 
 	// Register listener
 	_pTab->RegisterButtonListenerInOverlay(
@@ -125,11 +121,8 @@ DOMTrigger<T>::DOMTrigger(TabInteractionInterface* pTab, std::vector<Trigger*>& 
 		idMapper.clear();
 		idMapper.emplace("text", _overlayBadgeId);
 
-		// Calculate position of overlay badge
-		CalculatePositionOfOverlayFrame(x, y, false);
-
 		// Add overlay
-		_overlayBadgeFrameIndex = _pTab->AddFloatingFrameToOverlay("bricks/triggers/IdentifierBadge.beyegui", x, y, CalculateWidthOfBadgeOverlay(), TAB_TRIGGER_BADGE_SIZE, idMapper);
+		_overlayBadgeFrameIndex = _pTab->AddFloatingFrameToOverlay("bricks/triggers/IdentifierBadge.beyegui", 0, 0, CalculateWidthOfBadgeOverlay(), TAB_TRIGGER_BADGE_SIZE, idMapper);
 
 		// Set content of text
 		std::u16string id16;
@@ -178,22 +171,17 @@ bool DOMTrigger<T>::Update(float tpf, const std::shared_ptr<const TabInput> spIn
 
 	// ### BUTTON ###
 
-	// Calculate position of overlay button
-	float x, y;
-	CalculatePositionOfOverlayFrame(x, y, true);
-
-	// Tell it floating frames
-	_pTab->SetPositionOfFloatingFrameInOverlay(_overlayButtonFrameIndex, x, y);
+	// Update position of overlay button
+	UpdatePositionOfOverlayFrame(true);
 
 	// ### BADGE ###
 
 	if (setup::TAB_TRIGGER_SHOW_BADGE)
 	{
-		// Calculate position of overlay badge
-		CalculatePositionOfOverlayFrame(x, y, false);
+		// Update position of overlay badge
+		UpdatePositionOfOverlayFrame(false);
 
-		// Tell it floating frames
-		_pTab->SetPositionOfFloatingFrameInOverlay(_overlayBadgeFrameIndex, x, y);
+		// Update size
 		_pTab->SetSizeOfFloatingFrameInOverlay(_overlayBadgeFrameIndex, CalculateWidthOfBadgeOverlay(), TAB_TRIGGER_BADGE_SIZE);
 	}
 
@@ -235,7 +223,7 @@ void DOMTrigger<T>::Deactivate()
 }
 
 template <class T>
-void DOMTrigger<T>::CalculatePositionOfOverlayFrame(float& rRelativePositionX, float& rRelativePositionY, bool isButton) const
+void DOMTrigger<T>::UpdatePositionOfOverlayFrame(bool isButton)
 {
 	// Scrolling offset only when not fixed
 	double scrollingOffsetX = 0;
@@ -252,12 +240,10 @@ void DOMTrigger<T>::CalculatePositionOfOverlayFrame(float& rRelativePositionX, f
 
 		// Center of node
 		const auto& nodeCenter = _spNode->GetRects()[0].Center();
+		const auto nodeWidth = _spNode->GetRects()[0].Width();
 
 		// Relative horizontal page pixel position of trigger within node
-		// const std::vector<float> relPositions = { 0.5f, 0.25f, 0.75f };
-		// int i = _spNode->GetId() % relPositions.size();
-		// auto xCoord = _spNode->GetRects()[0].left + (_spNode->GetRects()[0].Width() * relPositions.at(0)); // not using relative positioning right now
-		auto xCoord = _spNode->GetRects()[0].left + (_spNode->GetRects()[0].Width() * 0.5f);
+		auto xCoord = _spNode->GetRects()[0].left + (nodeWidth * 0.5f);
 
 		// Center of node in WebViewPixel space
 		double webViewPixelX = xCoord - scrollingOffsetX;
@@ -265,18 +251,27 @@ void DOMTrigger<T>::CalculatePositionOfOverlayFrame(float& rRelativePositionX, f
 		_pTab->ConvertToWebViewPixel(webViewPixelX, webViewPixelY);
 
 		// Calculate coordinates and size
-		rRelativePositionX = ((float)webViewPixelX + (float)_pTab->GetWebViewX()) / (float)_pTab->GetWindowWidth();
-		rRelativePositionY = ((float)webViewPixelY + (float)_pTab->GetWebViewY()) / (float)_pTab->GetWindowHeight();
+		glm::vec2 relativePosition;
+		relativePosition.x = ((float)webViewPixelX + (float)_pTab->GetWebViewX()) / (float)_pTab->GetWindowWidth();
+		relativePosition.y = ((float)webViewPixelY + (float)_pTab->GetWebViewY()) / (float)_pTab->GetWindowHeight();
 
 		// Subtract half of size to center frame
-		rRelativePositionX -= size / 2.f;
-		rRelativePositionY -= size / 2.f;
+		relativePosition.x -= size / 2.f;
+		relativePosition.y -= size / 2.f;
 
 		// If badge, add offset
 		if (!isButton)
 		{
-			rRelativePositionX += TAB_TRIGGER_BADGE_OFFSET.x;
-			rRelativePositionY += TAB_TRIGGER_BADGE_OFFSET.y;
+			relativePosition.x += TAB_TRIGGER_BADGE_OFFSET.x;
+			relativePosition.y += TAB_TRIGGER_BADGE_OFFSET.y;
+
+			// Tell it floating frames
+			_pTab->SetPositionOfFloatingFrameInOverlay(_overlayBadgeFrameIndex, relativePosition.x, relativePosition.y);
+		}
+		else
+		{
+			// Tell it floating frames
+			_pTab->SetPositionOfFloatingFrameInOverlay(_overlayButtonFrameIndex, relativePosition.x, relativePosition.y);
 		}
 	}
 }
