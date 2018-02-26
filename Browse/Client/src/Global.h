@@ -67,6 +67,6 @@ static const std::string SEARCH_POSTFIX_HEBREW = "&k1=-1&kp=-2&kl=il-he";
 static const glm::vec4 NOTIFICATION_NEUTRAL_COLOR = glm::vec4(0.2f, 0.2f, 0.2f, 0.75f);
 static const glm::vec4 NOTIFICATION_SUCCESS_COLOR = glm::vec4(0.15f, 1.0f, 0.0f, 0.75f);
 static const glm::vec4 NOTIFICATION_WARNING_COLOR = glm::vec4(1.0f, 0.15f, 0.0f, 0.75f);
-static const float FILTER_MAXIMUM_SAMPLE_AGE = 1000; // maximum time returned as sample age by filter, in seconds
+static const double FILTER_MAXIMUM_SAMPLE_AGE = std::numeric_limits<double>::max(); // maximum time returned as sample age by filter, in seconds
 
 #endif // GLOBAL_H_

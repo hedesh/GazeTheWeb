@@ -34,7 +34,7 @@ public:
 	float GetFixationDuration() const;
 
 	// Getter for age of last used sample
-	float GetAge() const;
+	double GetAge() const;
 
 	// Getter which returns whether timestamp was actively set at least once (aka at least one sample received)
 	bool IsTimestampSetOnce() const;

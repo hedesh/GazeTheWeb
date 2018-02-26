@@ -410,6 +410,9 @@ private:
 
 	// Store whether drift map is used
 	bool _useDriftMap = false;
+
+	// Duration super calibration layout is visible (after long time, shut down the system)
+	double _recalibrationLayoutTime = 0.0;
 };
 
 #endif // MASTER_H_

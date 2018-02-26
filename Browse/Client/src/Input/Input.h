@@ -19,7 +19,7 @@ public:
 		float gazeY,
 		float rawGazeX,
 		float rawGazeY,
-		float gazeAge,
+		double gazeAge,
 		bool gazeEmulated,
 		bool gazeUponGUI,
 		bool instantInteraction,
@@ -41,7 +41,7 @@ public:
 	float gazeY;
 	float rawGazeX;
 	float rawGazeY;
-	float gazeAge;
+	double gazeAge;
 	bool gazeEmulated;
     bool gazeUponGUI;
 	bool instantInteraction;
@@ -113,7 +113,7 @@ public:
 	const float& gazeY;
 	const float& rawGazeX;
 	const float& rawGazeY;
-	const float& gazeAge;
+	const double& gazeAge;
 	const bool& gazeEmulated;
 	const bool& gazeUponGUI;
 	const bool& instantInteraction;

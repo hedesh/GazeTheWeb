@@ -876,6 +876,12 @@ void Master::Loop()
 			_width,
 			_height); // returns whether gaze was used (or emulated by mouse)
 
+		// Record how long super calibration layout has been visible
+		if (eyegui::isLayoutVisible(_pSuperCalibrationLayout))
+		{
+			_recalibrationLayoutTime += tpf;
+		}
+
 		// If last gaze sample age is too high, perform recalibration
 		if (
 			!setup::DEMO_MODE // do not do it in DEMO mode
@@ -886,6 +892,16 @@ void Master::Loop()
 		{
 			// Show super calibration layout
 			ShowSuperCalibrationLayout();
+			_recalibrationLayoutTime = 0.0;
+		}
+
+		// Call exit when the system has been in super calibration state for a long amount of time
+		if (eyegui::isLayoutVisible(_pSuperCalibrationLayout) // if super calibration layout visible
+			&& _recalibrationLayoutTime >= setup::INACTIVITY_SHUTDOWN_TIME // when layout visible longer than certain amount of time
+			&& spInput->gazeAge > setup::DURATION_BEFORE_SUPER_CALIBRATION) // and right now no gaze is going on
+		{
+			// Do shutdown the system
+			Exit(true);
 		}
 
 		// Update super calibration layout with trackbox information

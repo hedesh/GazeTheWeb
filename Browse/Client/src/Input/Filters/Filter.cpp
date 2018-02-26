@@ -125,13 +125,13 @@ float Filter::GetFixationDuration() const
 	return _fixationDuration;
 }
 
-float Filter::GetAge() const
+double Filter::GetAge() const
 {
 	if (_timestampSetOnce)
 	{
 		return std::min(
 			FILTER_MAXIMUM_SAMPLE_AGE,
-			(float)((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch() - _timestamp).count() / 1000.0));
+			((double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch() - _timestamp).count() / 1000.0));
 	}
 	else
 	{
