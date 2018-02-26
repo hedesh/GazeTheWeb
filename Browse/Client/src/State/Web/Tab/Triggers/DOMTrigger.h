@@ -54,6 +54,9 @@ protected:
 
 private:
 
+	// Available offsets within DOM node in x direction
+	const std::vector<float> _offsets = { 0.5f, 0.7f, 0.3f, 0.9f, 0.1f };
+
     // Update position of overlay
     void UpdatePositionOfOverlayFrame(bool isButton); // button or badge
 
@@ -80,6 +83,9 @@ private:
 
     // Visibility of overlay
     bool _visible = false;
+
+	// Store offset of button to move badge accordingly
+	float _buttonOffset = 0.f;
 };
 
 // ######################
@@ -242,18 +248,59 @@ void DOMTrigger<T>::UpdatePositionOfOverlayFrame(bool isButton)
 		const auto& nodeCenter = _spNode->GetRects()[0].Center();
 		const auto nodeWidth = _spNode->GetRects()[0].Width();
 
+		// Function to go from CEF pixels to relative screen position
+		std::function<glm::vec2(const glm::vec2&)> ToRelativeScreenPosition = [&](const glm::vec2& rCEFPixel)
+		{
+			double webViewPixelX = rCEFPixel.x - scrollingOffsetX;
+			double webViewPixelY = rCEFPixel.y - scrollingOffsetY;
+			_pTab->ConvertToWebViewPixel(webViewPixelX, webViewPixelY);
+			return glm::vec2(
+				((float)webViewPixelX + (float)_pTab->GetWebViewX()) / (float)_pTab->GetWindowWidth(),
+				((float)webViewPixelY + (float)_pTab->GetWebViewY()) / (float)_pTab->GetWindowHeight());
+		};
+
+		/*
+
+		// If button, try to find empty space
+		if (isButton)
+		{
+			// Go over triggers so far
+			int buttonOffsetIndex = 0;
+			for (int i = 0; i < (int)_pTriggerCollection->size(); i++)
+			{
+				// Check for different kind of triggers
+				auto pTrigger = _pTriggerCollection.at(i);
+				if (i = 0) // this if first trigger, just place it conveniently
+				{
+					buttonOffset = _offset.at(0);
+				}
+				else if(pTrigger == nullptr) // ups
+				{
+					continue;
+				} // TODO: if trigger on same original position as this, use its placement
+				else if (pTrigger == this) // ok this is this so stop it
+				{
+					break;
+				}
+				else
+				{
+					// Determine buttonOffset (may only become bigger)
+					for (int j = buttonOffsetIndex; j < (int)_offsets; j++)
+					{
+
+						if()
+					}
+				}
+			}
+		}
+
+		*/
+
 		// Relative horizontal page pixel position of trigger within node
 		auto xCoord = _spNode->GetRects()[0].left + (nodeWidth * 0.5f);
 
-		// Center of node in WebViewPixel space
-		double webViewPixelX = xCoord - scrollingOffsetX;
-		double webViewPixelY = nodeCenter.y - scrollingOffsetY;
-		_pTab->ConvertToWebViewPixel(webViewPixelX, webViewPixelY);
-
-		// Calculate coordinates and size
-		glm::vec2 relativePosition;
-		relativePosition.x = ((float)webViewPixelX + (float)_pTab->GetWebViewX()) / (float)_pTab->GetWindowWidth();
-		relativePosition.y = ((float)webViewPixelY + (float)_pTab->GetWebViewY()) / (float)_pTab->GetWindowHeight();
+		// Calculate relative screen position
+		glm::vec2 relativePosition = ToRelativeScreenPosition(glm::vec2(xCoord, nodeCenter.y));
 
 		// Subtract half of size to center frame
 		relativePosition.x -= size / 2.f;
