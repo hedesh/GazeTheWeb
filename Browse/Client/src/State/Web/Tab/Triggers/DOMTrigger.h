@@ -322,9 +322,11 @@ void DOMTrigger<T>::UpdatePositionOfOverlayFrame(bool isButton)
 				}
 			}
 
-			// Adapt button offset index
+			// Check whether for loop was completely iterated and index is now out of range
 			if (buttonOffsetIndex >= (int)_offsets.size()) { buttonOffsetIndex = 0; }
-			_buttonOffsetIndex = buttonOffsetIndex; // overwrite member
+
+			// Overwrite member
+			_buttonOffsetIndex = buttonOffsetIndex;
 		}
 
 		// Calculate relative screen position
@@ -339,7 +341,7 @@ void DOMTrigger<T>::UpdatePositionOfOverlayFrame(bool isButton)
 			relativePosition.x += TAB_TRIGGER_BADGE_OFFSET.x;
 			relativePosition.y += TAB_TRIGGER_BADGE_OFFSET.y;
 
-			// Tell it floating frames
+			// Tell it floating frame
 			_pTab->SetPositionOfFloatingFrameInOverlay(_overlayBadgeFrameIndex, relativePosition.x - (size / 2.f), relativePosition.y - (size / 2.f));
 		}
 		else // button
@@ -347,7 +349,7 @@ void DOMTrigger<T>::UpdatePositionOfOverlayFrame(bool isButton)
 			// Store relative screen position for next triggers to compare against
 			_position = relativePosition;
 
-			// Tell it floating frames
+			// Tell it floating frame
 			_pTab->SetPositionOfFloatingFrameInOverlay(_overlayButtonFrameIndex, relativePosition.x - (size / 2.f), relativePosition.y - (size / 2.f));
 		}
 	}
