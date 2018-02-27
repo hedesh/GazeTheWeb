@@ -57,11 +57,14 @@ public:
 	// Get button offset index
 	virtual int GetButtonOffsetIndex() const { return _buttonOffsetIndex; }
 
+	// Get type of DOM node
+	virtual int GetDOMType() const { return _spNode->GetType(); }
+
 	// Get rects of DOMNode
     std::vector<Rect> GetDOMRects() const { return _spNode->GetRects(); }
 
     // Get whether DOMNode is marked as fixed
-    bool GetDOMFixed() const { return _spNode->GetFixedId() >= 0; } // TODO: call real "isFixed" method so not checked for being zero
+    virtual bool GetDOMFixed() const { return _spNode->GetFixedId() >= 0; } // TODO: call real "isFixed" method so not checked for being zero
 
 protected:
 
@@ -295,7 +298,10 @@ void DOMTrigger<T>::UpdatePositionOfOverlayFrame(bool isButton)
 				{
 					break;
 				}
-				else if (glm::distance(pTrigger->GetDOMPosition(), nodeCenter) < 1) // should be treated same as already existing trigger
+				else if ( // should be treated same as already existing trigger
+					glm::distance(pTrigger->GetDOMPosition(), nodeCenter) < 1 // very close to each other in CEF pixel space
+					&& GetDOMType() == pTrigger->GetDOMType() // same type
+					&& GetDOMFixed() == pTrigger->GetDOMFixed()) // both either fixed or not fixed
 				{
 					buttonOffsetIndex = pTrigger->GetButtonOffsetIndex();
 					break;

@@ -45,6 +45,12 @@ public:
 	// Get button offset index
 	virtual int GetButtonOffsetIndex() const = 0;
 
+	// Get type of DOM node
+	virtual int GetDOMType() const = 0;
+
+	// Get whether DOMNode is marked as fixed
+	virtual bool GetDOMFixed() const = 0;
+
 protected:
 
     // Pointer to tab interface
