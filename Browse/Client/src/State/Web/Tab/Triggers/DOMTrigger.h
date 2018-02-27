@@ -74,7 +74,7 @@ protected:
 private:
 
 	// Available offsets within DOM node in x direction
-	const std::vector<float> _offsets = { 0.5f, 0.7f, 0.3f, 0.9f, 0.1f };
+	const std::vector<float> _offsets = { 0.3f, 0.7f, 0.5f, 0.4f, 0.6f, 0.2f, 0.8f, 0.1f, 0.9f };
 
     // Update position of overlay
     void UpdatePositionOfOverlayFrame(bool isButton); // button or badge
@@ -314,7 +314,7 @@ void DOMTrigger<T>::UpdatePositionOfOverlayFrame(bool isButton)
 						glm::vec2 potentialRelativePosition = ToRelativeScreenPosition(glm::vec2(
 							_spNode->GetRects()[0].left + (nodeWidth * _offsets.at(buttonOffsetIndex)),
 							nodeCenter.y));
-						if (glm::distance(pTrigger->GetPosition(), potentialRelativePosition) >= (0.75f * TAB_TRIGGER_BUTTON_SIZE))
+						if (glm::distance(pTrigger->GetPosition(), potentialRelativePosition) >= (0.7f * TAB_TRIGGER_BUTTON_SIZE))
 						{
 							break;
 						}
