@@ -27,7 +27,7 @@
 const std::string serverURL = "https://userpages.uni-koblenz.de/~raphaelmenges/gtw-update";
 const std::string tmpZipName = "gtw_new_version.zip";
 const std::string tmpUnzipDirName = "gtw_new_version";
-const std::string gtwPath = "./Browse"; // path to GazeTheWeb-Browse folder, relative from bat file that calls the updater
+const std::string gtwPath = std::experimental::filesystem::current_path().generic_string() + "/Browse"; // path to GazeTheWeb-Browse folder, relative from bat file that calls the updater
 const long long exitSleepMS = 2000;
 
 // Callback for CURL to retrieve zip name
@@ -263,10 +263,11 @@ int main()
 	std::experimental::filesystem::remove_all(gtwPath.c_str());
 
 	// Create new empty folder
-	std::cout << "Install new version..." << std::endl;
+	std::cout << "Creating directory for new version..." << std::endl;
 	std::experimental::filesystem::create_directory(gtwPath.c_str());
 
 	// Move new version to given path (move, not copy)
+	std::cout << "Moving new version to directory..." << std::endl;
 	std::experimental::filesystem::rename(tmpUnzipPath.c_str(), gtwPath.c_str());
 
 	// ### RETURN ###
