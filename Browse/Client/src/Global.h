@@ -25,6 +25,7 @@ static const glm::vec4 TAB_DEFAULT_COLOR_ACCENT = glm::vec4(96.f / 255.f, 125.f 
 static const int TAB_ACCENT_COLOR_SAMPLING_POINTS = 100;
 static const float TAB_SCROLLING_SENSOR_WIDTH = 0.2f;
 static const float TAB_SCROLLING_SENSOR_HEIGHT = 0.1075f;
+static const float TAB_SCROLLING_DOWN_SENSOR_SCALE = 1.25f;
 static const float TAB_SCROLLING_SENSOR_PADDING = 0.025f;
 static const float TAB_TRIGGER_BUTTON_SIZE = 0.14f;
 static const float TAB_TRIGGER_BADGE_SIZE = 0.035f;
