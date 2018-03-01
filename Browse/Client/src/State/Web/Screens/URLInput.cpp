@@ -86,6 +86,13 @@ void URLInput::Activate(int tabId)
 
         // Remember activation
         _active = true;
+
+		// Reset layout button related stuff
+		eyegui::buttonUp(_pLayout, "layout", true);
+		eyegui::setElementActivity(_pLayout, "keyboard", true);
+		eyegui::setElementActivity(_pLayout, "bookmarks", true);
+		eyegui::setElementActivity(_pLayout, "complete", true);
+		eyegui::setElementActivity(_pLayout, "delete", true);
     }
 }
 
@@ -269,6 +276,9 @@ void URLInput::URLButtonListener::down(eyegui::Layout* pLayout, std::string id)
 		else if (id == "layout")
 		{
 			eyegui::setElementActivity(_pURLInput->_pLayout, "keyboard", false);
+			eyegui::setElementActivity(_pURLInput->_pLayout, "bookmarks", false);
+			eyegui::setElementActivity(_pURLInput->_pLayout, "complete", false);
+			eyegui::setElementActivity(_pURLInput->_pLayout, "delete", false);
 		}
 		else if (id == "layout_us_english")
 		{
@@ -354,6 +364,9 @@ void URLInput::URLButtonListener::up(eyegui::Layout* pLayout, std::string id)
 		if (id == "layout")
 		{
 			eyegui::setElementActivity(_pURLInput->_pLayout, "keyboard", true);
+			eyegui::setElementActivity(_pURLInput->_pLayout, "bookmarks", true);
+			eyegui::setElementActivity(_pURLInput->_pLayout, "complete", true);
+			eyegui::setElementActivity(_pURLInput->_pLayout, "delete", true);
 		}
 		else if (id == "extra_keys")
 		{
