@@ -50,6 +50,9 @@ EyetrackerInfo Connect(EyetrackerGeometry geometry)
 	// If server not running, try to start it
 	if (ret_connect != RET_SUCCESS)
 	{
+		// Increase connection timeout
+		iV_SetConnectionTimeout(10);
+
 		// Start myGaze server
 		iV_Start();
 
