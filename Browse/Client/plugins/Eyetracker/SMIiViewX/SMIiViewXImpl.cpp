@@ -3,11 +3,6 @@
 // Author: Raphael Menges (raphaelmenges@uni-koblenz.de)
 //============================================================================
 
-//============================================================================
-// Distributed under the Apache License, Version 2.0.
-// Author: Raphael Menges (raphaelmenges@uni-koblenz.de)
-//============================================================================
-
 // This is an implementation
 #define DLL_IMPLEMENTATION
 
@@ -80,6 +75,24 @@ EyetrackerInfo Connect(EyetrackerGeometry geometry)
 		iV_GetSystemInfo(&systemInfoData);
 		info.samplerate = systemInfoData.samplerate;
 
+		// Setup LabStreamingLayer
+		lsl::stream_info streamInfo(
+			"myViewXLSL",
+			"Gaze",
+			2, // must match with number of samples in SampleData structure
+			lsl::IRREGULAR_RATE, // otherwise will generate samples even if transmission paused (and somehow even gets the "real" samples, no idea how)
+			lsl::cf_double64, // must match with type of samples in SampleData structure
+			"source_id");
+		streamInfo.desc().append_child_value("manufacturer", "SensoMotoric Instruments GmbH");
+		lsl::xml_element channels = streamInfo.desc().append_child("channels");
+		channels.append_child("channel")
+			.append_child_value("label", "gazeX")
+			.append_child_value("unit", "screenPixels");
+		channels.append_child("channel")
+			.append_child_value("label", "gazeY")
+			.append_child_value("unit", "screenPixels");
+		eyetracker_global::SetupLabStream(streamInfo);
+
 		// Define a callback function for receiving samples
 		iV_SetSampleCallback(SampleCallbackFunction);
 	}
@@ -95,6 +108,9 @@ bool IsTracking()
 
 bool Disconnect()
 {
+	// Just terminate lab stream (not necessary to have done setup)
+	eyetracker_global::TerminateLabStream();
+
 	// Disable callbacks
 	iV_SetSampleCallback(NULL);
 
