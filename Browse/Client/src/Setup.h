@@ -32,15 +32,15 @@ namespace setup
 
 	// Window
 	static const bool	FULLSCREEN = false; // does not work in combination with eye tracker calibration
-	static const bool	MAXIMIZE_WINDOW = false | DEPLOYMENT | DEMO_MODE; // only implemented for Windows
+	static const bool	MAXIMIZE_WINDOW = true | DEPLOYMENT | DEMO_MODE; // only implemented for Windows
 	static const int	INITIAL_WINDOW_WIDTH = 1280;
 	static const int	INITIAL_WINDOW_HEIGHT = 720;
 
 	// Control TODO: move connect bools to config file
 	static const bool	CONNECT_OPEN_GAZE = false;
-	static const bool	CONNECT_SMI_IVIEWX = false;
-	static const bool	CONNECT_VI_MYGAZE = true | DEPLOYMENT;
-	static const bool	CONNECT_TOBII_EYEX = true;
+	static const bool	CONNECT_SMI_IVIEWX = true;
+	static const bool	CONNECT_VI_MYGAZE = false;
+	static const bool	CONNECT_TOBII_EYEX = false;
 	static const float	DURATION_BEFORE_INPUT = 1.f; // wait one second before accepting input
 	static const float	MAX_AGE_OF_USED_GAZE = 0.25f; // only accept gaze as input that is not older than one second (TODO: this is not used by filter but by master to determine when to stop taking gaze input as serious)
 	static const float	DURATION_BEFORE_SUPER_CALIBRATION = 30.f; // duration until recalibration is offered after receiving no gaze samples
@@ -62,7 +62,7 @@ namespace setup
 	static const float	EYEINPUT_DISTORT_GAZE_BIAS_Y = 32.f; // pixels
 
 	// Experiments
-	static const bool			ENABLE_EYEGUI_DRIFT_MAP_ACTIVATION = !DEMO_MODE;
+	static const bool			ENABLE_EYEGUI_DRIFT_MAP_ACTIVATION = false;
 	static const std::string	LAB_STREAM_OUTPUT_NAME = "GazeTheWebOutput";
 	static const std::string	LAB_STREAM_OUTPUT_SOURCE_ID = CLIENT_VERSION; // use client version as source id
 	static const std::string	LAB_STREAM_INPUT_NAME = "GazeTheWebInput"; // may be set to same value as LAB_STREAM_OUTPUT_NAME to receive own events for debugging purposes
@@ -72,7 +72,7 @@ namespace setup
 	static const double			INACTIVITY_SHUTDOWN_TIME = 60.0*60.0*3.0; // shutting down after three hours of inactivity (determined by the time the super calibration layout is visible, in seconds)
 
 	// Firebase
-	static const bool			FIREBASE_MAILING = !DEMO_MODE; // on/off switch for sending data to Firebase
+	static const bool			FIREBASE_MAILING = false; // on/off switch for sending data to Firebase
 	static const std::string	FIREBASE_API_KEY = "AIzaSyBMa9gSXsoDo27S7P959QZYf3rJBGDGEIA"; // API key for our Firebase
 	static const std::string	FIREBASE_PROJECT_ID = "mamem-phase2-fall17"; // Project Id of our Firebase
 	static const int			SOCIAL_RECORD_DIGIT_COUNT = 6;
