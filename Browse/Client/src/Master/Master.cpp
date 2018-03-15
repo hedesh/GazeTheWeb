@@ -1224,13 +1224,14 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 			case GLFW_KEY_0: { _pCefMediator->ShowDevTools(); break; }
 			// case GLFW_KEY_SPACE: { _upVoiceInput->StartAudioRecording(); break; }
 			// case GLFW_KEY_M: { PersistDriftGrid(PersistDriftGridReason::MANUAL); break; }
+			case GLFW_KEY_SPACE: { _upWeb->PushBackPointingEvaluationPipeline(PointingApproach::DRIFT_CORRECTION); }
         }
     }
 	else if (action == GLFW_RELEASE)
 	{
 		switch (key)
 		{
-			case GLFW_KEY_SPACE: { auto voiceAction = _upVoiceInput->EndAndProcessAudioRecording(); LogInfo("Retrieved VoiceAction: ", static_cast<int>(voiceAction)); }
+			// case GLFW_KEY_SPACE: { auto voiceAction = _upVoiceInput->EndAndProcessAudioRecording(); LogInfo("Retrieved VoiceAction: ", static_cast<int>(voiceAction)); }
 		}
 	}
 }
