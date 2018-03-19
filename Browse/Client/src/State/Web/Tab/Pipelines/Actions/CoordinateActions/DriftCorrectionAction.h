@@ -38,7 +38,7 @@ public:
 protected:
 
 	// States of zooming
-	enum class State { ORIENTATE, ZOOM, WAIT, DEBUG };
+	enum class State { ORIENTATE, WAIT_FOR_ZOOM, ZOOM, ESTIMATE, DEBUG };
 
 	// Sample data
 	struct SampleData
@@ -68,13 +68,17 @@ protected:
 	const float MOVE_DURATION = 0.5f;
 
 	// Speed of zoom
-	const float ZOOM_SPEED = 0.25f;
+	const float ORIENTATION_SPEED = 0.35f;
+	const float ZOOM_SPEED = 1.0f;
 
 	// Maximum log zoom level of orientation phase
 	const float MAX_ORIENTATION_LOG_ZOOM = 0.75f;
 
 	// Drift correction zoom level (must be lower than MAX_LOG_ZOOM)
 	const float MAX_DRIFT_CORRECTION_LOG_ZOOM = 0.5f;
+
+	// Time after zooming to wait for gaze to calm down
+	float CALM_DOWN_DURATION = 0.5f;
 
     // Coordinate of center of zooming in relative page coordinates (not WebView, page!)
     glm::vec2 _relativeZoomCoordinate; // aka zoom coordinate
@@ -102,11 +106,11 @@ protected:
 	// Do dimming
 	bool _doDimming = true;
 
+	// Wait time to calm down
+	float _calmDownTime = 0.f;
+
 	// Datas saved before drift correction zooming starts
 	SampleData _sampleData;
-
-	// Time after zooming to wait for gaze to calm down
-	float _gazeCalmDownTime = 0.1f;
 
 	// State of action
 	State _state = State::ORIENTATE;

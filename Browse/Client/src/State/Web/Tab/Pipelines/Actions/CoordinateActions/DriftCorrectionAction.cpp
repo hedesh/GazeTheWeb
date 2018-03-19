@@ -45,8 +45,8 @@ bool DriftCorrectionAction::Update(float tpf, const std::shared_ptr<const TabInp
 		pageCoordinate(_logZoom, _relativeZoomCoordinate, _relativeCenterOffset, rCoordinate);
 	};
 
-	// Current raw! gaze (filtered here manually)
-	glm::vec2 relativeGazeCoordinate = glm::vec2(spInput->webViewRelativeRawGazeX, spInput->webViewRelativeRawGazeY); // relative WebView space
+	// Current gaze
+	glm::vec2 relativeGazeCoordinate = glm::vec2(spInput->webViewRelativeGazeX, spInput->webViewRelativeGazeY); // relative WebView space
 
 	// ### UPDATE ZOOM SPEED, ZOOM CENTER AND CENTER OFFSET ###
 
@@ -79,7 +79,7 @@ bool DriftCorrectionAction::Update(float tpf, const std::shared_ptr<const TabInp
 				_deviation = glm::min(1.f, glm::max(pixelDelta / glm::max(_pTab->GetWebViewResolutionX(), _pTab->GetWebViewResolutionY()), _deviation));
 
 				// If at the moment a high deviation is given, try to zoom out to give user more overview
-				zoomSpeed = ZOOM_SPEED - glm::min(1.f, DEVIATION_WEIGHT * _deviation); // TODO weight deviation more intelligent
+				zoomSpeed = ORIENTATION_SPEED - glm::min(1.f, DEVIATION_WEIGHT * _deviation); // TODO weight deviation more intelligent
 			}
 			else // first frame of execution
 			{
@@ -102,9 +102,9 @@ bool DriftCorrectionAction::Update(float tpf, const std::shared_ptr<const TabInp
 			break;
 		}
 		case State::ZOOM: // zoom phase
-			zoomSpeed = 0.25f;
+			zoomSpeed = ZOOM_SPEED;
 			break;
-		default: // in fact: debug phase
+		default:
 			zoomSpeed = 0.f;
 			break;
 		}
@@ -147,13 +147,23 @@ bool DriftCorrectionAction::Update(float tpf, const std::shared_ptr<const TabInp
 		{
 			if (_logZoom <= MAX_ORIENTATION_LOG_ZOOM)
 			{
+				// End orientation
+				_state = State::WAIT_FOR_ZOOM;
+				_calmDownTime = CALM_DOWN_DURATION;
+			}
+			break;
+		}
+		case State::WAIT_FOR_ZOOM:
+		{
+			_calmDownTime -= tpf;
+			if (_calmDownTime <= 0)
+			{
 				// Store sample from that time
 				_sampleData.logZoom = _logZoom;
 				_sampleData.relativeGazeCoordinate = relativeGazeCoordinate;
 				_sampleData.relativeZoomCoordinate = _relativeZoomCoordinate;
 				_sampleData.relativeCenterOffset = _relativeCenterOffset;
 
-				// End orientation
 				_state = State::ZOOM;
 			}
 			break;
@@ -162,18 +172,19 @@ bool DriftCorrectionAction::Update(float tpf, const std::shared_ptr<const TabInp
 		{
 			if (_logZoom <= MAX_DRIFT_CORRECTION_LOG_ZOOM)
 			{
-				_state = State::WAIT;
+				_state = State::ESTIMATE;
+				_calmDownTime = CALM_DOWN_DURATION;
 			}
 			break;
 		}
-		case State::WAIT:
+		case State::ESTIMATE:
 		{
-			_gazeCalmDownTime -= tpf;
-			if (_gazeCalmDownTime < 0)
+			_calmDownTime -= tpf;
+			if (_calmDownTime <= 0)
 			{
 				// TODO check whether drift is significant or can be ignored (for very good calibration)
 
-				// Use filtered gaze here, not raw one (TODO: fixation based filtering might be a bad idea, as here something moving is fixated and not a static position)
+				// Use filtered gaze here (TODO: fixation based filtering might be a bad idea, as here something moving is fixated and not a static position)
 				glm::vec2 relativeFilteredGazeCoordinate = glm::vec2(spInput->webViewRelativeGazeX, spInput->webViewRelativeGazeY); // relative WebView space
 
 				// Current pixel gaze coordinate on page with values as sample was taken
@@ -192,6 +203,9 @@ bool DriftCorrectionAction::Update(float tpf, const std::shared_ptr<const TabInp
 				float radius = glm::length(drift) / ((1.f/_logZoom) - (1.f/_sampleData.logZoom));
 				glm::vec2 fixation = (glm::normalize(drift) * radius) + samplePixelZoomCoordinate;
 				SetOutputValue("coordinate", fixation);
+
+				// Print drift
+				LogInfo("DriftX = ", (glm::normalize(drift) * radius).x, " DriftY = ", (glm::normalize(drift) * radius).y);
 
 				// Return success
 				finished = true;
@@ -276,5 +290,5 @@ void DriftCorrectionAction::Deactivate()
 
 void DriftCorrectionAction::Abort()
 {
-
+	// Nothing to do
 }
