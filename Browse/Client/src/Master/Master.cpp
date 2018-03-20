@@ -1228,7 +1228,7 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 	{
 		switch (key)
 		{
-			case GLFW_KEY_SPACE: { auto voiceAction = _upVoiceInput->EndAndProcessAudioRecording(); LogInfo("Retrieved VoiceAction: ", static_cast<int>(voiceAction)); }
+			// case GLFW_KEY_SPACE: { auto voiceAction = _upVoiceInput->EndAndProcessAudioRecording(); LogInfo("Retrieved VoiceAction: ", static_cast<int>(voiceAction)); }
 		}
 	}
 }
