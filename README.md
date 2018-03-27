@@ -22,7 +22,7 @@ Visit the [**wiki**](https://github.com/MAMEM/GazeTheWeb/wiki) for troubleshooti
 
 ## Public
 * Winner of the TPG Accessibility Challenge Judges' Award at the [Web For All 2017](http://www.w4a.info/2016/2017) in Perth, Australia. Read the corresponding paper [here](Browse/media/W4A17-p19-WeST.pdf).
-* Honourable mention for the technical approach at the [WWW 2017](http://www2017.com.au) conference in Perth, Australia. Read the corresponding paper [here](Browse/media/WWW17-p219-WeST).
+* Honourable mention for the technical approach at the [WWW 2017](http://www2017.com.au) conference in Perth, Australia. Read the corresponding paper [here](Browse/media/WWW17-p219-WeST.pdf).
 * Third place in the Digital Imagination Challenge by Unitymedia. See [here](https://twitter.com/Unitymedia_News/status/964441841943891968).
 
 ## Research
