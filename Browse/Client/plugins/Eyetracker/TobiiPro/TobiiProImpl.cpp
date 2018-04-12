@@ -3,6 +3,12 @@
 // Author: Raphael Menges (raphaelmenges@uni-koblenz.de)
 //============================================================================
 
+// Basic implementation of the connection to the Tobii Pro SDK
+// Limitations:
+// - License Key is not set (must be done via TobiiProEyetrackerManager)
+// - Gaze data is provided in relative screen space. Conversion assumes GTW to be executed on primary monitor
+// - Calibration not implemented (custom stimulus required)
+
 // This is an implementation
 #define DLL_IMPLEMENTATION
 
