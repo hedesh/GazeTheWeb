@@ -118,19 +118,22 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
     glfwInit();
     LogInfo("..done.");
 
-    // Window mode and size
+    // Window mode and size (assumption: use primary monitor, only)
     GLFWmonitor* usedMonitor = NULL;
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode * mode = glfwGetVideoMode(monitor);
+	_monitorWidth = mode->width;
+	_monitorHeight = mode->height;
     if (setup::FULLSCREEN)
     {
         LogInfo("Fullscreen mode");
-        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-        const GLFWvidmode * mode = glfwGetVideoMode(monitor);
-        _width = mode->width;
-        _height = mode->height;
+        _width = _monitorWidth;
+        _height = _monitorHeight;
         usedMonitor = monitor;
     }
     else
     {
+		
         LogInfo("Windowed mode");
     }
 
@@ -874,7 +877,9 @@ void Master::Loop()
 			windowX,
 			windowY,
 			_width,
-			_height); // returns whether gaze was used (or emulated by mouse)
+			_height,
+			_monitorWidth,
+			_monitorHeight); // returns whether gaze was used (or emulated by mouse)
 
 		// Record how long super calibration layout has been visible
 		if (eyegui::isLayoutVisible(_pSuperCalibrationLayout))
@@ -1425,6 +1430,9 @@ void Master::PushEyetrackerStatusThreadJob::Execute()
 			break;
 		case EyeTrackerDevice::TOBII_EYEX:
 			_pMaster->PushNotificationByKey("notification:eye_tracker_status:connected_tobii_eyex", MasterNotificationInterface::Type::SUCCESS, false);
+			break;
+		case EyeTrackerDevice::TOBII_PRO:
+			_pMaster->PushNotificationByKey("notification:eye_tracker_status:connected_tobii_pro", MasterNotificationInterface::Type::SUCCESS, false);
 			break;
 		default:
 			_pMaster->PushNotificationByKey("notification:eye_tracker_status:connected", MasterNotificationInterface::Type::SUCCESS, false);

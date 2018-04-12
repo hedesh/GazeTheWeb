@@ -413,6 +413,10 @@ private:
 
 	// Duration super calibration layout is visible (after long time, shut down the system)
 	double _recalibrationLayoutTime = 0.0;
+
+	// Monitor resolution
+	int _monitorWidth = -1;
+	int _monitorHeight = -1;
 };
 
 #endif // MASTER_H_
