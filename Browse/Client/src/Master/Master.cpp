@@ -1257,7 +1257,7 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 					{
 						_upWeb->DemoModeReset();
 						_demoModeReset = true;
-						eyegui::hitButton(_pSuperLayout, "pause");
+						eyegui::buttonDown(_pSuperLayout, "pause");
 						PushNotification(u"Demo Mode Reset", MasterNotificationInterface::Type::SUCCESS, false);
 						LogInfo("Demo Mode Reset");
 					}
