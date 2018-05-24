@@ -54,6 +54,12 @@ Web::Web(Master* pMaster, Mediator* pCefMediator, bool dataTransfer) : State(pMa
     eyegui::registerButtonListener(_pTabOverviewLayout, "edit_url", _spWebButtonListener);
 	eyegui::registerButtonListener(_pTabOverviewLayout, "bookmark_tab", _spWebButtonListener);
 
+	// If firebase mailing is not activated, no "no data transfer" button is required
+	if (!setup::FIREBASE_MAILING)
+	{
+		eyegui::setElementActivity(_pWebLayout, "no_data_transfer", false, false);
+	}
+
 	// Regular expression for URL validation
 	_upURLregex = std::make_unique<std::regex>(
 		_pURLregexExpression,

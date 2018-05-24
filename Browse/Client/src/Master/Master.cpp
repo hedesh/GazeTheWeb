@@ -377,12 +377,12 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
     // ### HOMEPAGE ###
 	// _upWeb->AddTab("https://developer.mozilla.org/en-US/docs/Web/CSS/overflow");
 	// _upWeb->AddTab("http://html5-demos.appspot.com/static/fullscreen.html");
-	// _upWeb->AddTab(std::string(CONTENT_PATH) + "/websites/index.html");
+	// _upWeb->AddTab(std::string(CONTENT_PATH) + "/websites/test/index.html");
 	// _upWeb->AddTab(_upSettings->GetHomepage());
 
 	if (setup::DEMO_MODE)
 	{
-		_upWeb->AddTab(_upSettings->GetHomepage());
+		_upWeb->AddTab(std::string(CONTENT_PATH) + "/websites/demo/index.html");
 	}
 	else
 	{
