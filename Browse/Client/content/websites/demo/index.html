@@ -2,9 +2,6 @@
 	<head>
 		<title>Start Page</title>
 		<link rel="shortcut icon" type="image/png" href="favicon.png"/>
-		
-		<!-- SCRIPTING -->
-		<script src="jquery-3.3.1.min.js"></script>
 	
 		<!-- STYLING -->
 		<style>
@@ -82,7 +79,14 @@
 			<img src="gtw-logo.svg" width="25%">
 			<p style="margin: 1%;">Explore the Web with your eyes!</p>
 			<br/>
-			<iframe src="https://duckduckgo.com/search.html?prefill=Search DuckDuckGo" style="overflow:hidden;margin:0;padding:0;width:408px;height:40px;" frameborder="0"></iframe>
+			<form name="search" action="https://www.duckduckgo.com/">
+				<div class="form-group">
+					<div class="input-group">
+						<input type="search" class="form-control" placeholder="Search DuckDuckGo" name="q"/>
+						<input type="submit"/>
+					</div>
+				</div>
+			</form>
 		</div>
 		
 		<!-- FOOTER -->
