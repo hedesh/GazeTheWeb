@@ -417,6 +417,9 @@ private:
 	// Monitor resolution
 	int _monitorWidth = -1;
 	int _monitorHeight = -1;
+
+	// Bool to indicate demo mode reset which is handled in the update loop
+	bool _demoModeReset = false;
 };
 
 #endif // MASTER_H_

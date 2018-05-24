@@ -382,7 +382,8 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 
 	if (setup::DEMO_MODE)
 	{
-		_upWeb->AddTab(std::string(CONTENT_PATH) + "/websites/demo/index.html");
+		// Perform initial reset, includes tab setup
+		_upWeb->DemoModeReset();
 	}
 	else
 	{
@@ -1076,6 +1077,28 @@ void Master::Loop()
             _currentState = nextState;
         }
 
+		// If demo mode reset, just reset to Web
+		if (_demoModeReset)
+		{
+			// deactivate current state
+			switch (_currentState)
+			{
+			case StateType::WEB:
+				_upWeb->Deactivate();
+				break;
+			case StateType::SETTINGS:
+				_upSettings->Deactivate();
+				break;
+			}
+
+			// Activate Web state
+			_upWeb->Activate();
+			_currentState = StateType::WEB;
+
+			// Remember to have it performed
+			_demoModeReset = false;
+		}
+
 		// Enable depth test again
 		glEnable(GL_DEPTH_TEST);
 
@@ -1216,7 +1239,7 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
     {
         switch (key)
         {
-            case GLFW_KEY_ESCAPE: { Exit(); break; }
+			case GLFW_KEY_ESCAPE: { if (!setup::DEMO_MODE) { Exit();} break; }
             case GLFW_KEY_TAB:  { eyegui::hitButton(_pSuperLayout, "pause"); break; }
             case GLFW_KEY_ENTER: { _enterKeyPressed = true; break; }
 			// case GLFW_KEY_S: { LabStreamMailer::instance().Send("42"); break; } // TODO: testing
@@ -1224,9 +1247,22 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 			// case GLFW_KEY_6: { _upWeb->PushBackPointingEvaluationPipeline(PointingApproach::MAGNIFICATION); break; }
 			// case GLFW_KEY_7: { _upWeb->PushBackPointingEvaluationPipeline(PointingApproach::FUTURE); break; }
 			// case GLFW_KEY_9: { _pCefMediator->Poll(); break; } // poll everything
-			case GLFW_KEY_0: { _pCefMediator->ShowDevTools(); break; }
+			case GLFW_KEY_0: { if (!setup::DEPLOYMENT && !setup::DEMO_MODE) { _pCefMediator->ShowDevTools(); } break; }
 			// case GLFW_KEY_SPACE: { _upVoiceInput->StartAudioRecording(); break; }
 			// case GLFW_KEY_M: { PersistDriftGrid(PersistDriftGridReason::MANUAL); break; }
+			case GLFW_KEY_D: {
+				if (mods & GLFW_MOD_CONTROL)
+				{
+					if (setup::DEMO_MODE)
+					{
+						_upWeb->DemoModeReset();
+						_demoModeReset = true;
+						eyegui::hitButton(_pSuperLayout, "pause");
+						PushNotification(u"Demo Mode Reset", MasterNotificationInterface::Type::SUCCESS, false);
+						LogInfo("Demo Mode Reset");
+					}
+				}
+				break; }
         }
     }
 	else if (action == GLFW_RELEASE)
