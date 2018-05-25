@@ -418,8 +418,8 @@ void Web::DemoModeReset()
 	_upBookmarkManager->ClearBookmarksAndDeleteFile();
 	_upBookmarkManager->AddBookmark("west.uni-koblenz.de");
 	_upBookmarkManager->AddBookmark("www.gazetheweb.com");
+	_upBookmarkManager->AddBookmark("www.cebit.de/en");
 	_upBookmarkManager->AddBookmark("www.mamem.eu");
-	_upBookmarkManager->AddBookmark("www.duckduckgo.com");
 	_upBookmarkManager->AddBookmark("www.youtube.com");
 	_upBookmarkManager->AddBookmark("C:/wikipedia-simple-html/simple/index.html");
 	
