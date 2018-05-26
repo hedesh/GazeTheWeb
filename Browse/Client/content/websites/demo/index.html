@@ -10,14 +10,14 @@
 				--tooltip_bg:rgba(255,255,255,0.5);
 			}
 			
+			* { margin:0; padding:0; }
+			
 			body {
 				font-family: Arial, Helvetica, sans-serif;
 				background-image: url("background.jpg");
 				background-position: center;
 				background-repeat: no-repeat;
 				background-size: cover;
-				margin: 0;
-				padding: 0;
 			}
 			
 			.center {
@@ -33,15 +33,15 @@
 			
 			.search-box {
 				margin: auto;
-				width: 40%;
+				padding: 8px;
+				width: 35%;
 				background-color: #de5833;
 				border-radius: 10px;
 				box-shadow: 0px 0px 10px 0px #FFFFFF;
 			}
 			
 			.search-button {
-				padding: 12px 20px;
-				margin: 8px 0;
+				padding: 8px;
 				background-color: #de5833;
 				color: white;
 				border-radius: 10px;
@@ -49,39 +49,60 @@
 				border-style: solid;
 				border-color: white;
 				text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-				width: 40%;
+				width: 45%;
 				font-size: 11pt;
+				cursor: pointer;
 			}
 			
 			.search-text {
-				padding: 12px 20px;
-				margin: 8px 0;
+				padding: 8px;
 				box-sizing: border-box;
-				width: 55%;
+				width: 50%;
 				border-radius: 10px;
 				border: 0px;
 			}
 			
 			.footer {
 				position: fixed;
-				margin: 0;
-				padding: 0;
 				bottom: 0%;
 				width: 100%;
-				height: 20%;
-				background-color: #ACACAC;
-				box-shadow: 0px 0px 10px 0px #111111;
+				height: 10%;
+				background-color: var(--tooltip_bg);
+				align-items: center;
+				//display:flex;
+				text-align: center;
+			}
+			
+			.footer ul {
+				display: table;
+				list-style: none;
+				width: 100%;
+			}
+			
+			.footer li {
+				width: 10%;
+				display: table-cell;
+			}
+			
+			.footer li a {
+				display: block;
+			}
+			
+			.footer li a img {
+				max-width: 100%;
+				max-height: 100%;
+				position: absolute;
 			}
 			
 			.tooltip {
 				position: fixed;
 				margin: 1%;
 				padding: 1%;
-				width: 10%;
-				height: 5%;
+				width: 12%;
+				height: 7%;
 				color: black;
 				word-wrap: break-word;
-				font-size: large;
+				font-size: 12pt;
 				background-color: var(--tooltip_bg);
 				box-shadow: 0px 0px 10px 0px #111111;
 				border-radius: 5px;
@@ -89,10 +110,11 @@
 				align-items: center;
 				justify-content:center;
 				text-align: center;
+				text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
 			}
 			
 			.pause {
-				top: 0%;
+				top: 2%;
 				left: 1%;
 			}
 			
@@ -105,8 +127,8 @@
 				width: 0;
 				position: absolute;
 				border-right-color: var(--tooltip_bg);
-				border-width: 30px;
-				margin-top: -30px;
+				border-width: 15px;
+				margin-top: -15px;
 			}
 			
 			.recalibration {
@@ -136,10 +158,11 @@
 		<!-- FOOTER -->
 		<div class="footer">
 			<ul>
-				<li>hello</li>
-				<li>hello</li>
-				<li>hello</li>
-				<li>hello</li>
+				<li><a href="http://www.mamem.eu"><img src="mamem-logo.png"></a></li>
+				<li><a href="https://west.uni-koblenz.de"><img src="west-logo.png"></a></li>
+				<li><a href="www.mamem.eu"><img src="mamem-logo.png"></a></li>
+				<li><a href="www.mamem.eu"><img src="mamem-logo.png"></a></li>
+				<li><a href="www.mamem.eu"><img src="mamem-logo.png"></a></li>
 			</ul>
 		</div>
 		
