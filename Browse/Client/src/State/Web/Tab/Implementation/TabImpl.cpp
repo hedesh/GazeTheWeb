@@ -115,6 +115,7 @@ Tab::Tab(
 	if (setup::DEMO_MODE)
 	{
 		eyegui::setContentOfTextBlock(_pPanelLayout, "version_info", "Demo Mode");
+		eyegui::setElementActivity(_pPanelLayout, "dashboard", false, false);
 	}
 	else
 	{
