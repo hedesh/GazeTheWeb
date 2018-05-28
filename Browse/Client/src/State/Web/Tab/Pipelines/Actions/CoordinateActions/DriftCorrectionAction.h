@@ -68,13 +68,13 @@ protected:
 	const float MOVE_DURATION = 0.5f;
 
 	// Speed of zoom
-	const float ZOOM_SPEED = 0.2f;
+	const float ZOOM_SPEED = 0.25f;
 
 	// Maximum log zoom level of orientation phase
-	const float MAX_ORIENTATION_LOG_ZOOM = 0.7f;
+	const float MAX_ORIENTATION_LOG_ZOOM = 0.5f;
 
 	// Drift correction zoom level (must be lower than MAX_LOG_ZOOM)
-	const float MAX_DRIFT_CORRECTION_LOG_ZOOM = 0.5f;
+	const float MAX_DRIFT_CORRECTION_LOG_ZOOM = 0.3f;
 
     // Coordinate of center of zooming in relative page coordinates (not WebView, page!)
     glm::vec2 _relativeZoomCoordinate; // aka zoom coordinate
