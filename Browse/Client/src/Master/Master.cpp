@@ -526,14 +526,15 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 
     // ### OTHER ###
 
-	// Maximize window if required
+	// Treat window
 #ifdef _WIN32 // Windows
-	if (!setup::FULLSCREEN && setup::MAXIMIZE_WINDOW)
-	{
-		// Fetch handle to window from GLFW
-		auto Hwnd = glfwGetWin32Window(_pWindow);
 
-		/*
+	// Fetch handle to window from GLFW
+	auto Hwnd = glfwGetWin32Window(_pWindow);
+
+	// Remove window decoration
+	if (!setup::FULLSCREEN && setup::REMOVE_WINDOW_DECORATION)
+	{
 		// Remove frame from window
 		LONG lStyle = GetWindowLong(Hwnd, GWL_STYLE);
 		lStyle &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZE | WS_MAXIMIZE | WS_SYSMENU);
@@ -543,11 +544,15 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 		LONG lExStyle = GetWindowLong(Hwnd, GWL_EXSTYLE);
 		lExStyle &= ~(WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE);
 		SetWindowLong(Hwnd, GWL_EXSTYLE, lExStyle);
-		*/
+	}
 
+	// Maximize window
+	if (!setup::FULLSCREEN && setup::MAXIMIZE_WINDOW)
+	{
 		// Maximize window
 		SendMessage(Hwnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
 	}
+
 #endif
 
     // Time
@@ -1242,6 +1247,7 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 			case GLFW_KEY_ESCAPE: { if (!setup::DEMO_MODE) { Exit();} break; }
             case GLFW_KEY_TAB:  { eyegui::hitButton(_pSuperLayout, "pause"); break; }
             case GLFW_KEY_ENTER: { _enterKeyPressed = true; break; }
+			case GLFW_KEY_SPACE: { _enterKeyPressed = true; break; }
 			// case GLFW_KEY_S: { LabStreamMailer::instance().Send("42"); break; } // TODO: testing
 			case GLFW_KEY_R: { ShowSuperCalibrationLayout(); break; } // just show the super calibration layout
 			// case GLFW_KEY_6: { _upWeb->PushBackPointingEvaluationPipeline(PointingApproach::MAGNIFICATION); break; }

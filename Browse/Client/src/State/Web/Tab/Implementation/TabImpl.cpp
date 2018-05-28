@@ -116,6 +116,8 @@ Tab::Tab(
 	{
 		eyegui::setContentOfTextBlock(_pPanelLayout, "version_info", "Demo Mode");
 		eyegui::setElementActivity(_pPanelLayout, "dashboard", false, false);
+		eyegui::setElementActivity(_pPanelLayout, "zoom", false, false);
+		eyegui::setElementActivity(_pPanelLayout, "selection", false, false);
 	}
 	else
 	{

@@ -11,6 +11,7 @@
 #include "src/Utils/Texture.h"
 #include "src/Utils/MakeUnique.h"
 #include "src/Arguments.h"
+#include "src/ContentPath.h"
 #include <algorithm>
 
 
@@ -409,14 +410,14 @@ void Web::DemoModeReset()
 {
 	// Tabs
 	RemoveAllTabs();
-	AddTab(std::string(CONTENT_PATH) + "/websites/demo/index.html");
+	AddTab(RUNTIME_CONTENT_PATH + "/websites/demo/index.html");
 
 	// History
 	_upHistoryManager->ClearHistoryAndDeleteFile();
 
 	// Bookmarks
 	_upBookmarkManager->ClearBookmarksAndDeleteFile();
-	_upBookmarkManager->AddBookmark("west.uni-koblenz.de");
+	_upBookmarkManager->AddBookmark("west.uni-koblenz.de/en");
 	_upBookmarkManager->AddBookmark("www.gazetheweb.com");
 	_upBookmarkManager->AddBookmark("www.cebit.de/en");
 	_upBookmarkManager->AddBookmark("www.mamem.eu");

@@ -4,14 +4,14 @@
 //============================================================================
 
 #include "ClickPipeline.h"
-#include "src/State/Web/Tab/Pipelines/Actions/CoordinateActions/MagnificationCoordinateAction.h"
+#include "src/State/Web/Tab/Pipelines/Actions/CoordinateActions/DriftCorrectionAction.h"
 #include "src/State/Web/Tab/Pipelines/Actions/LinkNavigationAction.h"
 
 ClickPipeline::ClickPipeline(TabInteractionInterface* pTab) : Pipeline(pTab)
 {
     // Push back magnification coordinate action
-	std::shared_ptr<MagnificationCoordinateAction> spMagnificationCoordinateAction = std::make_shared<MagnificationCoordinateAction>(_pTab);
-	_actions.push_back(spMagnificationCoordinateAction);
+	std::shared_ptr<DriftCorrectionAction> spDriftCorrectionAction = std::make_shared<DriftCorrectionAction>(_pTab);
+	_actions.push_back(spDriftCorrectionAction);
 
 	// Push back link navigation action
 	std::shared_ptr<LinkNavigationAction> spLinkNavigationAction = std::make_shared<LinkNavigationAction>(_pTab);
@@ -19,7 +19,7 @@ ClickPipeline::ClickPipeline(TabInteractionInterface* pTab) : Pipeline(pTab)
 
     // Connect actions
     std::unique_ptr<ActionConnector> upConnector =
-        std::unique_ptr<ActionConnector>(new ActionConnector(spMagnificationCoordinateAction, spLinkNavigationAction));
+        std::unique_ptr<ActionConnector>(new ActionConnector(spDriftCorrectionAction, spLinkNavigationAction));
     upConnector->ConnectVec2("coordinate", "coordinate");
     _connectors.push_back(std::move(upConnector));
 }
