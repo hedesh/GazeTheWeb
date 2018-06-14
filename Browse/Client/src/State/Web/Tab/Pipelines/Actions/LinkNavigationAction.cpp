@@ -50,7 +50,7 @@ bool LinkNavigationAction::Update(float tpf, const std::shared_ptr<const TabInpu
             {
 				// Get coordinate in CEFPixel space
                 glm::vec2 linkCoordinate = sp->GetRects().front().Center();
-				CEFPixelX = linkCoordinate.x - scrollingX;
+				CEFPixellX = linkCoordinate.x - scrollingX;
 				CEFPixelY = linkCoordinate.y - scrollingY;
             }
         }
