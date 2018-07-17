@@ -1,6 +1,7 @@
+# GazeTheWeb
+
 <img align="right" src="Browse/media/Award.jpg"/>
 
-# GazeTheWeb
 Software to access the Web using eyes and mind.
 
 Download latest release [**here**](https://github.com/MAMEM/GazeTheWeb/releases/latest).
