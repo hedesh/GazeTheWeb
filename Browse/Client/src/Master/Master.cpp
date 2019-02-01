@@ -377,6 +377,7 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 	// _upWeb->AddTab(std::string(CONTENT_PATH) + "/websites/index.html");
 	// _upWeb->AddTab(_upSettings->GetHomepage());
 
+	/*
 	if (setup::DEMO_MODE)
 	{
 		_upWeb->AddTab(_upSettings->GetHomepage());
@@ -391,6 +392,9 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 		URL += "project_id=" + parameters.projectId;
 		_upWeb->AddTab(URL);
 	}
+	*/
+
+	_upWeb->AddTab("www.hedeshy.com/TGSBoard", true); // TODO some welcome page
 
     // ### SUPER LAYOUT ###
 
@@ -1222,6 +1226,9 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 			case GLFW_KEY_0: { _pCefMediator->ShowDevTools(); break; }
 			// case GLFW_KEY_SPACE: { _upVoiceInput->StartAudioRecording(); break; }
 			// case GLFW_KEY_M: { PersistDriftGrid(PersistDriftGridReason::MANUAL); break; }
+			case GLFW_KEY_1: { _upWeb->RemoveAllTabs(); _upWeb->AddTab("www.hedeshy.com/TGSBoard", true); break; }
+			case GLFW_KEY_2: { _upWeb->RemoveAllTabs(); _upWeb->AddTab("www.hedeshy.com/eyeSwipe", true); break; }
+			case GLFW_KEY_3: { _upWeb->RemoveAllTabs(); _upWeb->AddTab("www.hedeshy.com/dwell", true); break; }
         }
     }
 	else if (action == GLFW_RELEASE)

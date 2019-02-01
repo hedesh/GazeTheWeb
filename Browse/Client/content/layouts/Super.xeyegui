@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <layout style="default">
 	<grid showbackground="true" style="pause_background">
-		<row size="16%">
+		<row size="0%">
 			<column size="9%">
 				<stack showbackground="true" style="default_noback" backgroundsrc="graphics/PauseBackground.png" backgroundalignment="stretched">
 					<circlebutton border="7%" switch="true" icon="icons/GlobalPause.png" desckey="pause:pause" id="pause" style="pause"/>
@@ -9,7 +9,7 @@
 			</column>
 			<column size="91%"/>
 		</row>
-		<row size="84%">
+		<row size="100%">
 			<column size="100%"/>
 		</row>
 	</grid>

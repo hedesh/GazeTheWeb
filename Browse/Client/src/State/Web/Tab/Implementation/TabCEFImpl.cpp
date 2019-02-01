@@ -161,10 +161,13 @@ bool Tab::IsFaviconAlreadyAvailable(std::string img_url)
 
 void Tab::AddDOMTextInput(int id)
 {
+	
 	std::shared_ptr<DOMTextInput> spNode = std::make_shared<DOMTextInput>(id, this);
 
 	// Add node to ID->node map
 	_TextInputMap.emplace(id, spNode);
+
+	/*
 
 	// Create DOMTrigger
 	std::unique_ptr<TextInputTrigger> upDOMTrigger = std::unique_ptr<TextInputTrigger>(new TextInputTrigger(this, _triggers, spNode));
@@ -177,6 +180,7 @@ void Tab::AddDOMTextInput(int id)
 
 	// Place trigger in map
 	_textInputTriggers.emplace(id, std::move(upDOMTrigger));
+	*/
 }
 
 void Tab::AddDOMLink(int id)

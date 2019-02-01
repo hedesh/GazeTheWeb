@@ -2,16 +2,16 @@
 <layout style="default">
     <grid style="tab_panel">
     	<row size="100%">
-    		<column size="9.375%">
+    		<column size="0%">
     			<blank/> <!-- reserved for Web -->
     		</column>
-    		<column size="90.625%">
+    		<column size="100%">
     			<grid>
     				<row size="100%">
-	    				<column size="90%">
+	    				<column size="100%">
 	    					<blank id="web_view"/> <!-- reserved for WebView rendering -->
     					</column>
-    					<column size="10%">
+    					<column size="0%">
     						<stack showbackground="true">
 								<picture style="default_noback" src="icons/TabIconNotFound.png" id="icon" relativescale="10%" border="10%"/>
 			  					<stack showbackground="false" separator="0.1%">
