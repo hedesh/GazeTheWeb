@@ -43,9 +43,9 @@ namespace setup
 	static const bool	CONNECT_TOBII_EYEX = true;
 	static const float	DURATION_BEFORE_INPUT = 1.f; // wait one second before accepting input
 	static const float	MAX_AGE_OF_USED_GAZE = 0.25f; // only accept gaze as input that is not older than one second (TODO: this is not used by filter but by master to determine when to stop taking gaze input as serious)
-	static const float	DURATION_BEFORE_SUPER_CALIBRATION = 30.f; // duration until recalibration is offered after receiving no gaze samples
+	static const float	DURATION_BEFORE_SUPER_CALIBRATION = 3000.f; // duration until recalibration is offered after receiving no gaze samples
 	static const bool	PAUSED_AT_STARTUP = false | DEMO_MODE;
-	static const bool	SUPER_CALIBRATION_AT_STARTUP =  DEPLOYMENT && !DEMO_MODE;
+	static const bool	SUPER_CALIBRATION_AT_STARTUP = false; // DEPLOYMENT && !DEMO_MODE;
 	static const float	LINK_CORRECTION_MAX_PIXEL_DISTANCE = 5.f;
 	static const int	TEXT_SELECTION_MARGIN = 4; // area which is selected before / after zoom coordinate in CEFPixels
 
@@ -72,7 +72,7 @@ namespace setup
 	static const double			INACTIVITY_SHUTDOWN_TIME = 60.0*60.0*3.0; // shutting down after three hours of inactivity (determined by the time the super calibration layout is visible, in seconds)
 
 	// Firebase
-	static const bool			FIREBASE_MAILING = !DEMO_MODE; // on/off switch for sending data to Firebase
+	static const bool			FIREBASE_MAILING = false; // !DEMO_MODE; // on/off switch for sending data to Firebase
 	static const std::string	FIREBASE_API_KEY = "AIzaSyBMa9gSXsoDo27S7P959QZYf3rJBGDGEIA"; // API key for our Firebase
 	static const std::string	FIREBASE_PROJECT_ID = "mamem-phase2-fall17"; // Project Id of our Firebase
 	static const int			SOCIAL_RECORD_DIGIT_COUNT = 6;
@@ -84,7 +84,7 @@ namespace setup
 	static const bool	BLUR_PERIPHERY = false;
 	static const float	WEB_VIEW_RESOLUTION_SCALE = 1.f;
 	static const unsigned int	HISTORY_MAX_PAGE_COUNT = 100; // maximal length of history
-	static const bool	USE_DOM_NODE_POLLING = !DEBUG_MODE;
+	static const bool	USE_DOM_NODE_POLLING = false; // !DEBUG_MODE;
 	static const float	DOM_POLLING_FREQUENCY = 1.0f; // times per second
 	static const int	DOM_POLLING_PARTITION_NUMBER = 8;
 }
