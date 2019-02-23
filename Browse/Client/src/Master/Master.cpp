@@ -394,7 +394,7 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 	}
 	*/
 
-	_upWeb->AddTab("www.hedeshy.com/TGSBoard", true); // TODO some welcome page
+	_upWeb->AddTab("http://127.0.0.1:3000/", true); // TODO some welcome page
 
     // ### SUPER LAYOUT ###
 
@@ -533,7 +533,6 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 		// Fetch handle to window from GLFW
 		auto Hwnd = glfwGetWin32Window(_pWindow);
 
-		/*
 		// Remove frame from window
 		LONG lStyle = GetWindowLong(Hwnd, GWL_STYLE);
 		lStyle &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZE | WS_MAXIMIZE | WS_SYSMENU);
@@ -543,7 +542,6 @@ Master::Master(Mediator* pCefMediator, std::string userDirectory)
 		LONG lExStyle = GetWindowLong(Hwnd, GWL_EXSTYLE);
 		lExStyle &= ~(WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE);
 		SetWindowLong(Hwnd, GWL_EXSTYLE, lExStyle);
-		*/
 
 		// Maximize window
 		SendMessage(Hwnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
@@ -1226,15 +1224,17 @@ void Master::GLFWKeyCallback(int key, int scancode, int action, int mods)
 			case GLFW_KEY_0: { _pCefMediator->ShowDevTools(); break; }
 			// case GLFW_KEY_SPACE: { _upVoiceInput->StartAudioRecording(); break; }
 			// case GLFW_KEY_M: { PersistDriftGrid(PersistDriftGridReason::MANUAL); break; }
-			case GLFW_KEY_1: { _upWeb->RemoveAllTabs(); _upWeb->AddTab("www.hedeshy.com/TGSBoard", true); break; }
-			case GLFW_KEY_2: { _upWeb->RemoveAllTabs(); _upWeb->AddTab("www.hedeshy.com/eyeSwipe", true); break; }
-			case GLFW_KEY_3: { _upWeb->RemoveAllTabs(); _upWeb->AddTab("www.hedeshy.com/dwell", true); break; }
+			case GLFW_KEY_1: { _upWeb->RemoveAllTabs(); _upWeb->AddTab("http://127.0.0.1:3000/", true); break; }
+			case GLFW_KEY_2: { _upWeb->RemoveAllTabs(); _upWeb->AddTab("http://127.0.0.1:3001/", true); break; }
+			case GLFW_KEY_3: { _upWeb->RemoveAllTabs(); _upWeb->AddTab("http://127.0.0.1:3002/", true); break; }
+			case GLFW_KEY_SPACE: { _pCefMediator->EmulateKeyboardKey(32, 32, GLFW_PRESS, 0); }
         }
     }
 	else if (action == GLFW_RELEASE)
 	{
 		switch (key)
 		{
+			//case GLFW_KEY_SPACE: { _pCefMediator->EmulateKeyboardKey(32, 32, GLFW_RELEASE, 0); }
 			// case GLFW_KEY_SPACE: { auto voiceAction = _upVoiceInput->EndAndProcessAudioRecording(); LogInfo("Retrieved VoiceAction: ", static_cast<int>(voiceAction)); }
 		}
 	}
