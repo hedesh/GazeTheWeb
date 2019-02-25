@@ -62,7 +62,7 @@ namespace setup
 	static const float	EYEINPUT_DISTORT_GAZE_BIAS_Y = 32.f; // pixels
 
 	// Experiments
-	static const bool			ENABLE_EYEGUI_DRIFT_MAP_ACTIVATION = !DEMO_MODE;
+	static const bool			ENABLE_EYEGUI_DRIFT_MAP_ACTIVATION = false; // !DEMO_MODE;
 	static const std::string	LAB_STREAM_OUTPUT_NAME = "GazeTheWebOutput";
 	static const std::string	LAB_STREAM_OUTPUT_SOURCE_ID = CLIENT_VERSION; // use client version as source id
 	static const std::string	LAB_STREAM_INPUT_NAME = "GazeTheWebInput"; // may be set to same value as LAB_STREAM_OUTPUT_NAME to receive own events for debugging purposes
